@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+
+---
+
+spring:
+  profiles: dev
+  output:
+    ansi.enabled: always
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate: DEBUG
