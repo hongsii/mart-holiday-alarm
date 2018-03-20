@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/app/travis/build/
+
+hooks:
+  AfterInstall:
+    - location: execution-app.sh
+      timeout: 180
