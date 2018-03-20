@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: dev
+
+---
+
+spring:
+  profiles: dev
+  jap:
+    show-sql:
