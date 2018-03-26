@@ -24,3 +24,19 @@ logging:
     root: DEBUG
     org.springframework.web: DEBUG
     org.hibernate: DEBUG
+
+---
+
+spring:
+  profiles: prod1
+
+server:
+  port: 8081
+
+---
+
+spring:
+  profiles: prod2
+
+server:
+  port: 8082
