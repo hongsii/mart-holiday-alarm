@@ -48,7 +48,7 @@ public class HolidayRepositoryTest {
 		Holiday savedHoliday = holidays.get(0);
 
 		assertNotNull(savedHoliday);
-		assertEquals("1", savedHoliday.getMart().getRealId());
+		assertEquals(mart.getId(), savedHoliday.getMart().getId());
 		assertEquals(now, savedHoliday.getHoliday());
 	}
 

@@ -45,15 +45,42 @@ public class Mart extends BaseEntity {
 	private List<Holiday> holidays;
 
 	@Builder
-	public Mart(MartType martType, String realId) {
+	public Mart(MartType martType, String realId, String branchName, String city,
+			String phoneNumber, String address, List<Holiday> holidays) {
 		this.martType = martType;
 		this.realId = realId;
+		this.branchName = branchName;
+		this.city = city;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.holidays = holidays;
 	}
 
 	public void addHoliday(Holiday holiday) {
-		if (holidays == null) {
-			holidays = new ArrayList<>();
+		if (this.holidays == null) {
+			this.holidays = new ArrayList();
 		}
-		holidays.add(holiday);
+		this.holidays.add(holiday);
+	}
+
+	public void setHolidays(List<Holiday> holidays) {
+		this.holidays = holidays;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		Mart mart = (Mart) obj;
+		if ((this.martType == mart.martType) && (this.realId.equals(mart.realId))) {
+			return true;
+		}
+		return false;
+	}
+
+	public int hashCode() {
+		int result = this.martType != null ? this.martType.hashCode() : 0;
+		result = 31 * result + (this.realId != null ? this.realId.hashCode() : 0);
+		return result;
 	}
 }

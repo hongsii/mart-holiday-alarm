@@ -37,4 +37,28 @@ public class Holiday extends BaseEntity {
 	public LocalDate getHoliday() {
 		return this.id.getDate();
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		Holiday holiday = (Holiday) o;
+
+		if (!id.equals(holiday.id)) {
+			return false;
+		}
+		return mart.equals(holiday.mart);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id.hashCode();
+		result = 31 * result + mart.hashCode();
+		return result;
+	}
 }

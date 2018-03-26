@@ -3,6 +3,7 @@ package com.hongsi.martholidayalarm.mart.service;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,9 @@ public class MartService {
 					.build();
 		}
 		return savedMart;
+	}
+
+	public void saveAll(List<Mart> marts) {
+		martRepository.saveAll(marts);
 	}
 }
