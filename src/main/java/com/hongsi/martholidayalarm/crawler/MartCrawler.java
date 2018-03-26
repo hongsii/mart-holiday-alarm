@@ -4,7 +4,6 @@ import com.hongsi.martholidayalarm.crawler.domain.Parser;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.service.MartService;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.IO;
 import java.io.IOException;
 import java.util.List;
 import lombok.AllArgsConstructor;
