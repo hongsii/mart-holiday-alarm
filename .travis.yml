@@ -15,8 +15,6 @@ script: "./gradlew clean build"
 
 before_deploy:
   - zip -r martholidayalarm *
-  - mkdir -p deploy
-  - mv martholidayalarm.zip deploy/martholidayalarm.zip
 
 deploy:
   - provider: s3
@@ -26,7 +24,6 @@ deploy:
     region: ap-northeast-2
     skip_cleanup: true
     acl: public_read
-    local_dir: deploy
     wait-until-deployed: true
     on:
       repo: Sihong12/MartHolidayAlarm
