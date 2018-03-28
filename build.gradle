@@ -28,6 +28,7 @@ ext['hibernate.version'] = '5.3.0.CR1'
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
 
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
 	compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
