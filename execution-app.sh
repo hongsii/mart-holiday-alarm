@@ -1,2 +1,2 @@
 #! /bin/bash
-/home/ubuntu/app/travis/deploy.sh > /dev/null 2> /dev/null < /dev/null &
+/home/ubuntu/app/MartHolidayAlarm/deploy.sh > /dev/null 2> /dev/null < /dev/null &
