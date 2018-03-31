@@ -7,4 +7,4 @@ files:
 hooks:
   AfterInstall:
     - location: execution-app.sh
-      timeout: 180
+      timeout: 600
