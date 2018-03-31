@@ -26,17 +26,33 @@ public class HolidayId implements Serializable {
 	}
 
 	@Override
-	public int hashCode() {
-		return date.hashCode() + martId.hashCode();
+	public String toString() {
+		return "HolidayId{" +
+				"date=" + date +
+				", martId=" + martId +
+				'}';
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		try {
-			return date.equals(((HolidayId) obj).date) &&
-					martId.equals(((HolidayId) obj).martId);
-		} catch (Exception ex) {
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof HolidayId)) {
 			return false;
 		}
+
+		HolidayId holidayId = (HolidayId) o;
+		if (!date.equals(holidayId.date)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = date.hashCode();
+		result = 31 * result + (martId != null ? martId.hashCode() : 0);
+		return result;
 	}
 }

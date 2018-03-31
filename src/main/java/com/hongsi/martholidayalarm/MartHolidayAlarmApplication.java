@@ -1,6 +1,5 @@
 package com.hongsi.martholidayalarm;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +13,8 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 @SpringBootApplication
 public class MartHolidayAlarmApplication {
 
-	public static final String APP_PROPERTIES = "spring.config.location=classpath:application.yml"
-			+ "app/conf/MartHolidayAlarm/prod-application.yml";
+	public static final String APP_PROPERTIES = "spring.config.location=classpath:application.yml,"
+			+ "/app/conf/MartHolidayAlarm/prod-application.yml";
 
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(MartHolidayAlarmApplication.class)

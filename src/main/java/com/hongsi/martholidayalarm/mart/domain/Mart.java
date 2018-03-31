@@ -63,10 +63,37 @@ public class Mart extends BaseEntity {
 		this.holidays.add(holiday);
 	}
 
+	public void removeAlreadySavedHoliday(List<Holiday> holidays) {
+		for (Holiday holiday : holidays) {
+			if (this.holidays.contains(holiday)) {
+				this.holidays.remove(holiday);
+			}
+		}
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public void setHolidays(List<Holiday> holidays) {
 		this.holidays = holidays;
 	}
 
+	@Override
+	public String toString() {
+		return "Mart{" +
+				"id=" + id +
+				", martType=" + martType +
+				", realId='" + realId + '\'' +
+				", branchName='" + branchName + '\'' +
+				", city='" + city + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", address='" + address + '\'' +
+				", holidays=" + holidays +
+				'}';
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -78,6 +105,7 @@ public class Mart extends BaseEntity {
 		return false;
 	}
 
+	@Override
 	public int hashCode() {
 		int result = this.martType != null ? this.martType.hashCode() : 0;
 		result = 31 * result + (this.realId != null ? this.realId.hashCode() : 0);

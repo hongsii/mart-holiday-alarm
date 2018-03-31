@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Component
 public class MartCrawler {
+
 	MartService martService;
 
 	@Scheduled(initialDelay = 9000, fixedDelay = 90000)

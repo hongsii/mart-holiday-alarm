@@ -5,9 +5,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
+import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.Test;
@@ -46,5 +49,38 @@ public class MartServiceTest {
 
 		Mart createdMart = martService.createMart(MartType.EMART, "2");
 		assertNull(createdMart.getId());
+	}
+
+	@Test
+	public void 마트_전체_저장() {
+		List<Mart> marts = new ArrayList<>();
+		Mart mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build();
+		mart.addHoliday(Holiday.builder()
+				.mart(mart)
+				.date(LocalDate.of(2018, 3, 31))
+				.build());
+		marts.add(mart);
+		martService.saveAll(marts);
+
+		marts = new ArrayList<>();
+		mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.branchName("성수점")
+				.build();
+		mart.addHoliday(Holiday.builder()
+				.mart(mart)
+				.date(LocalDate.of(2018, 3, 31))
+				.build());
+		marts.add(mart);
+		martService.saveAll(marts);
+
+		marts = martRepository.findAll();
+		assertEquals(1, marts.size());
+		assertEquals(1, marts.get(0).getHolidays().size());
+		assertEquals("성수점", marts.get(0).getBranchName());
 	}
 }
