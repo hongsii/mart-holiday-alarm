@@ -1,11 +1,5 @@
-spring:
-  profiles:
-    active: dev
-
 server:
   port: 8080
-
-management.endpoints.web.base-path: /
 
 ---
 
@@ -19,12 +13,11 @@ spring:
     open-in-view: false
   h2:
     console:
-      enabled: true
+      enabled: false
 
 logging:
   level:
     root: DEBUG
-    org.springframework.web: DEBUG
     org.hibernate: DEBUG
 
 ---

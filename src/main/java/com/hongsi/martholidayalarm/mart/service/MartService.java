@@ -25,6 +25,15 @@ public class MartService {
 	}
 
 	public void saveAll(List<Mart> marts) {
+		List<Mart> savedMarts = martRepository.findAll();
+		for (Mart mart : marts) {
+			if (savedMarts.contains(mart)) {
+				int index = savedMarts.indexOf(mart);
+				Mart savedMart = savedMarts.get(index);
+				mart.setId(savedMart.getId());
+				mart.removeAlreadySavedHoliday(savedMart.getHolidays());
+			}
+		}
 		martRepository.saveAll(marts);
 	}
 }

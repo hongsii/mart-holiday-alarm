@@ -39,16 +39,20 @@ public class Holiday extends BaseEntity {
 	}
 
 	@Override
+	public String toString() {
+		return "Holiday{" +
+				"id=" + id +
+				", martId=" + mart.getId() +
+				'}';
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
 		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
 
 		Holiday holiday = (Holiday) o;
-
 		if (!id.equals(holiday.id)) {
 			return false;
 		}
