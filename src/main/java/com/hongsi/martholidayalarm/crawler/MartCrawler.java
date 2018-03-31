@@ -18,8 +18,8 @@ public class MartCrawler {
 
 	MartService martService;
 
-	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
-//	@Scheduled(cron = "0 0 3 ? * MON")
+	//	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
+	@Scheduled(cron = "0 0 3 ? * MON")
 	public void start() throws IOException {
 		log.info("Crawler -- start !");
 		for (MartType martType : MartType.values()) {
