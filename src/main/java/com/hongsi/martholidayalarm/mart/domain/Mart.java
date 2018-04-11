@@ -5,8 +5,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
@@ -20,19 +23,21 @@ import lombok.NoArgsConstructor;
 public class Mart extends BaseEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "mart_type")
+	@Column(name = "mart_type", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private MartType martType;
 
-	@Column(name = "real_id")
+	@Column(name = "real_id", nullable = false)
 	private String realId;
 
 	@Column(name = "branch_name")
 	private String branchName;
 
-	private String city;
+	@Column(name = "region")
+	private String region;
 
 	@Column(name = "phone_number")
 	private String phoneNumber;
@@ -42,41 +47,41 @@ public class Mart extends BaseEntity {
 
 	@Column
 	@OneToMany(mappedBy = "mart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Holiday> holidays;
+	private List<Holiday> holidays = new ArrayList<>();
 
 	@Builder
-	public Mart(MartType martType, String realId, String branchName, String city,
+	public Mart(MartType martType, String realId, String branchName, String region,
 			String phoneNumber, String address, List<Holiday> holidays) {
 		this.martType = martType;
 		this.realId = realId;
 		this.branchName = branchName;
-		this.city = city;
+		this.region = region;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.holidays = holidays;
 	}
 
-	public void addHoliday(Holiday holiday) {
-		if (this.holidays == null) {
-			this.holidays = new ArrayList();
+	public void addHolidays(List<Holiday> holidays) {
+		for (Holiday holiday : holidays) {
+			addHoliday(holiday);
 		}
-		this.holidays.add(holiday);
 	}
 
-	public void removeAlreadySavedHoliday(List<Holiday> holidays) {
-		for (Holiday holiday : holidays) {
-			if (this.holidays.contains(holiday)) {
-				this.holidays.remove(holiday);
+	public void addHoliday(Holiday holiday) {
+		if (!this.holidays.contains(holiday)) {
+			this.holidays.add(holiday);
+		}
+	}
+
+	public void readyForUpdate(Mart savedMart) {
+		this.id = savedMart.getId();
+		List<Holiday> savedHolidays = savedMart.getHolidays();
+		for (Holiday holiday : this.holidays) {
+			if (savedHolidays.contains(holiday)) {
+				int index = savedHolidays.indexOf(holiday);
+				holiday.readyForUpdate(savedHolidays.get(index));
 			}
 		}
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setHolidays(List<Holiday> holidays) {
-		this.holidays = holidays;
 	}
 
 	@Override
@@ -86,7 +91,7 @@ public class Mart extends BaseEntity {
 				", martType=" + martType +
 				", realId='" + realId + '\'' +
 				", branchName='" + branchName + '\'' +
-				", city='" + city + '\'' +
+				", region='" + region + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", address='" + address + '\'' +
 				", holidays=" + holidays +
@@ -94,21 +99,26 @@ public class Mart extends BaseEntity {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+	public boolean equals(Object o) {
+		if (this == o) {
 			return true;
 		}
-		Mart mart = (Mart) obj;
-		if ((this.martType == mart.martType) && (this.realId.equals(mart.realId))) {
-			return true;
+		if (!(o instanceof Mart)) {
+			return false;
 		}
-		return false;
+
+		Mart mart = (Mart) o;
+
+		if (martType != mart.martType) {
+			return false;
+		}
+		return realId.equals(mart.realId);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = this.martType != null ? this.martType.hashCode() : 0;
-		result = 31 * result + (this.realId != null ? this.realId.hashCode() : 0);
+		int result = martType.hashCode();
+		result = 31 * result + realId.hashCode();
 		return result;
 	}
 }

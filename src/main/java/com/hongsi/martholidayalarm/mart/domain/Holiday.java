@@ -1,12 +1,14 @@
 package com.hongsi.martholidayalarm.mart.domain;
 
 import java.time.LocalDate;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,33 +19,28 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Holiday extends BaseEntity {
 
-	@EmbeddedId
-	private HolidayId id;
-
-	@MapsId("martId")
+	@Column
+	LocalDate date;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "mart_id", referencedColumnName = "id")
+	@JoinColumn(name = "mart_id")
 	private Mart mart;
 
 	@Builder
 	public Holiday(LocalDate date, Mart mart) {
+		this.date = date;
 		this.mart = mart;
-		this.id = HolidayId.builder()
-				.date(date)
-				.martId(mart.getId())
-				.build();
+		this.mart.addHoliday(this);
 	}
 
 	public LocalDate getHoliday() {
-		return this.id.getDate();
+		return this.date;
 	}
 
-	@Override
-	public String toString() {
-		return "Holiday{" +
-				"id=" + id +
-				", martId=" + mart.getId() +
-				'}';
+	public void readyForUpdate(Holiday holiday) {
+		this.id = holiday.getId();
 	}
 
 	@Override
@@ -51,9 +48,13 @@ public class Holiday extends BaseEntity {
 		if (this == o) {
 			return true;
 		}
+		if (!(o instanceof Holiday)) {
+			return false;
+		}
 
 		Holiday holiday = (Holiday) o;
-		if (!id.equals(holiday.id)) {
+
+		if (!date.isEqual(holiday.date)) {
 			return false;
 		}
 		return mart.equals(holiday.mart);
@@ -61,7 +62,7 @@ public class Holiday extends BaseEntity {
 
 	@Override
 	public int hashCode() {
-		int result = id.hashCode();
+		int result = date.hashCode();
 		result = 31 * result + mart.hashCode();
 		return result;
 	}

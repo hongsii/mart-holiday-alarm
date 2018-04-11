@@ -4,10 +4,12 @@ import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.util.List;
+import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@Transactional
 @Service
 public class MartService {
 
@@ -29,9 +31,7 @@ public class MartService {
 		for (Mart mart : marts) {
 			if (savedMarts.contains(mart)) {
 				int index = savedMarts.indexOf(mart);
-				Mart savedMart = savedMarts.get(index);
-				mart.setId(savedMart.getId());
-				mart.removeAlreadySavedHoliday(savedMart.getHolidays());
+				mart.readyForUpdate(savedMarts.get(index));
 			}
 		}
 		martRepository.saveAll(marts);

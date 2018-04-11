@@ -8,6 +8,7 @@ import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@Transactional
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MartRepositoryTest {
@@ -61,5 +63,39 @@ public class MartRepositoryTest {
 		Mart mart = marts.get(0);
 		assertTrue(mart.getCreatedDate().isAfter(now));
 		assertTrue(mart.getModifiedDate().isAfter(now));
+	}
+
+	@Test
+	public void Entity업데이트시_CreatedDate_확인() {
+		LocalDateTime now = LocalDateTime.now();
+
+		martRepository.save(Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build());
+
+		List<Mart> marts = martRepository.findAll();
+		Mart savedMart = marts.get(0);
+		assertTrue(savedMart.getCreatedDate().isAfter(now));
+
+		Mart mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build();
+		martRepository.save(mart);
+		marts = martRepository.findAll();
+		mart = marts.get(0);
+		assertTrue(mart.getCreatedDate().isEqual(mart.getCreatedDate()));
+	}
+
+	@Test
+	public void Enum저장_확인() {
+		martRepository.save(Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build());
+		List<Mart> marts = martRepository.findAll();
+		Mart savedMart = marts.get(0);
+		assertThat(MartType.EMART, is(savedMart.getMartType()));
 	}
 }

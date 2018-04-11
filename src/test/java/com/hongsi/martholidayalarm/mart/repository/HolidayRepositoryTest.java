@@ -2,6 +2,7 @@ package com.hongsi.martholidayalarm.mart.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
@@ -85,32 +86,29 @@ public class HolidayRepositoryTest {
 				.martType(MartType.EMART)
 				.realId("1")
 				.build();
-		Holiday holiday = Holiday.builder()
+		mart.addHoliday(Holiday.builder()
 				.date(now)
 				.mart(mart)
-				.build();
-		mart.addHoliday(holiday);
+				.build());
 		martRepository.save(mart);
 
 		Mart mart2 = Mart.builder()
 				.martType(MartType.EMART)
 				.realId("2")
 				.build();
-		Holiday holiday2 = Holiday.builder()
+		mart2.addHoliday(Holiday.builder()
 				.date(now)
 				.mart(mart2)
-				.build();
-		mart2.addHoliday(holiday2);
+				.build());
 		martRepository.save(mart2);
 
 		List<Mart> marts = martRepository.findAll();
-		Mart savedMart1 = marts.get(0);
-		Mart savedMart2 = marts.get(1);
+		Holiday holiday1 = marts.get(0).getHolidays().get(0);
+		Holiday holiday2 = marts.get(1).getHolidays().get(0);
 
 		assertEquals(2, marts.size());
-		assertEquals(now, savedMart1.getHolidays().get(0).getHoliday());
-		assertEquals(savedMart1.getHolidays().get(0).getHoliday(),
-				savedMart2.getHolidays().get(0).getHoliday());
+		assertTrue(holiday1.getHoliday().isEqual(now));
+		assertTrue(holiday1.getHoliday().isEqual(holiday2.getHoliday()));
 	}
 
 	@Test
@@ -130,5 +128,35 @@ public class HolidayRepositoryTest {
 		List<Mart> marts = martRepository.findAll();
 
 		assertEquals(1, marts.size());
+	}
+
+	@Test
+	public void 휴무일_중복저장() {
+		Mart mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build();
+		LocalDate now = LocalDate.now();
+		mart.addHoliday(Holiday.builder()
+				.date(now)
+				.mart(mart)
+				.build());
+		mart.addHoliday(Holiday.builder()
+				.date(now)
+				.mart(mart)
+				.build());
+		martRepository.save(mart);
+		List<Mart> marts = martRepository.findAll();
+		mart = marts.get(0);
+		assertEquals(1, mart.getHolidays().size());
+
+		mart.addHoliday(Holiday.builder()
+				.date(now)
+				.mart(mart)
+				.build());
+		martRepository.save(mart);
+		marts = martRepository.findAll();
+		mart = marts.get(0);
+		assertEquals(1, mart.getHolidays().size());
 	}
 }
