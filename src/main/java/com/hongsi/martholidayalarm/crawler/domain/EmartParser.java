@@ -20,22 +20,22 @@ public class EmartParser extends Parser {
 	@Override
 	public List<Mart> getParsedData() throws IOException {
 		List<Mart> marts = new ArrayList();
-		Document listPage = Jsoup.connect("http://store.emart.com/branch/list.do").get();
+		Document listPage = Jsoup.connect(LIST_URL).get();
 		Elements links = findLinksFrom(listPage);
 		for (Element link : links) {
 			if (isEmart(link)) {
 				String realId = findRealId(link);
 				Document detailPage = Jsoup
-						.connect("http://store.emart.com/branch/view.do?id=" + realId).get();
+						.connect(DETAIL_PAGE_URL + realId).get();
 				Mart mart = Mart.builder()
 						.martType(MartType.EMART)
 						.realId(realId)
-						.city(findCity(link))
+						.region(findRegion(link))
 						.branchName(findBranchName(detailPage))
 						.phoneNumber(findPhoneNumber(detailPage))
 						.address(findAddress(detailPage))
 						.build();
-				mart.setHolidays(findHolidaysFrom(detailPage, mart));
+				mart.addHolidays(findHolidaysFrom(detailPage, mart));
 				marts.add(mart);
 			}
 		}
@@ -54,7 +54,7 @@ public class EmartParser extends Parser {
 		return link.attr("data-code");
 	}
 
-	private String findCity(Element link) {
+	private String findRegion(Element link) {
 		return link.parent().parent().parent().parent().select("a[href=\"#\"]").text();
 	}
 
@@ -72,7 +72,7 @@ public class EmartParser extends Parser {
 
 	private List<Holiday> findHolidaysFrom(Document detailPage, Mart mart) {
 		Elements holidayTags = detailPage.select("div.calendar_table.d-calendar");
-		List<Holiday> holidays = new ArrayList();
+		List<Holiday> holidays = new ArrayList<>();
 		for (Element holidayTag : holidayTags) {
 			String[] holidayTexts = holidayTag.attr("data-holidays").replaceAll("\\[|\\]|\\'", "")
 					.split(",");
