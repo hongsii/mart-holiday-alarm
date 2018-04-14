@@ -32,7 +32,6 @@ public class Holiday extends BaseEntity {
 	public Holiday(LocalDate date, Mart mart) {
 		this.date = date;
 		this.mart = mart;
-		this.mart.addHoliday(this);
 	}
 
 	public LocalDate getHoliday() {

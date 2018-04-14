@@ -51,14 +51,13 @@ public class Mart extends BaseEntity {
 
 	@Builder
 	public Mart(MartType martType, String realId, String branchName, String region,
-			String phoneNumber, String address, List<Holiday> holidays) {
+			String phoneNumber, String address) {
 		this.martType = martType;
 		this.realId = realId;
 		this.branchName = branchName;
 		this.region = region;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
-		this.holidays = holidays;
 	}
 
 	public void addHolidays(List<Holiday> holidays) {
