@@ -36,4 +36,8 @@ public class MartService {
 		}
 		martRepository.saveAll(marts);
 	}
+
+	public List<String> getRegions(MartType martType) {
+		return martRepository.findRegionByMartType(martType);
+	}
 }

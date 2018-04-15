@@ -1,6 +1,7 @@
 package com.hongsi.martholidayalarm.mart.service;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -82,5 +83,31 @@ public class MartServiceTest {
 		assertEquals(1, marts.size());
 		assertEquals(1, marts.get(0).getHolidays().size());
 		assertEquals("성수점", marts.get(0).getBranchName());
+	}
+
+	@Test
+	public void 마트타입별_지역_조회() {
+		List<Mart> marts = new ArrayList<>();
+		marts.add(Mart.builder()
+				.realId("1")
+				.martType(MartType.EMART)
+				.region("서울")
+				.build());
+		marts.add(Mart.builder()
+				.realId("2")
+				.martType(MartType.EMART)
+				.region("경상")
+				.build());
+		marts.add(Mart.builder()
+				.realId("3")
+				.martType(MartType.EMART)
+				.region("경기")
+				.build());
+		martRepository.saveAll(marts);
+
+		List<String> regions = martService.getRegions(MartType.EMART);
+
+		assertEquals(marts.size(), regions.size());
+		assertThat(regions, containsInAnyOrder("경기", "경상", "서울"));
 	}
 }
