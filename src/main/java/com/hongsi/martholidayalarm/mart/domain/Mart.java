@@ -67,15 +67,15 @@ public class Mart extends BaseEntity {
 	}
 
 	public void addHoliday(Holiday holiday) {
-		if (!this.holidays.contains(holiday)) {
-			this.holidays.add(holiday);
+		if (!holidays.contains(holiday)) {
+			holidays.add(holiday);
 		}
 	}
 
 	public void readyForUpdate(Mart savedMart) {
-		this.id = savedMart.getId();
+		id = savedMart.getId();
 		List<Holiday> savedHolidays = savedMart.getHolidays();
-		for (Holiday holiday : this.holidays) {
+		for (Holiday holiday : holidays) {
 			if (savedHolidays.contains(holiday)) {
 				int index = savedHolidays.indexOf(holiday);
 				holiday.readyForUpdate(savedHolidays.get(index));
