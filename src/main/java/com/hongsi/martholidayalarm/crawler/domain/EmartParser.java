@@ -47,7 +47,7 @@ public class EmartParser extends Parser {
 	}
 
 	private boolean isEmart(Element link) {
-		return MartType.EMART.getType().equals(link.attr("data-etc"));
+		return "E" .equals(link.attr("data-etc"));
 	}
 
 	private String findRealId(Element link) {
