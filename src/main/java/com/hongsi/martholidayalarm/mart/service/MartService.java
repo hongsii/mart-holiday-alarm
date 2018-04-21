@@ -4,6 +4,7 @@ import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,21 @@ public class MartService {
 		martRepository.saveAll(marts);
 	}
 
+	public Mart getMart(String branchName) {
+		return martRepository.findByBranchName(branchName);
+	}
+
+	public List<MartType> getMartTypes() {
+		List<MartType> martTypes = martRepository.findMartType();
+		return martTypes.stream().filter(martType -> martType.isUsing())
+				.collect(Collectors.toList());
+	}
+
 	public List<String> getRegions(MartType martType) {
 		return martRepository.findRegionByMartType(martType);
+	}
+
+	public List<String> getBranches(MartType martType, String region) {
+		return martRepository.findBranchByMartTypeAndRegion(martType, region);
 	}
 }

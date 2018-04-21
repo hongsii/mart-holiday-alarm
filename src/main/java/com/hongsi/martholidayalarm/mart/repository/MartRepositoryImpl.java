@@ -12,6 +12,17 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 	JPAQueryFactory queryFactory;
 
 	@Override
+	public List<MartType> findMartType() {
+		QMart mart = QMart.mart;
+		return queryFactory.query()
+				.select(mart.martType)
+				.from(mart)
+				.groupBy(mart.martType)
+				.orderBy(mart.martType.asc())
+				.fetch();
+	}
+
+	@Override
 	public List<String> findRegionByMartType(MartType martType) {
 		QMart mart = QMart.mart;
 		return queryFactory.query()
@@ -20,6 +31,18 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 				.where(mart.martType.eq(martType))
 				.groupBy(mart.martType, mart.region)
 				.orderBy(mart.region.asc())
+				.fetch();
+	}
+
+	@Override
+	public List<String> findBranchByMartTypeAndRegion(MartType martType, String region) {
+		QMart mart = QMart.mart;
+		return queryFactory.query()
+				.select(mart.branchName)
+				.from(mart)
+				.where(mart.martType.eq(martType).and(mart.region.eq(region)))
+				.groupBy(mart.martType, mart.branchName)
+				.orderBy(mart.branchName.asc())
 				.fetch();
 	}
 }

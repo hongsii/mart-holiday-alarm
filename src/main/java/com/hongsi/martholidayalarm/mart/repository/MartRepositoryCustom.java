@@ -5,6 +5,10 @@ import java.util.List;
 
 public interface MartRepositoryCustom {
 
+	List<MartType> findMartType();
+
 	List<String> findRegionByMartType(MartType martType);
+
+	List<String> findBranchByMartTypeAndRegion(MartType martType, String region);
 
 }

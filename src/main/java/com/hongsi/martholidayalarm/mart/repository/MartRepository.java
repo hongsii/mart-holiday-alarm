@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MartRepository extends JpaRepository<Mart, Long>, MartRepositoryCustom {
 
 	Mart findByRealId(String realId);
+
+	Mart findByBranchName(String branchName);
 }
