@@ -1,6 +1,7 @@
 package com.hongsi.martholidayalarm.mart.service;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -11,7 +12,9 @@ import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,5 +85,97 @@ public class MartServiceTest {
 		assertEquals(1, marts.size());
 		assertEquals(1, marts.get(0).getHolidays().size());
 		assertEquals("성수점", marts.get(0).getBranchName());
+	}
+
+	@Test
+	public void 마트타입_조회() {
+		List<Mart> marts = new ArrayList<>();
+		marts.add(Mart.builder()
+				.realId("1")
+				.martType(MartType.EMART)
+				.region("서울")
+				.build());
+		marts.add(Mart.builder()
+				.realId("2")
+				.martType(MartType.EMART)
+				.region("경상")
+				.build());
+		marts.add(Mart.builder()
+				.realId("1")
+				.martType(MartType.LOTTEMART)
+				.region("서울")
+				.build());
+		marts.add(Mart.builder()
+				.realId("2")
+				.martType(MartType.LOTTEMART)
+				.region("경상")
+				.build());
+		martRepository.saveAll(marts);
+
+		List<MartType> martTypes = martService.getMartTypes();
+		List<MartType> usingMartTypes = Arrays.stream(MartType.values())
+				.filter(martType -> martType.isUsing()).collect(Collectors.toList());
+		assertEquals(martTypes.size(), usingMartTypes.size());
+	}
+
+	@Test
+	public void 마트타입별_지역_조회() {
+		List<Mart> marts = new ArrayList<>();
+		marts.add(Mart.builder()
+				.realId("1")
+				.martType(MartType.EMART)
+				.region("서울")
+				.build());
+		marts.add(Mart.builder()
+				.realId("2")
+				.martType(MartType.EMART)
+				.region("경상")
+				.build());
+		marts.add(Mart.builder()
+				.realId("3")
+				.martType(MartType.EMART)
+				.region("경기")
+				.build());
+		martRepository.saveAll(marts);
+
+		List<String> regions = martService.getRegions(MartType.EMART);
+
+		assertEquals(marts.size(), regions.size());
+		assertThat(regions, containsInAnyOrder("경기", "경상", "서울"));
+	}
+
+	@Test
+	public void 마트타입별_지점_조회() {
+		List<Mart> marts = new ArrayList<>();
+		marts.add(Mart.builder()
+				.realId("1")
+				.martType(MartType.EMART)
+				.region("서울")
+				.branchName("서울점")
+				.build());
+		marts.add(Mart.builder()
+				.realId("2")
+				.martType(MartType.EMART)
+				.region("서울")
+				.branchName("강남점")
+				.build());
+		marts.add(Mart.builder()
+				.realId("3")
+				.martType(MartType.EMART)
+				.region("경상")
+				.branchName("경상점")
+				.build());
+		marts.add(Mart.builder()
+				.realId("1")
+				.martType(MartType.LOTTEMART)
+				.region("경기")
+				.branchName("경기점")
+				.build());
+		martRepository.saveAll(marts);
+
+		List<String> branches = martService.getBranches(MartType.EMART, "서울");
+
+		assertEquals(2, branches.size());
+		assertThat(branches, containsInAnyOrder("강남점", "서울점"));
 	}
 }

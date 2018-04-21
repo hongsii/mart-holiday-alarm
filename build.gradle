@@ -1,13 +1,14 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.0.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.0.0.RELEASE'
+        querydslVersion = '4.2.1'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -20,20 +21,54 @@ version = '0.0.1'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext['hibernate.version'] = '5.3.0.CR1'
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
 
-	compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
-	compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
+    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
+    compile group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
+    compile group: 'com.querydsl', name: 'querydsl-apt', version: "${querydslVersion}"
 
-	runtime('com.h2database:h2')
-	compileOnly('org.projectlombok:lombok')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    runtime('com.h2database:h2')
+    compileOnly('org.projectlombok:lombok')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+def querydslOutput = file("src/main/generated")
+sourceSets {
+    main {
+        java {
+            srcDir querydslOutput
+        }
+    }
+}
+
+task generateQuerydsl(type: JavaCompile, group: 'build') {
+    querydslOutput.deleteDir()
+    querydslOutput.mkdirs()
+
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.compileOnly
+    destinationDir = querydslOutput
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
+    ]
+    doLast {
+        println ">> Done generateQuerydsl"
+    }
+}
+
+compileJava.dependsOn(generateQuerydsl)
+
+clean.doLast {
+    querydslOutput.deleteDir()
+    println ">> Delete $querydslOutput";
 }

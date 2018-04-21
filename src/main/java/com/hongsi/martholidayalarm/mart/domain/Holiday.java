@@ -35,11 +35,11 @@ public class Holiday extends BaseEntity {
 	}
 
 	public LocalDate getHoliday() {
-		return this.date;
+		return date;
 	}
 
 	public void readyForUpdate(Holiday holiday) {
-		this.id = holiday.getId();
+		id = holiday.getId();
 	}
 
 	@Override
