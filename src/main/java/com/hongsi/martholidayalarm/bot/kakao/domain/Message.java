@@ -3,14 +3,14 @@ package com.hongsi.martholidayalarm.bot.kakao.domain;
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.StringJoiner;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class Message {
 
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -21,6 +21,15 @@ public class Message {
 
 	private MessageButton messageButton;
 
+	public Message(String text) {
+		this.text = text;
+	}
+
+	public Message(String text, MessageButton messageButton) {
+		this.text = text;
+		this.messageButton = messageButton;
+	}
+
 	public Message(String text, Photo photo, MessageButton messageButton) {
 		this.text = text;
 		this.photo = photo;
@@ -28,19 +37,24 @@ public class Message {
 	}
 
 	public static String makeBranchInfo(Mart mart) {
-		StringJoiner message = new StringJoiner(LINE_SEPARATOR);
-		message.add("※ " + mart.getBranchName() + "\n")
-				.add("* 주소\n  - " + mart.getAddress())
-				.add("* 전화번호\n  - " + mart.getPhoneNumber())
-				.add("* 휴일");
+		final String TITLE_PREFIX = "※ ";
+		final String ITEM_PREFIX = "◦ ";
+		final String INFO_PREFIX = " ‣ ";
 
+		StringJoiner message = new StringJoiner(LINE_SEPARATOR);
+		message.add(TITLE_PREFIX + mart.getBranchName() + "\n")
+				.add(ITEM_PREFIX + "주소\n" + INFO_PREFIX + mart.getAddress())
+				.add(ITEM_PREFIX + "전화번호\n" + INFO_PREFIX + mart.getPhoneNumber())
+				.add(ITEM_PREFIX + "휴일");
 		LocalDate now = LocalDate.now();
 		for (Holiday holiday : mart.getHolidays()) {
 			LocalDate date = holiday.getHoliday();
 			if (date.isBefore(now)) {
 				continue;
 			}
-			message.add("  - " + date.toString());
+			message.add(INFO_PREFIX + date.toString() +
+					" (" + date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)
+					+ ")");
 		}
 		return message.toString();
 	}

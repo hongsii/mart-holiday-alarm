@@ -8,4 +8,5 @@ public interface MartRepository extends JpaRepository<Mart, Long>, MartRepositor
 	Mart findByRealId(String realId);
 
 	Mart findByBranchName(String branchName);
+
 }

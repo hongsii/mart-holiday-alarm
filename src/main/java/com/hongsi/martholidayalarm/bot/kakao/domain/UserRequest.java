@@ -65,10 +65,6 @@ public class UserRequest extends BaseEntity {
 		path += DEFAULT_SEPARATOR + content;
 	}
 
-	public void setButton(Button button) {
-		this.button = button;
-	}
-
 	public String[] getSplitedPath() {
 		return path.split(DEFAULT_SEPARATOR);
 	}

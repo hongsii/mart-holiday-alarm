@@ -2,7 +2,7 @@ package com.hongsi.martholidayalarm.bot.kakao;
 
 import com.hongsi.martholidayalarm.bot.kakao.domain.BotResponse;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Keyboard;
-import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequestDTO;
+import com.hongsi.martholidayalarm.bot.kakao.dto.UserRequestDTO;
 import com.hongsi.martholidayalarm.bot.kakao.service.KakaoBotService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,11 +19,7 @@ public class KakaoBotController {
 
 	@GetMapping("/keyboard")
 	public Keyboard makeDefaultKeyboard() {
-		Keyboard keyboard = Keyboard
-				.builder()
-				.buttons(Keyboard.DEFAULT_KEYBOARD)
-				.build();
-		return keyboard;
+		return new Keyboard(Keyboard.DEFAULT_KEYBOARD);
 	}
 
 	@PostMapping(value = "/message", produces = MediaType.APPLICATION_JSON_VALUE)
