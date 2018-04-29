@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.bot.kakao.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class Message {
 
 	private Photo photo;
 
+	@JsonProperty("message_button")
 	private MessageButton messageButton;
 
 	public Message(String text) {
@@ -38,8 +40,8 @@ public class Message {
 
 	public static String makeBranchInfo(Mart mart) {
 		final String TITLE_PREFIX = "※ ";
-		final String ITEM_PREFIX = "◦ ";
-		final String INFO_PREFIX = " ‣ ";
+		final String ITEM_PREFIX = "\n◦ ";
+		final String INFO_PREFIX = "  ➤ ";
 
 		StringJoiner message = new StringJoiner(LINE_SEPARATOR);
 		message.add(TITLE_PREFIX + mart.getBranchName() + "\n")
