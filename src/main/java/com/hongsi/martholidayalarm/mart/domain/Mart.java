@@ -45,19 +45,23 @@ public class Mart extends BaseEntity {
 	@Column(name = "address")
 	private String address;
 
+	@Column(name = "url")
+	private String url;
+
 	@Column
 	@OneToMany(mappedBy = "mart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Holiday> holidays = new ArrayList<>();
 
 	@Builder
 	public Mart(MartType martType, String realId, String branchName, String region,
-			String phoneNumber, String address) {
+			String phoneNumber, String address, String url) {
 		this.martType = martType;
 		this.realId = realId;
 		this.branchName = branchName;
 		this.region = region;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
+		this.url = url;
 	}
 
 	public void addHolidays(List<Holiday> holidays) {

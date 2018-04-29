@@ -5,6 +5,7 @@ import com.hongsi.martholidayalarm.bot.kakao.domain.BotResponse;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Button;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Keyboard;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Message;
+import com.hongsi.martholidayalarm.bot.kakao.domain.MessageButton;
 import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
 import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
@@ -36,29 +37,23 @@ public class KakaoBotService {
 		} catch (Exception e) {
 			return reset(userRequest.getUserKey());
 		}
-		return makeResponse(userRequest);
+		return new BotResponse(getMessageForResponse(userRequest),
+				getKeyboardForResponse(userRequest));
 	}
 
-	private BotResponse makeResponse(UserRequest userRequest) {
-		Message message = Message.builder()
-				.text(getMessage(userRequest))
-				.build();
-		Keyboard keyboard = Keyboard.builder()
-				.buttons(getButtons(userRequest)
-						.stream()
-						.toArray(String[]::new))
-				.build();
-		return new BotResponse(message, keyboard);
-	}
-
-	private String getMessage(UserRequest userRequest) {
+	private Message getMessageForResponse(UserRequest userRequest) {
 		Button selectedButton = userRequest.getButton();
-		if (selectedButton != Button.BRANCH) {
-			return selectedButton.getMessage();
+		if (selectedButton == Button.BRANCH) {
+			String branchName = userRequest.getSplitedPath()[selectedButton.getOrder()];
+			Mart mart = martService.getMart(branchName);
+			MessageButton messageButton = new MessageButton(mart);
+			return new Message(Message.makeBranchInfo(mart), messageButton);
 		}
-		String branchName = userRequest.getSplitedPath()[selectedButton.getOrder()];
-		Mart mart = martService.getMart(branchName);
-		return Message.makeBranchInfo(mart);
+		return new Message(selectedButton.getMessage());
+	}
+
+	private Keyboard getKeyboardForResponse(UserRequest userRequest) {
+		return new Keyboard(getButtons(userRequest));
 	}
 
 	private List<String> getButtons(UserRequest userRequest) {
@@ -82,7 +77,8 @@ public class KakaoBotService {
 
 	private BotResponse reset(String userKey) {
 		kakaoBotRepository.deleteByUserKey(userKey);
-		return new BotResponse(Message.builder().text("잘못된 요청입니다. 다시 선택해주세요").build(),
-				Keyboard.builder().buttons(Keyboard.DEFAULT_KEYBOARD).build());
+		Message wrongMessage = new Message("잘못된 요청입니다 다시 선택해주세요");
+		Keyboard defaultKeyboard = new Keyboard(Keyboard.DEFAULT_KEYBOARD);
+		return new BotResponse(wrongMessage, defaultKeyboard);
 	}
 }
