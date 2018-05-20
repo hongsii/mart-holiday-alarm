@@ -44,8 +44,7 @@ public class MartService {
 
 	public List<MartType> getMartTypes() {
 		List<MartType> martTypes = martRepository.findMartType();
-		return martTypes.stream().filter(martType -> martType.isUsing())
-				.collect(Collectors.toList());
+		return martTypes.stream().collect(Collectors.toList());
 	}
 
 	public List<String> getRegions(MartType martType) {
