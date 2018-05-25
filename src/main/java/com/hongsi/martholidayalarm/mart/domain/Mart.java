@@ -66,8 +66,10 @@ public class Mart extends BaseEntity {
 	}
 
 	public void addHolidays(List<Holiday> holidays) {
-		for (Holiday holiday : holidays) {
-			addHoliday(holiday);
+		if (holidays != null) {
+			for (Holiday holiday : holidays) {
+				addHoliday(holiday);
+			}
 		}
 	}
 
@@ -115,10 +117,7 @@ public class Mart extends BaseEntity {
 
 		Mart mart = (Mart) o;
 
-		if (martType != mart.martType) {
-			return false;
-		}
-		return realId.equals(mart.realId);
+		return martType == mart.martType && realId.equals(mart.realId);
 	}
 
 	@Override
