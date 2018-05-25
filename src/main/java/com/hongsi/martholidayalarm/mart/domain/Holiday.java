@@ -67,10 +67,7 @@ public class Holiday extends BaseEntity {
 
 		Holiday holiday = (Holiday) o;
 
-		if (!date.isEqual(holiday.date)) {
-			return false;
-		}
-		return mart.equals(holiday.mart);
+		return date.isEqual(holiday.date);
 	}
 
 	@Override
