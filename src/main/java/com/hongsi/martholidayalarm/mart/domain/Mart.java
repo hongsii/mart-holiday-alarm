@@ -54,7 +54,7 @@ public class Mart extends BaseEntity {
 
 	@Builder
 	public Mart(MartType martType, String realId, String branchName, String region,
-			String phoneNumber, String address, String url) {
+			String phoneNumber, String address, String url, List<Holiday> holidays) {
 		this.martType = martType;
 		this.realId = realId;
 		this.branchName = branchName;
@@ -62,16 +62,20 @@ public class Mart extends BaseEntity {
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.url = url;
+		addHolidays(holidays);
 	}
 
 	public void addHolidays(List<Holiday> holidays) {
-		for (Holiday holiday : holidays) {
-			addHoliday(holiday);
+		if (holidays != null) {
+			for (Holiday holiday : holidays) {
+				addHoliday(holiday);
+			}
 		}
 	}
 
 	public void addHoliday(Holiday holiday) {
 		if (!holidays.contains(holiday)) {
+			holiday.addedFromMart(this);
 			holidays.add(holiday);
 		}
 	}
@@ -97,6 +101,7 @@ public class Mart extends BaseEntity {
 				", region='" + region + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", address='" + address + '\'' +
+				", url='" + url + '\'' +
 				", holidays=" + holidays +
 				'}';
 	}
@@ -112,10 +117,7 @@ public class Mart extends BaseEntity {
 
 		Mart mart = (Mart) o;
 
-		if (martType != mart.martType) {
-			return false;
-		}
-		return realId.equals(mart.realId);
+		return martType == mart.martType && realId.equals(mart.realId);
 	}
 
 	@Override
