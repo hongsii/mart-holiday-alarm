@@ -114,7 +114,7 @@ public class MartServiceTest {
 
 		List<MartType> martTypes = martService.getMartTypes();
 		List<MartType> usingMartTypes = Arrays.stream(MartType.values())
-				.filter(martType -> martType.isUsing()).collect(Collectors.toList());
+				.collect(Collectors.toList());
 		assertEquals(martTypes.size(), usingMartTypes.size());
 	}
 

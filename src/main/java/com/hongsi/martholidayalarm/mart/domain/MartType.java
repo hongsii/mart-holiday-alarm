@@ -1,17 +1,30 @@
 package com.hongsi.martholidayalarm.mart.domain;
 
+import com.hongsi.martholidayalarm.crawler.domain.Crawlable;
+import com.hongsi.martholidayalarm.crawler.domain.EmartCrawler;
+import com.hongsi.martholidayalarm.crawler.domain.LottemartCrawler;
+import com.hongsi.martholidayalarm.crawler.domain.MartCrawler;
 import lombok.Getter;
 
 @Getter
-public enum MartType {
-	EMART("이마트", true), LOTTEMART("롯데마트", false);
+public enum MartType implements Crawlable {
+	EMART("이마트") {
+		@Override
+		public MartCrawler getMartCrawler() {
+			return new EmartCrawler();
+		}
+	},
+	LOTTEMART("롯데마트") {
+		@Override
+		public MartCrawler getMartCrawler() {
+			return new LottemartCrawler();
+		}
+	};
 
 	private String name;
-	private boolean isUsing;
 
-	MartType(String name, boolean isUsing) {
+	MartType(String name) {
 		this.name = name;
-		this.isUsing = isUsing;
 	}
 
 	public static MartType of(String name) throws NoSuchFieldException {

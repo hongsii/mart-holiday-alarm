@@ -19,11 +19,13 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Holiday extends BaseEntity {
 
-	@Column
-	LocalDate date;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column
+	private LocalDate date;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mart_id")
 	private Mart mart;
@@ -38,8 +40,20 @@ public class Holiday extends BaseEntity {
 		return date;
 	}
 
+	public void addedFromMart(Mart mart) {
+		this.mart = mart;
+	}
+
 	public void readyForUpdate(Holiday holiday) {
 		id = holiday.getId();
+	}
+
+	@Override
+	public String toString() {
+		return "Holiday{" +
+				"date=" + date +
+				", id=" + id +
+				'}';
 	}
 
 	@Override
@@ -53,10 +67,7 @@ public class Holiday extends BaseEntity {
 
 		Holiday holiday = (Holiday) o;
 
-		if (!date.isEqual(holiday.date)) {
-			return false;
-		}
-		return mart.equals(holiday.mart);
+		return date.isEqual(holiday.date);
 	}
 
 	@Override

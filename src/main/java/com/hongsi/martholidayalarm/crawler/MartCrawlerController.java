@@ -39,13 +39,11 @@ public class MartCrawlerController {
 		List<MartPage> pages = new ArrayList<>();
 		for (MartType martType : MartType.values()) {
 			try {
-				if (martType.isUsing()) {
-					MartCrawler martCrawler = MartCrawler.create(martType);
-					List<MartPage> crawledPages = martCrawler.crawl();
-					pages.addAll(crawledPages);
-					log.info("Crawler -- Mart type : " + martType +
-							" > page count : " + crawledPages.size());
-				}
+				MartCrawler martCrawler = martType.getMartCrawler();
+				List<MartPage> crawledPages = martCrawler.crawl();
+				pages.addAll(crawledPages);
+				log.info("Crawler -- Mart type : " + martType +
+						" > page count : " + crawledPages.size());
 			} catch (IOException ie) {
 				log.error("Crawler Exception : " + martType + " Can't find url");
 			}
