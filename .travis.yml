@@ -26,7 +26,7 @@ deploy:
     acl: public_read
     wait-until-deployed: true
     on:
-      repo: hongsii/MartHolidayAlarm
+      repo: hongsii/mart-holiday-alarm
       branch: master
 
   - provider: codedeploy
@@ -40,7 +40,7 @@ deploy:
     region: ap-northeast-2
     wait-until-deployed: true
     on:
-      repo: hongsii/MartHolidayAlarm
+      repo: hongsii/mart-holiday-alarm
       branch: master
 
 notifications:
