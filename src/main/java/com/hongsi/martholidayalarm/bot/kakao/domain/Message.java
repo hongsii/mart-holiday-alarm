@@ -40,11 +40,11 @@ public class Message {
 
 	public static String makeBranchInfo(Mart mart) {
 		final String TITLE_PREFIX = "※ ";
-		final String ITEM_PREFIX = "\n◦ ";
-		final String INFO_PREFIX = "  ➤ ";
+		final String ITEM_PREFIX = "\n• ";
+		final String INFO_PREFIX = "  ▪︎ ";
 
 		StringJoiner message = new StringJoiner(LINE_SEPARATOR);
-		message.add(TITLE_PREFIX + mart.getBranchName() + "\n")
+		message.add(TITLE_PREFIX + mart.getMartType().getName() + " > " + mart.getBranchName())
 				.add(ITEM_PREFIX + "주소\n" + INFO_PREFIX + mart.getAddress())
 				.add(ITEM_PREFIX + "전화번호\n" + INFO_PREFIX + mart.getPhoneNumber())
 				.add(ITEM_PREFIX + "휴일");

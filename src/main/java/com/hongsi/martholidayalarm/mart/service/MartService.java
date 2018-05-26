@@ -38,8 +38,8 @@ public class MartService {
 		martRepository.saveAll(marts);
 	}
 
-	public Mart getMart(String branchName) {
-		return martRepository.findByBranchName(branchName);
+	public Mart getMart(MartType martType, String branchName) {
+		return martRepository.findByMartTypeAndBranchName(martType, branchName);
 	}
 
 	public List<MartType> getMartTypes() {
