@@ -9,7 +9,6 @@ import com.hongsi.martholidayalarm.bot.kakao.domain.Keyboard;
 import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
 import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
 import com.hongsi.martholidayalarm.mart.service.MartService;
-import javax.transaction.Transactional;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +58,6 @@ public class KakaoBotControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void 채팅방_나갈시_이전_유저요청_삭제() throws Exception {
 		kakaoBotRepository.save(UserRequest.builder()
 				.userKey("1234").build());
