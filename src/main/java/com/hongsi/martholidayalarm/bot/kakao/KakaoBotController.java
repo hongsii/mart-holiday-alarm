@@ -30,7 +30,8 @@ public class KakaoBotController {
 		return kakaoBotService.parse(userRequestDTO.toEntity());
 	}
 
-	@DeleteMapping(value = "/chat_room/{user_key}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = {"/chat_room/{user_key}", "/friend/{user_key}"}
+			, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> leaveChatRoom(@PathVariable("user_key") String userKey) {
 		kakaoBotService.deleteUserRequest(userKey);
 		return ResponseEntity.ok("SUCCESS");

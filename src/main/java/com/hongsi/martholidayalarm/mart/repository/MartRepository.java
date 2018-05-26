@@ -1,6 +1,7 @@
 package com.hongsi.martholidayalarm.mart.repository;
 
 import com.hongsi.martholidayalarm.mart.domain.Mart;
+import com.hongsi.martholidayalarm.mart.domain.MartType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MartRepository extends JpaRepository<Mart, Long>, MartRepositoryCustom {
@@ -8,5 +9,7 @@ public interface MartRepository extends JpaRepository<Mart, Long>, MartRepositor
 	Mart findByRealId(String realId);
 
 	Mart findByBranchName(String branchName);
+
+	Mart findByMartTypeAndBranchName(MartType martType, String branchName);
 
 }
