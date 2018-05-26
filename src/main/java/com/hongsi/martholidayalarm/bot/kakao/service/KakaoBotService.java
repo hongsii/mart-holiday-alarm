@@ -72,7 +72,7 @@ public class KakaoBotService {
 		} catch (NoSuchFieldException e) {
 			log.error("Can not create response : " + e.getMessage());
 		}
-		return Lists.transform(martService.getMartTypes(), input -> input.getName());
+		return Lists.transform(martService.getMartTypes(), MartType::getName);
 	}
 
 	private BotResponse reset(String userKey) {
@@ -80,5 +80,9 @@ public class KakaoBotService {
 		Message wrongMessage = new Message("잘못된 요청입니다 다시 선택해주세요");
 		Keyboard defaultKeyboard = new Keyboard(Keyboard.DEFAULT_KEYBOARD);
 		return new BotResponse(wrongMessage, defaultKeyboard);
+	}
+
+	public void deleteUserRequest(String userKey) {
+		kakaoBotRepository.deleteByUserKey(userKey);
 	}
 }
