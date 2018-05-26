@@ -34,18 +34,20 @@ public class KakaoBotService {
 			}
 			userRequest.readyToUpdate(beforeRequest);
 			kakaoBotRepository.save(userRequest);
+			return new BotResponse(getMessageForResponse(userRequest),
+					getKeyboardForResponse(userRequest));
 		} catch (Exception e) {
 			return reset(userRequest.getUserKey());
 		}
-		return new BotResponse(getMessageForResponse(userRequest),
-				getKeyboardForResponse(userRequest));
 	}
 
-	private Message getMessageForResponse(UserRequest userRequest) {
+	private Message getMessageForResponse(UserRequest userRequest) throws NoSuchFieldException {
 		Button selectedButton = userRequest.getButton();
 		if (selectedButton == Button.BRANCH) {
+			MartType martType = MartType.of(userRequest
+					.getSplitedPath()[Button.MARTTYPE.getOrder()]);
 			String branchName = userRequest.getSplitedPath()[selectedButton.getOrder()];
-			Mart mart = martService.getMart(branchName);
+			Mart mart = martService.getMart(martType, branchName);
 			MessageButton messageButton = new MessageButton(mart);
 			return new Message(Message.makeBranchInfo(mart), messageButton);
 		}

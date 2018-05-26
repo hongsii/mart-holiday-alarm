@@ -68,4 +68,16 @@ public class KakaoBotControllerTest {
 
 		Assert.assertNull(kakaoBotRepository.findByUserKey("1234"));
 	}
+
+	@Test
+	public void 친구삭제시_이전_유저요청_삭제() throws Exception {
+		kakaoBotRepository.save(UserRequest.builder()
+				.userKey("1234").build());
+
+		mockMvc.perform(delete("/friend/{user_key}", "1234")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(status().isOk());
+
+		Assert.assertNull(kakaoBotRepository.findByUserKey("1234"));
+	}
 }
