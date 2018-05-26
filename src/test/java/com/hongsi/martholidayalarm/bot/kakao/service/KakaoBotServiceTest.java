@@ -14,6 +14,7 @@ import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,8 +86,9 @@ public class KakaoBotServiceTest {
 
 		BotResponse botResponse = kakaoBotService.parse(userRequest);
 		assertThat("_마트 휴일 조회", is(userRequest.getPath()));
-		System.out.println(Arrays.toString(botResponse.getKeyboard().getButtons()));
-		assertArrayEquals(new String[]{"이마트"}, botResponse.getKeyboard().getButtons());
+		assertArrayEquals(Arrays.stream(MartType.values()).map(martType -> martType.getName())
+						.collect(Collectors.toList()).toArray(),
+				botResponse.getKeyboard().getButtons());
 	}
 
 	@Test
