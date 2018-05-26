@@ -82,6 +82,7 @@ public class KakaoBotService {
 		return new BotResponse(wrongMessage, defaultKeyboard);
 	}
 
+	@Transactional
 	public void deleteUserRequest(String userKey) {
 		kakaoBotRepository.deleteByUserKey(userKey);
 	}
