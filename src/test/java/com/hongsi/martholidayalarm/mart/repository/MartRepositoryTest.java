@@ -4,30 +4,25 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import com.hongsi.martholidayalarm.config.JPAConfig;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.transaction.Transactional;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@Transactional
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
+@Import(JPAConfig.class)
 public class MartRepositoryTest {
 
 	@Autowired
 	MartRepository martRepository;
-
-	@After
-	public void cleanup() {
-		martRepository.deleteAll();
-	}
 
 	@Test
 	public void 마트저장_조회() {

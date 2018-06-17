@@ -3,12 +3,10 @@ package com.hongsi.martholidayalarm.crawler.domain;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-@Slf4j
 public class LottemartCrawler implements MartCrawler {
 
 	private int currentPage = 1;
@@ -20,11 +18,7 @@ public class LottemartCrawler implements MartCrawler {
 		do {
 			linkTags = getLinkTagsFromListPage();
 			for (Element linkTag : linkTags) {
-				try {
-					pages.add(getPageFrom(linkTag));
-				} catch (IOException ie) {
-					log.error("Can not access this page : " + ie.getMessage());
-				}
+				pages.add(getPageFrom(linkTag));
 			}
 		} while (!isLastPage(linkTags));
 		return pages;
@@ -32,7 +26,9 @@ public class LottemartCrawler implements MartCrawler {
 
 	private Elements getLinkTagsFromListPage() throws IOException {
 		final String LINK_TAGS_SELECTOR = "ul.office_list > li > div.bx_type1 > div.article4 > ul > li:first-child > span > a";
-		String url = LottemartPage.LIST_URL + currentPage++;
+		String url = LottemartPage.BASE_URL
+				+ "/bc/branchSearch/branchSearch.do?schBrnchTypeCd=BC0701&currentPageNo="
+				+ currentPage++;
 		return Jsoup.connect(url).get().select(LINK_TAGS_SELECTOR);
 	}
 

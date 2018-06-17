@@ -14,8 +14,6 @@ import org.jsoup.select.Elements;
 public class EmartPage extends MartPage {
 
 	public static final String BASE_URL = "http://store.emart.com";
-	public static final String LIST_URL = BASE_URL + "/branch/list.do";
-	public static final String CRAWLING_PAGE_URL = BASE_URL + "/branch/view.do?id=";
 	public static final String VIEW_PAGE_URL = BASE_URL + "/branch/list.do?id=";
 
 	EmartPage(String url) throws IOException {
@@ -65,7 +63,7 @@ public class EmartPage extends MartPage {
 		List<Holiday> holidays = new ArrayList<>();
 		Elements holidayTags = page.select("div.calendar_table.d-calendar");
 		for (Element holidayTag : holidayTags) {
-			String[] holidayTexts = holidayTag.attr("data-holidays").replaceAll("\\[|\\]|\\'", "")
+			String[] holidayTexts = holidayTag.attr("data-holidays").replaceAll("\\[|\\]|'", "")
 					.split(",");
 			for (String holidayText : holidayTexts) {
 				holidayText = holidayText.trim();

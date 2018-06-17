@@ -2,34 +2,30 @@ package com.hongsi.martholidayalarm.mart.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
+import com.hongsi.martholidayalarm.config.JPAConfig;
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.time.LocalDate;
 import java.util.List;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
+@Import(JPAConfig.class)
 public class HolidayRepositoryTest {
 
 	@Autowired
 	MartRepository martRepository;
+
 	@Autowired
 	HolidayRepository holidayRepository;
-
-	@After
-	public void cleanup() {
-		martRepository.deleteAll();
-		holidayRepository.deleteAll();
-	}
 
 	@Test
 	public void 휴무일조회() {
@@ -50,7 +46,8 @@ public class HolidayRepositoryTest {
 
 		assertNotNull(savedHoliday);
 		assertEquals(mart.getId(), savedHoliday.getMart().getId());
-		assertEquals(now, savedHoliday.getHoliday());
+		assertEquals(now.format(Holiday.DEFAULT_FORMATTER_WITH_DAYOFWEEK),
+				savedHoliday.getFormattedHolidayWithDayOfWeek());
 	}
 
 	@Test
@@ -107,8 +104,10 @@ public class HolidayRepositoryTest {
 		Holiday holiday2 = marts.get(1).getHolidays().get(0);
 
 		assertEquals(2, marts.size());
-		assertTrue(holiday1.getHoliday().isEqual(now));
-		assertTrue(holiday1.getHoliday().isEqual(holiday2.getHoliday()));
+		assertEquals(holiday1.getFormattedHolidayWithDayOfWeek(),
+				now.format(Holiday.DEFAULT_FORMATTER_WITH_DAYOFWEEK));
+		assertEquals(holiday1.getFormattedHolidayWithDayOfWeek(),
+				holiday2.getFormattedHolidayWithDayOfWeek());
 	}
 
 	@Test

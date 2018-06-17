@@ -1,6 +1,8 @@
 package com.hongsi.martholidayalarm.mart.domain;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,10 +16,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity
 public class Holiday extends BaseEntity {
+
+	public static final DateTimeFormatter DEFAULT_FORMATTER_WITH_DAYOFWEEK = DateTimeFormatter
+			.ofPattern("yyyy-MM-dd (EE)").withLocale(Locale.KOREAN);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,16 +41,16 @@ public class Holiday extends BaseEntity {
 		this.mart = mart;
 	}
 
-	public LocalDate getHoliday() {
-		return date;
+	public String getFormattedHolidayWithDayOfWeek() {
+		return date.format(DEFAULT_FORMATTER_WITH_DAYOFWEEK);
+	}
+
+	public boolean isUpcoming() {
+		return !date.isBefore(LocalDate.now());
 	}
 
 	public void addedFromMart(Mart mart) {
 		this.mart = mart;
-	}
-
-	public void readyForUpdate(Holiday holiday) {
-		id = holiday.getId();
 	}
 
 	@Override

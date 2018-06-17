@@ -17,9 +17,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity
 public class Mart extends BaseEntity {
 
 	@Id
@@ -53,8 +53,9 @@ public class Mart extends BaseEntity {
 	private List<Holiday> holidays = new ArrayList<>();
 
 	@Builder
-	public Mart(MartType martType, String realId, String branchName, String region,
+	public Mart(Long id, MartType martType, String realId, String branchName, String region,
 			String phoneNumber, String address, String url, List<Holiday> holidays) {
+		this.id = id;
 		this.martType = martType;
 		this.realId = realId;
 		this.branchName = branchName;
@@ -80,15 +81,9 @@ public class Mart extends BaseEntity {
 		}
 	}
 
-	public void readyForUpdate(Mart savedMart) {
+	public void update(Mart savedMart) {
 		id = savedMart.getId();
-		List<Holiday> savedHolidays = savedMart.getHolidays();
-		for (Holiday holiday : holidays) {
-			if (savedHolidays.contains(holiday)) {
-				int index = savedHolidays.indexOf(holiday);
-				holiday.readyForUpdate(savedHolidays.get(index));
-			}
-		}
+		holidays.removeIf(holiday -> savedMart.getHolidays().contains(holiday));
 	}
 
 	@Override

@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 public class JPAConfig {
 
 	@PersistenceContext
-	EntityManager em;
+	private EntityManager em;
 
 	@Bean
-	public JPAQueryFactory queryFactory() {
+	public JPAQueryFactory jpaQueryFactory() {
 		return new JPAQueryFactory(em);
 	}
 }

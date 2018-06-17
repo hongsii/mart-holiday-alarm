@@ -17,13 +17,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
+@Slf4j
 public class KakaoBotService {
 
-	private MartService martService;
-	private KakaoBotRepository kakaoBotRepository;
+	private final MartService martService;
+	private final KakaoBotRepository kakaoBotRepository;
 
 	@Transactional
 	public BotResponse parse(UserRequest userRequest) {

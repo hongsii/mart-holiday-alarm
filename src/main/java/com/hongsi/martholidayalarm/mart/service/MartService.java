@@ -4,35 +4,23 @@ import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
-@Transactional
 @Service
+@AllArgsConstructor
 public class MartService {
 
-	private MartRepository martRepository;
+	private final MartRepository martRepository;
 
-	public Mart createMart(MartType martType, String realId) {
-		Mart savedMart = martRepository.findByRealId(realId);
-		if (savedMart == null) {
-			return Mart.builder()
-					.martType(martType)
-					.realId(realId)
-					.build();
-		}
-		return savedMart;
-	}
-
+	@Transactional
 	public void saveAll(List<Mart> marts) {
 		List<Mart> savedMarts = martRepository.findAll();
 		for (Mart mart : marts) {
 			if (savedMarts.contains(mart)) {
 				int index = savedMarts.indexOf(mart);
-				mart.readyForUpdate(savedMarts.get(index));
+				mart.update(savedMarts.get(index));
 			}
 		}
 		martRepository.saveAll(marts);
@@ -43,8 +31,7 @@ public class MartService {
 	}
 
 	public List<MartType> getMartTypes() {
-		List<MartType> martTypes = martRepository.findMartType();
-		return martTypes.stream().collect(Collectors.toList());
+		return martRepository.findMartType();
 	}
 
 	public List<String> getRegions(MartType martType) {
