@@ -9,12 +9,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MartRepositoryImpl implements MartRepositoryCustom {
 
-	JPAQueryFactory queryFactory;
+	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
 	public List<MartType> findMartType() {
 		QMart mart = QMart.mart;
-		return queryFactory.query()
+		return jpaQueryFactory.query()
 				.select(mart.martType)
 				.from(mart)
 				.groupBy(mart.martType)
@@ -25,7 +25,7 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 	@Override
 	public List<String> findRegionByMartType(MartType martType) {
 		QMart mart = QMart.mart;
-		return queryFactory.query()
+		return jpaQueryFactory.query()
 				.select(mart.region)
 				.from(mart)
 				.where(mart.martType.eq(martType))
@@ -37,7 +37,7 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 	@Override
 	public List<String> findBranchByMartTypeAndRegion(MartType martType, String region) {
 		QMart mart = QMart.mart;
-		return queryFactory.query()
+		return jpaQueryFactory.query()
 				.select(mart.branchName)
 				.from(mart)
 				.where(mart.martType.eq(martType).and(mart.region.eq(region)))

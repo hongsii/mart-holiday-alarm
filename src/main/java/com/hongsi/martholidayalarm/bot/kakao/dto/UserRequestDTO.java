@@ -1,6 +1,7 @@
 package com.hongsi.martholidayalarm.bot.kakao.dto;
 
 import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +9,13 @@ import lombok.Setter;
 @Setter
 public class UserRequestDTO {
 
+	@NotBlank
 	private String user_key;
 
+	@NotBlank
 	private String type;
 
+	@NotBlank
 	private String content;
 
 	public UserRequest toEntity() {

@@ -13,16 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Slf4j
-@AllArgsConstructor
 @Component
+@AllArgsConstructor
+@Slf4j
 public class MartCrawlerController {
 
 	MartService martService;
 
 	//	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
 	@Scheduled(cron = "0 0 3 ? * MON")
-	public void start() throws IOException {
+	public void start() {
 		log.info("Crawler -- start !");
 
 		List<Mart> crawledMarts = new ArrayList<>();
@@ -35,7 +35,7 @@ public class MartCrawlerController {
 		log.info("Crawler -- done !");
 	}
 
-	private List<MartPage> getPages() throws IOException {
+	private List<MartPage> getPages() {
 		List<MartPage> pages = new ArrayList<>();
 		for (MartType martType : MartType.values()) {
 			try {

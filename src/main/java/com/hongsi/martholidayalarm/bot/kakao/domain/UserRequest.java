@@ -13,9 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
+@Entity
 @NoArgsConstructor
 @Getter
-@Entity
 public class UserRequest extends BaseEntity {
 
 	public static final String DEFAULT_SEPARATOR = "_";

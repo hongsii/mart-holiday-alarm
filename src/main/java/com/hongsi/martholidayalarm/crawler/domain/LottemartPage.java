@@ -18,9 +18,6 @@ import java.util.regex.Pattern;
 public class LottemartPage extends MartPage {
 
 	public static final String BASE_URL = "http://company.lottemart.com";
-	public static final String LIST_URL =
-			BASE_URL + "/bc/branchSearch/branchSearch.do?schBrnchTypeCd=BC0701&currentPageNo=";
-	public static final String VIEW_PAGE_URL = BASE_URL + "/branch/bc/main.do?brnchCd=";
 
 	LottemartPage(String url) throws IOException {
 		super(url);

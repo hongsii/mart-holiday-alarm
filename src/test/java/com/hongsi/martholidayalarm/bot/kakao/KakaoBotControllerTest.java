@@ -1,83 +1,76 @@
 package com.hongsi.martholidayalarm.bot.kakao;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.hongsi.martholidayalarm.bot.kakao.domain.Keyboard;
-import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
-import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
-import com.hongsi.martholidayalarm.mart.service.MartService;
+import com.hongsi.martholidayalarm.bot.kakao.service.KakaoBotService;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.AdditionalMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@WebMvcTest(value = KakaoBotController.class)
+@AutoConfigureMockMvc
 public class KakaoBotControllerTest {
 
 	@Autowired
-	MartService martService;
-	@Autowired
-	KakaoBotRepository kakaoBotRepository;
-
-	@Autowired
-	private WebApplicationContext wac;
 	private MockMvc mockMvc;
 
-	@Before
-	public void initMockMvc() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-	}
+	@MockBean
+	private KakaoBotService kakaoBotService;
 
 	@Test
 	public void 최초_요청시_키보드_확인() throws Exception {
-		HttpHeaders headers = new HttpHeaders();
-
 		mockMvc.perform(get("/keyboard")
-				.headers(headers)
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.type", Matchers.is("buttons")))
-				.andExpect(jsonPath("$.buttons", new Object[]{AdditionalMatchers
-						.aryEq(Keyboard.DEFAULT_KEYBOARD)})
-						.isArray());
+				.andExpect(jsonPath("$.buttons[0]").value("마트 휴일 조회"));
 	}
 
 	@Test
 	public void 채팅방_나갈시_이전_유저요청_삭제() throws Exception {
-		kakaoBotRepository.save(UserRequest.builder()
-				.userKey("1234").build());
-
-		mockMvc.perform(delete("/chat_room/{user_key}", "1234")
+		mockMvc.perform(delete("/chat_room/1234")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
-
-		Assert.assertNull(kakaoBotRepository.findByUserKey("1234"));
 	}
 
 	@Test
 	public void 친구삭제시_이전_유저요청_삭제() throws Exception {
-		kakaoBotRepository.save(UserRequest.builder()
-				.userKey("1234").build());
-
-		mockMvc.perform(delete("/friend/{user_key}", "1234")
+		mockMvc.perform(delete("/friend/1234")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
+		verify(kakaoBotService, times(1)).deleteUserRequest(any(String.class));
+	}
 
-		Assert.assertNull(kakaoBotRepository.findByUserKey("1234"));
+	@Test
+	public void 삭제_요청시_id생략() throws Exception {
+		mockMvc.perform(delete("/friend/")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(status().isNotFound());
+		verify(kakaoBotService, never()).deleteUserRequest(any(String.class));
+	}
+
+	@Configuration
+	@ComponentScan(basePackageClasses = {KakaoBotController.class})
+	public static class TestConf {
+
 	}
 }

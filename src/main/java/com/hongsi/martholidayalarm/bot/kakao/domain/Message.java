@@ -3,9 +3,6 @@ package com.hongsi.martholidayalarm.bot.kakao.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
-import java.util.Locale;
 import java.util.StringJoiner;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,15 +45,10 @@ public class Message {
 				.add(ITEM_PREFIX + "주소\n" + INFO_PREFIX + mart.getAddress())
 				.add(ITEM_PREFIX + "전화번호\n" + INFO_PREFIX + mart.getPhoneNumber())
 				.add(ITEM_PREFIX + "휴일");
-		LocalDate now = LocalDate.now();
 		for (Holiday holiday : mart.getHolidays()) {
-			LocalDate date = holiday.getHoliday();
-			if (date.isBefore(now)) {
-				continue;
+			if (holiday.isUpcoming()) {
+				message.add(INFO_PREFIX + holiday.getFormattedHolidayWithDayOfWeek());
 			}
-			message.add(INFO_PREFIX + date.toString() +
-					" (" + date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)
-					+ ")");
 		}
 		return message.toString();
 	}
