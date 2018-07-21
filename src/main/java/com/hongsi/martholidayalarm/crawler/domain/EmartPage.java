@@ -36,7 +36,7 @@ public class EmartPage extends MartPage {
 
 
 	private String getRealId() {
-		return page.select("div.btn.d-favor-toggle > button").attr("data-store-id");
+		return page.select("a[data-store-id]").attr("data-store-id");
 	}
 
 	private String getRegion() {

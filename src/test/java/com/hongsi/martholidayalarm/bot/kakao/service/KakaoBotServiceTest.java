@@ -77,7 +77,7 @@ public class KakaoBotServiceTest {
 	}
 
 	@Test
-	public void 최초_사용자가_요청시_버튼생성() {
+	public void 최초_사용자가_요청시_버튼생성() throws Exception {
 		UserRequest userRequest = UserRequest.builder()
 				.userKey("1234qwer")
 				.content("마트 휴일 조회")
@@ -92,7 +92,7 @@ public class KakaoBotServiceTest {
 	}
 
 	@Test
-	public void 사용자가_휴일조회_후_버튼생성() {
+	public void 사용자가_휴일조회_후_버튼생성() throws Exception {
 		UserRequest branchRequest = UserRequest.builder()
 				.userKey("1234qwer")
 				.content("서울")

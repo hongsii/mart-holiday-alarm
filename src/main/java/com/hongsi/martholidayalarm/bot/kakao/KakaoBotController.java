@@ -31,7 +31,11 @@ public class KakaoBotController {
 	@PostMapping(value = "/message", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public BotResponse makeResponse(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-		return kakaoBotService.parse(userRequestDTO.toEntity());
+		try {
+			return kakaoBotService.parse(userRequestDTO.toEntity());
+		} catch (Exception e) {
+			return kakaoBotService.reset(userRequestDTO.getUser_key());
+		}
 	}
 
 	@DeleteMapping(value = {"/chat_room/{user_key}", "/friend/{user_key}"}

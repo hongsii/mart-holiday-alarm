@@ -26,19 +26,15 @@ public class KakaoBotService {
 	private final KakaoBotRepository kakaoBotRepository;
 
 	@Transactional
-	public BotResponse parse(UserRequest userRequest) {
-		try {
-			UserRequest beforeRequest = kakaoBotRepository.findByUserKey(userRequest.getUserKey());
-			if (userRequest.isSame(beforeRequest)) {
-				throw new IllegalStateException("중복된 요청입니다.");
-			}
-			userRequest.readyToUpdate(beforeRequest);
-			kakaoBotRepository.save(userRequest);
-			return new BotResponse(getMessageForResponse(userRequest),
-					getKeyboardForResponse(userRequest));
-		} catch (Exception e) {
-			return reset(userRequest.getUserKey());
+	public BotResponse parse(UserRequest userRequest) throws Exception {
+		UserRequest beforeRequest = kakaoBotRepository.findByUserKey(userRequest.getUserKey());
+		if (userRequest.isSame(beforeRequest)) {
+			throw new IllegalStateException("중복된 요청입니다.");
 		}
+		userRequest.readyToUpdate(beforeRequest);
+		kakaoBotRepository.save(userRequest);
+		return new BotResponse(getMessageForResponse(userRequest),
+				getKeyboardForResponse(userRequest));
 	}
 
 	private Message getMessageForResponse(UserRequest userRequest) throws NoSuchFieldException {
@@ -67,7 +63,7 @@ public class KakaoBotService {
 					return martService.getRegions(MartType.of(path[buttonOrder]));
 				case REGION:
 					return martService.getBranches(MartType.of(path[buttonOrder]),
-							path[Button.MARTTYPE.REGION.getOrder()]);
+							path[Button.REGION.getOrder()]);
 				case BRANCH:
 					return Keyboard.getDefaultKeyboardToList();
 			}
@@ -77,7 +73,7 @@ public class KakaoBotService {
 		return Lists.transform(martService.getMartTypes(), MartType::getName);
 	}
 
-	private BotResponse reset(String userKey) {
+	public BotResponse reset(String userKey) {
 		kakaoBotRepository.deleteByUserKey(userKey);
 		Message wrongMessage = new Message("잘못된 요청입니다 다시 선택해주세요");
 		Keyboard defaultKeyboard = new Keyboard(Keyboard.DEFAULT_KEYBOARD);
