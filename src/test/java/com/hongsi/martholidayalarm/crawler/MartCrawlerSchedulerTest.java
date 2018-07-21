@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MartCrawlerControllerTest {
+public class MartCrawlerSchedulerTest {
 
 	@Test
 	public void 월요일마다_스케줄_실행확인() {

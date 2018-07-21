@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class MartCrawlerController {
+public class MartCrawlerScheduler {
 
 	MartService martService;
 

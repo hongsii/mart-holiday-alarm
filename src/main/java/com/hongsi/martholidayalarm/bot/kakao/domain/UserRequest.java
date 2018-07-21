@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.bot.kakao.domain;
 
-import com.hongsi.martholidayalarm.mart.domain.BaseEntity;
+import com.hongsi.martholidayalarm.common.domain.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
