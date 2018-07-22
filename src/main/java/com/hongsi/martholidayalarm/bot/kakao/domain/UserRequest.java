@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.bot.kakao.domain;
 
-import com.hongsi.martholidayalarm.mart.domain.BaseEntity;
+import com.hongsi.martholidayalarm.common.domain.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -65,8 +65,8 @@ public class UserRequest extends BaseEntity {
 		path += DEFAULT_SEPARATOR + content;
 	}
 
-	public String[] getSplitedPath() {
-		return path.split(DEFAULT_SEPARATOR);
+	public String getBeforeRequest(Button button) {
+		return path.split(DEFAULT_SEPARATOR)[button.getOrder()];
 	}
 
 	public boolean isSame(UserRequest beforeRequest) {
