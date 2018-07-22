@@ -11,6 +11,7 @@ import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.service.MartService;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,7 @@ public class KakaoBotService {
 		return new BotResponse(wrongMessage, defaultKeyboard);
 	}
 
+	@Transactional
 	public void deleteUserRequest(String userKey) {
 		kakaoBotRepository.deleteByUserKey(userKey);
 	}
