@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.mart.domain;
 
+import com.hongsi.martholidayalarm.common.domain.BaseEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;

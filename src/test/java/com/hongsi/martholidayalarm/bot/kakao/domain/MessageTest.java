@@ -24,6 +24,7 @@ public class MessageTest {
 				.holidays(asList(Holiday.builder().date(LocalDate.of(2018, 6, 20)).build()))
 				.build();
 
-		assertThat(Message.makeBranchInfo(mart)).isNotEmpty();
+		Message message = new Message(mart);
+		assertThat(message.getText()).isNotBlank();
 	}
 }

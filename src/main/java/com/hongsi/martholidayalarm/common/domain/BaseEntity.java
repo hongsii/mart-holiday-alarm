@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.mart.domain;
+package com.hongsi.martholidayalarm.common.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
