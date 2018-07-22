@@ -73,6 +73,7 @@ public class KakaoBotService {
 		return Keyboard.getDefaultKeyboardToList();
 	}
 
+	@Transactional
 	public BotResponse reset(String userKey) {
 		deleteUserRequest(userKey);
 		Message wrongMessage = new Message("잘못된 요청입니다 다시 선택해주세요");
