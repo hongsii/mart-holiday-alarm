@@ -65,8 +65,8 @@ public class UserRequest extends BaseEntity {
 		path += DEFAULT_SEPARATOR + content;
 	}
 
-	public String[] getSplitedPath() {
-		return path.split(DEFAULT_SEPARATOR);
+	public String getBeforeRequest(Button button) {
+		return path.split(DEFAULT_SEPARATOR)[button.getOrder()];
 	}
 
 	public boolean isSame(UserRequest beforeRequest) {

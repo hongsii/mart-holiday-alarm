@@ -35,7 +35,12 @@ public class Message {
 		this.messageButton = messageButton;
 	}
 
-	public static String makeBranchInfo(Mart mart) {
+	public Message(Mart mart) {
+		text = makeBranchInfo(mart);
+		messageButton = new MessageButton(mart);
+	}
+
+	private String makeBranchInfo(Mart mart) {
 		final String TITLE_PREFIX = "※ ";
 		final String ITEM_PREFIX = "\n• ";
 		final String INFO_PREFIX = "  ▪︎ ";

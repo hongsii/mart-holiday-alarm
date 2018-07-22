@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class KakaoBotController {
 
-	KakaoBotService kakaoBotService;
+	private final KakaoBotService kakaoBotService;
 
 	@GetMapping("/keyboard")
 	public Keyboard makeDefaultKeyboard() {
