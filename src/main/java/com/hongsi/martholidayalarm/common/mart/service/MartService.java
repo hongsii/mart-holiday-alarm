@@ -1,8 +1,8 @@
-package com.hongsi.martholidayalarm.mart.service;
+package com.hongsi.martholidayalarm.common.mart.service;
 
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
-import com.hongsi.martholidayalarm.mart.repository.MartRepository;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;

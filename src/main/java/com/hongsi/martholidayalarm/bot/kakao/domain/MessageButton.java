@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.bot.kakao.domain;
 
-import com.hongsi.martholidayalarm.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import lombok.Getter;
 
 @Getter

@@ -1,9 +1,9 @@
 package com.hongsi.martholidayalarm.crawler.domain;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.crawler.util.CrawlUtil;
-import com.hongsi.martholidayalarm.mart.domain.Holiday;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;

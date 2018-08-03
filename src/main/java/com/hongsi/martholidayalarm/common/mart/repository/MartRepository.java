@@ -1,7 +1,7 @@
-package com.hongsi.martholidayalarm.mart.repository;
+package com.hongsi.martholidayalarm.common.mart.repository;
 
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MartRepository extends JpaRepository<Mart, Long>, MartRepositoryCustom {

@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.mart.domain;
+package com.hongsi.martholidayalarm.common.mart.domain;
 
 import com.hongsi.martholidayalarm.common.domain.BaseEntity;
 import java.util.ArrayList;

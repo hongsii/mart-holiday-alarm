@@ -3,9 +3,9 @@ package com.hongsi.martholidayalarm.bot.kakao.domain;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.hongsi.martholidayalarm.mart.domain.Holiday;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import java.time.LocalDate;
 import org.junit.Test;
 

@@ -1,10 +1,10 @@
 package com.hongsi.martholidayalarm.crawler;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import com.hongsi.martholidayalarm.crawler.domain.MartCrawler;
 import com.hongsi.martholidayalarm.crawler.domain.MartPage;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
-import com.hongsi.martholidayalarm.mart.service.MartService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

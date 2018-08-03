@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.mart.domain;
+package com.hongsi.martholidayalarm.common.mart.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

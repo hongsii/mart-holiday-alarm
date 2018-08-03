@@ -2,7 +2,7 @@ package com.hongsi.martholidayalarm.crawler.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.hongsi.martholidayalarm.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import org.junit.Test;
 
 public class LottemartPageTest {

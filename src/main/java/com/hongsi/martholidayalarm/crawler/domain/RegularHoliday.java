@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.crawler.domain;
 
-import com.hongsi.martholidayalarm.mart.domain.Holiday;
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;

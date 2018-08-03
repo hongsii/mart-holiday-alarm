@@ -1,6 +1,6 @@
-package com.hongsi.martholidayalarm.mart.repository;
+package com.hongsi.martholidayalarm.common.mart.repository;
 
-import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import java.util.List;
 
 public interface MartRepositoryCustom {

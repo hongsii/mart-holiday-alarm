@@ -1,7 +1,7 @@
-package com.hongsi.martholidayalarm.mart.repository;
+package com.hongsi.martholidayalarm.common.mart.repository;
 
-import com.hongsi.martholidayalarm.mart.domain.MartType;
-import com.hongsi.martholidayalarm.mart.domain.QMart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.domain.QMart;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.AllArgsConstructor;

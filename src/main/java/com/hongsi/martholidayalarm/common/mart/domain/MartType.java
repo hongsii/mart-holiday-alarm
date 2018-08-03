@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.mart.domain;
+package com.hongsi.martholidayalarm.common.mart.domain;
 
 import com.hongsi.martholidayalarm.crawler.domain.Crawlable;
 import com.hongsi.martholidayalarm.crawler.domain.EmartCrawler;
