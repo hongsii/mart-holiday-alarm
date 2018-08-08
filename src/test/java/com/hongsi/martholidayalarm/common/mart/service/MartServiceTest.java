@@ -1,12 +1,14 @@
 package com.hongsi.martholidayalarm.common.mart.service;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.dto.MartDTO;
 import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -63,9 +65,9 @@ public class MartServiceTest {
 		martService.saveAll(marts);
 
 		marts = martRepository.findAll();
-		assertEquals(1, marts.size());
-		assertEquals(1, marts.get(0).getHolidays().size());
-		assertEquals("성수점", marts.get(0).getBranchName());
+		assertThat(marts).isNotEmpty().hasSize(1);
+		assertThat(marts.get(0).getHolidays()).isNotEmpty().hasSize(1);
+		assertThat(marts.get(0).getBranchName()).isEqualTo("성수점");
 	}
 
 	@Test
@@ -96,7 +98,8 @@ public class MartServiceTest {
 		List<MartType> martTypes = martService.getMartTypes();
 		List<MartType> usingMartTypes = Arrays.stream(MartType.values())
 				.collect(Collectors.toList());
-		assertEquals(martTypes.size(), usingMartTypes.size());
+
+		assertThat(usingMartTypes).isNotEmpty().hasSize(martTypes.size());
 	}
 
 	@Test
@@ -121,8 +124,8 @@ public class MartServiceTest {
 
 		List<String> regions = martService.getRegions(MartType.EMART);
 
-		assertEquals(marts.size(), regions.size());
-		assertThat(regions, containsInAnyOrder("경기", "경상", "서울"));
+		assertThat(regions).isNotEmpty().hasSize(marts.size());
+		assertThat(regions).containsOnly("경기", "경상", "서울");
 	}
 
 	@Test
@@ -156,7 +159,35 @@ public class MartServiceTest {
 
 		List<String> branches = martService.getBranches(MartType.EMART, "서울");
 
-		assertEquals(2, branches.size());
-		assertThat(branches, containsInAnyOrder("강남점", "서울점"));
+		assertThat(branches).isNotEmpty().hasSize(2);
+		assertThat(branches).containsExactlyInAnyOrder("강남점", "서울점");
+	}
+
+	@Test
+	public void 마트타입으로_MartDTO_리스트조회() {
+		List<Mart> savedMarts = new ArrayList<>();
+		Mart mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build();
+		mart.addHoliday(Holiday.builder()
+				.mart(mart)
+				.date(LocalDate.of(2018, 8, 9))
+				.build());
+		savedMarts.add(mart);
+		martService.saveAll(savedMarts);
+
+		String martTypeStr = "emart";
+		List<MartDTO> marts = martService.findMartsByMartType(martTypeStr);
+
+		assertThat(marts).isNotEmpty().hasSize(1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void 잘못된_마트타입으로_MartDTO_리스트조회() {
+		String martTypeStr = "honghong";
+		List<MartDTO> marts = martService.findMartsByMartType(martTypeStr);
+
+		verify(martService, never()).findMartsByMartType(any(String.class));
 	}
 }
