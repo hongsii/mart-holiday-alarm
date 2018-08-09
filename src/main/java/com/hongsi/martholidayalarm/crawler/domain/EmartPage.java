@@ -29,6 +29,7 @@ public class EmartPage extends MartPage {
 				.branchName(getBranchName())
 				.phoneNumber(getPhoneNumber())
 				.address(getAddress())
+				.openingHours(getOpeningHours())
 				.url(getPageUrl())
 				.holidays(getHolidays())
 				.build();
@@ -53,6 +54,10 @@ public class EmartPage extends MartPage {
 
 	private String getAddress() {
 		return page.select("li.addr > div.layer_addr").text();
+	}
+
+	private String getOpeningHours() {
+		return page.select("li.time dd").text();
 	}
 
 	private String getPageUrl() {

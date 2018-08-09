@@ -46,6 +46,9 @@ public class Mart extends BaseEntity {
 	@Column(name = "address")
 	private String address;
 
+	@Column(name = "opening_hours")
+	private String openingHours;
+
 	@Column(name = "url")
 	private String url;
 
@@ -55,7 +58,8 @@ public class Mart extends BaseEntity {
 
 	@Builder
 	public Mart(Long id, MartType martType, String realId, String branchName, String region,
-			String phoneNumber, String address, String url, List<Holiday> holidays) {
+			String phoneNumber, String address, String openingHours, String url,
+			List<Holiday> holidays) {
 		this.id = id;
 		this.martType = martType;
 		this.realId = realId;
@@ -63,6 +67,7 @@ public class Mart extends BaseEntity {
 		this.region = region;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
+		this.openingHours = openingHours;
 		this.url = url;
 		addHolidays(holidays);
 	}
