@@ -2,7 +2,7 @@ package com.hongsi.martholidayalarm.bot.kakao;
 
 import com.hongsi.martholidayalarm.bot.kakao.domain.BotResponse;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Keyboard;
-import com.hongsi.martholidayalarm.bot.kakao.dto.UserRequestDTO;
+import com.hongsi.martholidayalarm.bot.kakao.dto.UserRequestDto;
 import com.hongsi.martholidayalarm.bot.kakao.service.KakaoBotService;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class KakaoBotController {
 
 	@PostMapping(value = "/message", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public BotResponse makeResponse(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+	public BotResponse makeResponse(@RequestBody @Valid UserRequestDto userRequestDTO) {
 		try {
 			return kakaoBotService.parse(userRequestDTO.toEntity());
 		} catch (Exception e) {

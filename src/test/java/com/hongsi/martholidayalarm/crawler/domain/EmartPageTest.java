@@ -13,10 +13,11 @@ public class EmartPageTest {
 		EmartPage page = new EmartPage(EmartPage.BASE_URL + "/branch/view.do?id=" + realId);
 		Mart mart = page.getInfo();
 		assertThat(mart).isNotNull();
-		assertThat(mart.getRealId()).isEqualTo(realId);
+		assertThat(mart.getRealId()).isNotBlank().isEqualTo(realId);
 		assertThat(mart.getBranchName()).isNotBlank();
-		assertThat(mart.getAddress()).isNotBlank();
 		assertThat(mart.getPhoneNumber()).isNotBlank();
+		assertThat(mart.getAddress()).isNotBlank();
+		assertThat(mart.getOpeningHours()).isNotBlank();
 		assertThat(mart.getRegion()).isNotEmpty();
 	}
 }
