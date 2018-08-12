@@ -36,12 +36,12 @@ public class MartControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martService, times(1)).findMartsByMartType(any(String.class));
+		verify(martService, times(1)).getMartsByMartType(any(String.class));
 	}
 
 	@Test
 	public void 잘못된_마트타입으로_리스트_요청() throws Exception {
-		when(martService.findMartsByMartType(any(String.class)))
+		when(martService.getMartsByMartType(any(String.class)))
 				.thenThrow(IllegalArgumentException.class);
 		mockMvc.perform(get("/api/mart/hongmart/list")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))

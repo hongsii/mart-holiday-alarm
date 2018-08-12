@@ -3,6 +3,7 @@ package com.hongsi.martholidayalarm.bot.kakao.domain;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.hongsi.martholidayalarm.bot.kakao.dto.Message;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;

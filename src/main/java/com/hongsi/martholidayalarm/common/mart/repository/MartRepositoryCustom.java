@@ -12,5 +12,7 @@ public interface MartRepositoryCustom {
 
 	List<String> findBranchByMartTypeAndRegion(MartType martType, String region);
 
+	LocalDateTime findMaxModifiedDate();
+
 	List<Long> findIdByModifiedDateLessThan(LocalDateTime localDateTime);
 }

@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.bot.kakao.domain;
+package com.hongsi.martholidayalarm.bot.kakao.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;

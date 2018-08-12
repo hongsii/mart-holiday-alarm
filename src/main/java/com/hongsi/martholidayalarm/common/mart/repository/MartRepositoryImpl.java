@@ -41,10 +41,20 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 		return jpaQueryFactory.query()
 				.select(mart.branchName)
 				.from(mart)
-				.where(mart.martType.eq(martType).and(mart.region.eq(region)))
+				.where(mart.martType.eq(martType)
+						.and(mart.region.eq(region)))
 				.groupBy(mart.martType, mart.branchName)
 				.orderBy(mart.branchName.asc())
 				.fetch();
+	}
+
+	@Override
+	public LocalDateTime findMaxModifiedDate() {
+		QMart mart = QMart.mart;
+		return jpaQueryFactory.query()
+				.select(mart.modifiedDate.max())
+				.from(mart)
+				.fetchOne();
 	}
 
 	@Override

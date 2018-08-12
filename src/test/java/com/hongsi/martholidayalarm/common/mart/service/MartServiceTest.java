@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
-import com.hongsi.martholidayalarm.common.mart.dto.MartDTO;
+import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -178,7 +178,7 @@ public class MartServiceTest {
 		martService.saveAll(savedMarts);
 
 		String martTypeStr = "emart";
-		List<MartDTO> marts = martService.findMartsByMartType(martTypeStr);
+		List<MartDto> marts = martService.getMartsByMartType(martTypeStr);
 
 		assertThat(marts).isNotEmpty().hasSize(1);
 	}
@@ -186,8 +186,8 @@ public class MartServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void 잘못된_마트타입으로_MartDTO_리스트조회() {
 		String martTypeStr = "honghong";
-		List<MartDTO> marts = martService.findMartsByMartType(martTypeStr);
+		List<MartDto> marts = martService.getMartsByMartType(martTypeStr);
 
-		verify(martService, never()).findMartsByMartType(any(String.class));
+		verify(martService, never()).getMartsByMartType(any(String.class));
 	}
 }

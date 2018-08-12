@@ -16,7 +16,7 @@ public enum Button {
 
 	public Button getNextButton() {
 		for (Button button : Button.values()) {
-			if (button.order == this.order + 1) {
+			if (button.order == order + 1) {
 				return button;
 			}
 		}

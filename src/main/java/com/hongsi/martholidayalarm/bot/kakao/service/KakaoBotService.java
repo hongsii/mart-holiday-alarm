@@ -1,10 +1,10 @@
 package com.hongsi.martholidayalarm.bot.kakao.service;
 
-import com.hongsi.martholidayalarm.bot.kakao.domain.BotResponse;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Button;
-import com.hongsi.martholidayalarm.bot.kakao.domain.Keyboard;
-import com.hongsi.martholidayalarm.bot.kakao.domain.Message;
 import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
+import com.hongsi.martholidayalarm.bot.kakao.dto.BotResponse;
+import com.hongsi.martholidayalarm.bot.kakao.dto.Keyboard;
+import com.hongsi.martholidayalarm.bot.kakao.dto.Message;
 import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
@@ -25,7 +25,7 @@ public class KakaoBotService {
 
 	private final KakaoBotRepository kakaoBotRepository;
 
-	public BotResponse parse(UserRequest userRequest) throws Exception {
+	public BotResponse parse(UserRequest userRequest) {
 		UserRequest beforeRequest = kakaoBotRepository.findByUserKey(userRequest.getUserKey());
 		if (userRequest.isSame(beforeRequest)) {
 			throw new IllegalStateException("중복된 요청입니다.");

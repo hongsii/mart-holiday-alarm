@@ -35,7 +35,6 @@ public class EmartPage extends MartPage {
 				.build();
 	}
 
-
 	private String getRealId() {
 		return page.select("a[data-store-id]").attr("data-store-id");
 	}

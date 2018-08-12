@@ -2,7 +2,7 @@ package com.hongsi.martholidayalarm.common.mart.service;
 
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
-import com.hongsi.martholidayalarm.common.mart.dto.MartDTO;
+import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.repository.HolidayRepository;
 import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
 import java.time.LocalDateTime;
@@ -20,18 +20,6 @@ public class MartService {
 
 	private final HolidayRepository holidayRepository;
 
-	@Transactional
-	public void saveAll(List<Mart> marts) {
-		List<Mart> savedMarts = martRepository.findAll();
-		for (Mart mart : marts) {
-			if (savedMarts.contains(mart)) {
-				int index = savedMarts.indexOf(mart);
-				mart.update(savedMarts.get(index));
-			}
-		}
-		martRepository.saveAll(marts);
-	}
-
 	public Mart getMart(MartType martType, String branchName) {
 		return martRepository.findByMartTypeAndBranchName(martType, branchName);
 	}
@@ -48,14 +36,27 @@ public class MartService {
 		return martRepository.findBranchByMartTypeAndRegion(martType, region);
 	}
 
-	public List<MartDTO> findMartsByMartType(String martTypeStr) throws IllegalArgumentException {
+	public List<MartDto> getMartsByMartType(String martTypeStr) throws IllegalArgumentException {
 		MartType martType = MartType.typeOf(martTypeStr);
 		return martRepository.findByMartType(martType)
 				.stream()
-				.map(MartDTO::new)
+				.map(MartDto::new)
 				.collect(Collectors.toList());
 	}
 
+	@Transactional
+	public void saveAll(List<Mart> marts) {
+		List<Mart> savedMarts = martRepository.findAll();
+		for (Mart mart : marts) {
+			if (savedMarts.contains(mart)) {
+				int index = savedMarts.indexOf(mart);
+				mart.update(savedMarts.get(index));
+			}
+		}
+		martRepository.saveAll(marts);
+	}
+
+	@Transactional
 	public void removeNotUpdatedMart(int days) {
 		LocalDateTime conditionTime = martRepository.findMaxModifiedDate().minusDays(days);
 		List<Long> notUpdatedMartIds = martRepository.findIdByModifiedDateLessThan(conditionTime);

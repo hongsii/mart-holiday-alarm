@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart;
 
-import com.hongsi.martholidayalarm.common.mart.dto.MartDTO;
+import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -22,8 +22,8 @@ public class MartController {
 	private final MartService martService;
 
 	@GetMapping(value = "/{mart_type}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<MartDTO>> getMarts(@PathVariable("mart_type") String martType) {
-		List<MartDTO> marts = martService.findMartsByMartType(martType);
+	public ResponseEntity<List<MartDto>> getMarts(@PathVariable("mart_type") String martType) {
+		List<MartDto> marts = martService.getMartsByMartType(martType);
 		return new ResponseEntity<>(marts, HttpStatus.OK);
 	}
 

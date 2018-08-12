@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.bot.kakao.domain;
+package com.hongsi.martholidayalarm.bot.kakao.dto;
 
 import lombok.Getter;
 

@@ -8,25 +8,35 @@ import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class MartDTO {
+public class MartDto {
 
 	private Long id;
+
 	@NotBlank
 	private String martType;
+
 	private String branchName;
+
 	private String region;
+
 	private String phoneNumber;
+
 	private String address;
+
+	private String openingHours;
+
 	private String url;
+
 	private List<String> holidays;
 
-	public MartDTO(Mart entity) {
+	public MartDto(Mart entity) {
 		id = entity.getId();
 		martType = entity.getMartType().getName();
 		branchName = entity.getBranchName();
 		region = entity.getRegion();
 		phoneNumber = entity.getPhoneNumber();
 		address = entity.getAddress();
+		openingHours = entity.getOpeningHours();
 		url = entity.getUrl();
 		holidays = toHolidayDto(entity.getHolidays());
 	}
