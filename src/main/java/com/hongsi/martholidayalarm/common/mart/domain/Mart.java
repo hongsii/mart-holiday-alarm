@@ -102,8 +102,10 @@ public class Mart extends BaseEntity {
 				", region='" + region + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", address='" + address + '\'' +
+				", openingHours='" + openingHours + '\'' +
 				", url='" + url + '\'' +
 				", holidays=" + holidays +
+				", " + super.toString() +
 				'}';
 	}
 

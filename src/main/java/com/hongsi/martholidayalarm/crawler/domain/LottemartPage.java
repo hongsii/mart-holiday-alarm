@@ -67,7 +67,7 @@ public class LottemartPage extends MartPage {
 	}
 
 	private String getOpeningHours() {
-		return page.select("li.time").text();
+		return page.select("li.time").text().trim();
 	}
 
 	private String getPageUrl() {

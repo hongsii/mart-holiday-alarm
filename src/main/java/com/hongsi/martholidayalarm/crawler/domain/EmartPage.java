@@ -49,7 +49,11 @@ public class EmartPage extends MartPage {
 	}
 
 	private String getPhoneNumber() {
-		return page.select("li.num > dl > dd").first().text();
+		Element phoneNumberTag = page.select("li.num > dl > dd").first();
+		if (phoneNumberTag == null) {
+			return "";
+		}
+		return phoneNumberTag.text();
 	}
 
 	private String getAddress() {
@@ -57,7 +61,7 @@ public class EmartPage extends MartPage {
 	}
 
 	private String getOpeningHours() {
-		return page.select("li.time dd").text();
+		return page.select("li.time dd").text().trim();
 	}
 
 	private String getPageUrl() {

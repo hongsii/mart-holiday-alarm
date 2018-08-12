@@ -36,7 +36,7 @@ public class KakaoBotService {
 				getKeyboardForResponse(userRequest));
 	}
 
-	private Message getMessageForResponse(UserRequest userRequest) throws NoSuchFieldException {
+	private Message getMessageForResponse(UserRequest userRequest) {
 		Button selectedButton = userRequest.getButton();
 		if (selectedButton == Button.BRANCH) {
 			MartType martType = MartType
@@ -56,7 +56,8 @@ public class KakaoBotService {
 		try {
 			switch (userRequest.getButton()) {
 				case DEFAULT:
-					return martService.getMartTypes().stream()
+					return martService.getMartTypes()
+							.stream()
 							.map(martType -> martType.getName())
 							.collect(Collectors.toList());
 				case MARTTYPE:
@@ -67,7 +68,7 @@ public class KakaoBotService {
 					String region = userRequest.getBeforeRequest(Button.REGION);
 					return martService.getBranches(martType, region);
 			}
-		} catch (NoSuchFieldException e) {
+		} catch (IllegalArgumentException e) {
 			log.error("Can not create response : " + e.getMessage());
 		}
 		return Keyboard.getDefaultKeyboardToList();

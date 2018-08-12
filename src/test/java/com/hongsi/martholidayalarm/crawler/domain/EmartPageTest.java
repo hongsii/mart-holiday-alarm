@@ -9,7 +9,7 @@ public class EmartPageTest {
 
 	@Test
 	public void getInfo() throws Exception {
-		String realId = "1038";
+		String realId = "1091";
 		EmartPage page = new EmartPage(EmartPage.BASE_URL + "/branch/view.do?id=" + realId);
 		Mart mart = page.getInfo();
 		assertThat(mart).isNotNull();
