@@ -27,7 +27,7 @@ public class MartCrawlerScheduler {
 
 	//	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
 	@Scheduled(cron = "0 0 3 ? * MON")
-	public void start() {
+	public void crawlMart() {
 		log("start !");
 		stopWatch = new StopWatch("martCrawler");
 
@@ -69,5 +69,13 @@ public class MartCrawlerScheduler {
 
 	private void log(String message) {
 		log.info(logPrefix + message);
+	}
+
+	@Scheduled(cron = "0 30 3 ? * MON")
+	public void deleteNotUpdatedMart() {
+		int minusDays = 14;
+		log.info("Delete not updated marts : update before {} days", minusDays);
+		martService.removeNotUpdatedMart(minusDays);
+
 	}
 }

@@ -3,7 +3,9 @@ package com.hongsi.martholidayalarm.common.mart.service;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDTO;
+import com.hongsi.martholidayalarm.common.mart.repository.HolidayRepository;
 import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class MartService {
 
 	private final MartRepository martRepository;
+
+	private final HolidayRepository holidayRepository;
 
 	@Transactional
 	public void saveAll(List<Mart> marts) {
@@ -50,5 +54,12 @@ public class MartService {
 				.stream()
 				.map(MartDTO::new)
 				.collect(Collectors.toList());
+	}
+
+	public void removeNotUpdatedMart(int days) {
+		LocalDateTime conditionTime = martRepository.findMaxModifiedDate().minusDays(days);
+		List<Long> notUpdatedMartIds = martRepository.findIdByModifiedDateLessThan(conditionTime);
+		holidayRepository.deleteByMartIds(notUpdatedMartIds);
+		martRepository.deleteByIds(notUpdatedMartIds);
 	}
 }
