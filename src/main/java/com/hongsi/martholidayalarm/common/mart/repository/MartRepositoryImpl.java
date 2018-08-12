@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart.repository;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.common.mart.domain.QMart;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -58,13 +59,11 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 	}
 
 	@Override
-	public List<Long> findIdByModifiedDateLessThan(LocalDateTime conditionTime) {
+	public List<Mart> findByModifiedDateLessThanOrEqual(LocalDateTime conditionTime) {
 		QMart mart = QMart.mart;
-		return jpaQueryFactory.query()
-				.select(mart.id)
-				.from(mart)
-				.where(mart.modifiedDate.before(conditionTime)
-						.and(mart.modifiedDate.eq(conditionTime)))
+		return jpaQueryFactory
+				.selectFrom(mart)
+				.where(mart.modifiedDate.loe(conditionTime))
 				.fetch();
 	}
 }

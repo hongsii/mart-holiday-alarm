@@ -6,14 +6,17 @@ import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.repository.HolidayRepository;
 import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class MartService {
 
 	private final MartRepository martRepository;
@@ -56,11 +59,30 @@ public class MartService {
 		martRepository.saveAll(marts);
 	}
 
+
 	@Transactional
-	public void removeNotUpdatedMart(int days) {
-		LocalDateTime conditionTime = martRepository.findMaxModifiedDate().minusDays(days);
-		List<Long> notUpdatedMartIds = martRepository.findIdByModifiedDateLessThan(conditionTime);
-		holidayRepository.deleteByMartIds(notUpdatedMartIds);
-		martRepository.deleteByIds(notUpdatedMartIds);
+	public int removeNotUpdatedMart(int days) {
+		LocalDateTime conditionTime = martRepository.findMaxModifiedDate();
+		log.info("Last modified date of Mart : {}, minus days : {}", conditionTime, days);
+		conditionTime = conditionTime.minusDays(days);
+		log.info("Condition time for finding not updated Mart : {}", conditionTime);
+		List<Mart> notUpdatedMarts = martRepository
+				.findByModifiedDateLessThanOrEqual(conditionTime);
+		if (notUpdatedMarts.isEmpty()) {
+			log.info("Not exists Mart to remove");
+			return 0;
+		}
+
+		List<Long> ids = new ArrayList<>();
+		for (Mart mart : notUpdatedMarts) {
+			log.info(" > Mart info to remove [Id : {}, CreatedDate : {}, ModifiedDate : {}"
+							+ ", MartType : {}, Region : {}, BranchName : {}]",
+					mart.getId(), mart.getCreatedDate(), mart.getModifiedDate(), mart.getMartType(),
+					mart.getRegion(), mart.getBranchName());
+			ids.add(mart.getId());
+		}
+		holidayRepository.deleteByMartIds(ids);
+		martRepository.deleteByIds(ids);
+		return ids.size();
 	}
 }

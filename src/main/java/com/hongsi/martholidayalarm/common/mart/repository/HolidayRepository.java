@@ -12,6 +12,6 @@ public interface HolidayRepository extends JpaRepository<Holiday, Long> {
 
 	@Transactional
 	@Modifying
-	@Query("delete from Holiday H where mart_id in :ids")
+	@Query("DELETE FROM Holiday H WHERE H.mart.id IN :ids")
 	void deleteByMartIds(@Param("ids") List<Long> ids);
 }

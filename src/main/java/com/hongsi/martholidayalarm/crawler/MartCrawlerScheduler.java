@@ -19,8 +19,6 @@ import org.springframework.util.StopWatch;
 @Slf4j
 public class MartCrawlerScheduler {
 
-	private final String logPrefix = "Crawler -- ";
-
 	private final MartService martService;
 
 	private StopWatch stopWatch;
@@ -28,8 +26,8 @@ public class MartCrawlerScheduler {
 	//	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
 	@Scheduled(cron = "0 0 3 ? * MON")
 	public void crawlMart() {
-		log("start !");
-		stopWatch = new StopWatch("martCrawler");
+		log.info("Start Mart crawling");
+		stopWatch = new StopWatch("MartCrawler");
 
 		List<Mart> crawledMarts = new ArrayList<>();
 		List<MartPage> pages = getPages();
@@ -39,43 +37,33 @@ public class MartCrawlerScheduler {
 				crawledMarts.add(mart);
 			}
 		}
-
-		stopWatch.start("insert");
 		martService.saveAll(crawledMarts);
-		stopWatch.stop();
 
-		log(stopWatch.prettyPrint());
+		log.info(stopWatch.prettyPrint());
 	}
 
 	private List<MartPage> getPages() {
 		List<MartPage> pages = new ArrayList<>();
 		for (MartType martType : MartType.values()) {
-			log(martType.getName() + " start !");
 			stopWatch.start(martType.getName());
 			try {
 				MartCrawler martCrawler = martType.getMartCrawler();
 				List<MartPage> crawledPages = martCrawler.crawl();
 				pages.addAll(crawledPages);
-
-				stopWatch.stop();
-				log("Mart type : " + martType +
-						" > mart count : " + crawledPages.size());
+				log.info("MartType : {}, Count : {}", martType.getName(), crawledPages.size());
 			} catch (IOException ie) {
-				log.error(logPrefix + "Exception : " + martType + " Can't find url");
+				log.error("Can't find url of {}", martType.getName());
 			}
+			stopWatch.stop();
 		}
 		return pages;
 	}
 
-	private void log(String message) {
-		log.info(logPrefix + message);
-	}
-
 	@Scheduled(cron = "0 30 3 ? * MON")
-	public void deleteNotUpdatedMart() {
+	public void removeNotUpdatedMart() {
+		log.info("Start remove not updated Marts");
 		int minusDays = 14;
-		log.info("Delete not updated marts : update before {} days", minusDays);
 		martService.removeNotUpdatedMart(minusDays);
-
+		log.info("End remove not updated Marts");
 	}
 }
