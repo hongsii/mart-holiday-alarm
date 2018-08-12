@@ -4,13 +4,13 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
-import com.hongsi.martholidayalarm.bot.kakao.domain.BotResponse;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Button;
 import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
+import com.hongsi.martholidayalarm.bot.kakao.dto.BotResponse;
 import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
-import com.hongsi.martholidayalarm.mart.repository.MartRepository;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,7 +77,7 @@ public class KakaoBotServiceTest {
 	}
 
 	@Test
-	public void 최초_사용자가_요청시_버튼생성() throws Exception {
+	public void 최초_사용자가_요청시_버튼생성() {
 		UserRequest userRequest = UserRequest.builder()
 				.userKey("1234qwer")
 				.content("마트 휴일 조회")
@@ -92,7 +92,7 @@ public class KakaoBotServiceTest {
 	}
 
 	@Test
-	public void 사용자가_휴일조회_후_버튼생성() throws Exception {
+	public void 사용자가_휴일조회_후_버튼생성() {
 		UserRequest branchRequest = UserRequest.builder()
 				.userKey("1234qwer")
 				.content("서울")

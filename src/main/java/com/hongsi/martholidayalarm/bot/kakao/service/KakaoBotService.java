@@ -1,14 +1,14 @@
 package com.hongsi.martholidayalarm.bot.kakao.service;
 
-import com.hongsi.martholidayalarm.bot.kakao.domain.BotResponse;
 import com.hongsi.martholidayalarm.bot.kakao.domain.Button;
-import com.hongsi.martholidayalarm.bot.kakao.domain.Keyboard;
-import com.hongsi.martholidayalarm.bot.kakao.domain.Message;
 import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
+import com.hongsi.martholidayalarm.bot.kakao.dto.BotResponse;
+import com.hongsi.martholidayalarm.bot.kakao.dto.Keyboard;
+import com.hongsi.martholidayalarm.bot.kakao.dto.Message;
 import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
-import com.hongsi.martholidayalarm.mart.service.MartService;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -25,7 +25,7 @@ public class KakaoBotService {
 
 	private final KakaoBotRepository kakaoBotRepository;
 
-	public BotResponse parse(UserRequest userRequest) throws Exception {
+	public BotResponse parse(UserRequest userRequest) {
 		UserRequest beforeRequest = kakaoBotRepository.findByUserKey(userRequest.getUserKey());
 		if (userRequest.isSame(beforeRequest)) {
 			throw new IllegalStateException("중복된 요청입니다.");
@@ -36,7 +36,7 @@ public class KakaoBotService {
 				getKeyboardForResponse(userRequest));
 	}
 
-	private Message getMessageForResponse(UserRequest userRequest) throws NoSuchFieldException {
+	private Message getMessageForResponse(UserRequest userRequest) {
 		Button selectedButton = userRequest.getButton();
 		if (selectedButton == Button.BRANCH) {
 			MartType martType = MartType
@@ -56,7 +56,8 @@ public class KakaoBotService {
 		try {
 			switch (userRequest.getButton()) {
 				case DEFAULT:
-					return martService.getMartTypes().stream()
+					return martService.getMartTypes()
+							.stream()
 							.map(martType -> martType.getName())
 							.collect(Collectors.toList());
 				case MARTTYPE:
@@ -67,7 +68,7 @@ public class KakaoBotService {
 					String region = userRequest.getBeforeRequest(Button.REGION);
 					return martService.getBranches(martType, region);
 			}
-		} catch (NoSuchFieldException e) {
+		} catch (IllegalArgumentException e) {
 			log.error("Can not create response : " + e.getMessage());
 		}
 		return Keyboard.getDefaultKeyboardToList();

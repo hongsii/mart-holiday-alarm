@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.mart.domain;
+package com.hongsi.martholidayalarm.common.mart.domain;
 
 import com.hongsi.martholidayalarm.crawler.domain.Crawlable;
 import com.hongsi.martholidayalarm.crawler.domain.EmartCrawler;
@@ -27,12 +27,19 @@ public enum MartType implements Crawlable {
 		this.name = name;
 	}
 
-	public static MartType of(String name) throws NoSuchFieldException {
+	public static MartType of(String name) {
 		for (MartType martType : MartType.values()) {
 			if (martType.name.equals(name)) {
 				return martType;
 			}
 		}
-		throw new NoSuchFieldException("해당 마트 타입이 존재하지 않습니다.");
+		throw new IllegalArgumentException("해당 마트 타입이 존재하지 않습니다.");
+	}
+
+	public static MartType typeOf(String martType) {
+		if (martType == null) {
+			throw new NullPointerException("MartType is null");
+		}
+		return Enum.valueOf(MartType.class, martType.trim().toUpperCase());
 	}
 }

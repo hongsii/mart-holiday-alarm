@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+spring:
+  http:
+    encoding:
+      force: true
+
 ---
 
 spring:
@@ -18,7 +23,8 @@ spring:
 logging:
   level:
     root: DEBUG
-    org.hibernate: DEBUG
+    org.hibernate: INFO
+    sun.rmi: INFO
 
 ---
 

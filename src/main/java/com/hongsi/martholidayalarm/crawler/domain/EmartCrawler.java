@@ -20,7 +20,8 @@ public class EmartCrawler implements MartCrawler {
 	}
 
 	private Elements getLinkTagsFromListPage() throws IOException {
-		final String LINK_TAGS_SELECTOR = ".tab_cont > ul > li > a[data-etc=\"E\"";
+		// 이마트, 트레이더스 조회
+		final String LINK_TAGS_SELECTOR = ".tab_cont > ul > li > a[data-etc=\"E\"], a[data-etc=\"T\"], a[data-etc=\"A\"]";
 		String url = EmartPage.BASE_URL + "/branch/list.do";
 		return Jsoup.connect(url).get().select(LINK_TAGS_SELECTOR);
 	}

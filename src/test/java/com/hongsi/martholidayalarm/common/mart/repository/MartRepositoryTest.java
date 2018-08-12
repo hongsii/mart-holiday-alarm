@@ -1,12 +1,12 @@
-package com.hongsi.martholidayalarm.mart.repository;
+package com.hongsi.martholidayalarm.common.mart.repository;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.config.JPAConfig;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.Test;

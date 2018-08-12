@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import com.hongsi.martholidayalarm.mart.domain.Holiday;
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;

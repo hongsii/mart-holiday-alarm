@@ -1,9 +1,9 @@
 package com.hongsi.martholidayalarm.crawler.domain;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.crawler.util.CrawlUtil;
-import com.hongsi.martholidayalarm.mart.domain.Holiday;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
@@ -32,6 +32,7 @@ public class LottemartPage extends MartPage {
 				.branchName(getBranchName())
 				.phoneNumber(getPhoneNumber())
 				.address(getAddress())
+				.openingHours(getOpeningHours())
 				.url(getPageUrl())
 				.holidays(getHolidays())
 				.build();
@@ -63,6 +64,10 @@ public class LottemartPage extends MartPage {
 			address = matcher.group().replaceAll("\\[[새|구]주소\\]", "").trim();
 		}
 		return address;
+	}
+
+	private String getOpeningHours() {
+		return page.select("li.time").text().trim();
 	}
 
 	private String getPageUrl() {

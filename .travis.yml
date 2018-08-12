@@ -1,52 +1,45 @@
 language: java
 jdk:
 - openjdk8
-
 branches:
   only:
   - master
-
 cache:
   directories:
   - "$HOME/.m2/repository"
   - "$HOME/.gradle"
-
 script: "./gradlew clean build"
-
 before_deploy:
-  - zip -r martholidayalarm *
-
+- zip -r martholidayalarm *
 deploy:
-  - provider: s3
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    bucket: martholidayalarm-deploy
-    region: ap-northeast-2
-    skip_cleanup: true
-    acl: public_read
-    wait-until-deployed: true
-    on:
-      repo: hongsii/mart-holiday-alarm
-      branch: master
-
-  - provider: codedeploy
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    bucket: martholidayalarm-deploy
-    key: martholidayalarm.zip
-    bundle_type: zip
-    application: martholidayalarm
-    deployment_group: martholidayalarm-group
-    region: ap-northeast-2
-    wait-until-deployed: true
-    on:
-      repo: hongsii/mart-holiday-alarm
-      branch: master
-
+- provider: s3
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  bucket: martholidayalarm-deploy
+  region: ap-northeast-2
+  skip_cleanup: true
+  acl: public_read
+  wait-until-deployed: true
+  on:
+    repo: hongsii/mart-holiday-alarm
+    branch: master
+- provider: codedeploy
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  bucket: martholidayalarm-deploy
+  key: martholidayalarm.zip
+  bundle_type: zip
+  application: martholidayalarm
+  deployment_group: martholidayalarm-group
+  region: ap-northeast-2
+  wait-until-deployed: true
+  on:
+    repo: hongsii/mart-holiday-alarm
+    branch: master
 notifications:
   email:
     recipients:
     - pozt1234@gmail.com
   slack:
     rooms:
-      - secure: "GbeaAOOsRHt5XOlhOmXSdPEUbR4ysGGuJY4DvxBfLVs2ZA3O+ITNwc3rKdMRe0c2vN/u9rnT0LixqvxUqgFhO+JDN8ycb4q7E5s2+9p56VZc97nBgU64+Tk4kUd22sB66nXtU5sPZYJXeMAeF42WIy0ByL5kQkRDve7Ea6RvYI5Spa/jDlyqH4CcGu/1iNe5IMpZ5FchczZtuungXpmTEcrkH7CXPB2wQoM7RnVyTIY6hI8jhBymIkM/TxBbMsqB1++XRODmfgZkRnXE2fijF/Nz15uyvtErgxA3p/v0ikuqynoBJPl3+CQjERJa9H0mVkGwCnxK1zOehI/40tqUxak12zV60QR/2yP6mYhoga67VTPAy1id7dFJ6CSTWDV3Tqyz03ok97izNV/pRPBJEUWCRO1/3nu+8ThM1ZkTNhCFgd0Zc44g6u7cZ4JIDRgVYqOQc9lFH20SODEgZOxPRJZtFUmIbKZzHA1o54DsI16CREVWOs7WXha6BQyngeBNHNelfT/CnQ1CwKyBMipeOU8pbzhERBC9CZUh3Gca93UD5jdyZkGuBAdabXeOUbgoEfc7SjmfARxee5vkVvKv2+LlTAp14GAdRJ78sa4dqlqAT9Y6jkK5MakdNaDo+gBZ+gbI4fI+XZhmM6lwy/maVjhc73ixPx/asqTxRr4jAQY="
+    - secure: oO7TASDUCg6LhKTrkJZc/J5mzpCQqvEfbRpcSfIdub3/dhtjCSALPBuzeh36I/DQhidcIUeUi2l1v6A411tPFAoUT0P2G5CxYRwh70Uv431cdHGu4VYTZfMma9J8Tr9LzMY5XSGlfQIshg97SBgr+hMUu+NJWHbg8PoQmerw6dJRLHTbWKvZDrKeZ8DDDiY25avaKeKLgUVxt7dctv9AZnlKRgcNBS0uRXZtYloDJrs8NDZuo1mbxvjePjf5gt0+gfxWrYtG/AhLwibRo+JU7Okb5va/Ury02UXPmmZFD8BAFrTtz2+B5R2S5WVW++y5Bsc9jEO51BYl+/0VFeCTxbKKf2sA6WqLkNLLq0LSDdIswNHx4BrEIExhvdxDYp5VMvGs2XQ8Zx3Ve4vzqBQ29aFyN027HLk/QG7DWAtElHsQUj1oYeY4ji2XRT+4BulOMPpolrXTGzXrwps/5sWvLzrKHs9n/eRANCrGzmIYptzmhAqWVU1cFjoyAWNOfxH3HvBK0k8YcUmcjmr1iEjXCUCzb0j+CVEZiWwkTXo2K9gGEqByojtiynVQ2cTWKFSn78HPWGDLMtgyxQM6vh5l5k6+cUs/2IPzXT56Tcx17OkstHhvjmgfVivR5/xQ2qemzoUc0EJw8TVQ/YvkLkA8S2xDjDI9T8qiAqu+LVDnVoA=

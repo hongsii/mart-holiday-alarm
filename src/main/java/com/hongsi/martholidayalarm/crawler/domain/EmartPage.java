@@ -1,9 +1,9 @@
 package com.hongsi.martholidayalarm.crawler.domain;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
+import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.crawler.util.CrawlUtil;
-import com.hongsi.martholidayalarm.mart.domain.Holiday;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class EmartPage extends MartPage {
 				.branchName(getBranchName())
 				.phoneNumber(getPhoneNumber())
 				.address(getAddress())
+				.openingHours(getOpeningHours())
 				.url(getPageUrl())
 				.holidays(getHolidays())
 				.build();
 	}
-
 
 	private String getRealId() {
 		return page.select("a[data-store-id]").attr("data-store-id");
@@ -48,11 +48,19 @@ public class EmartPage extends MartPage {
 	}
 
 	private String getPhoneNumber() {
-		return page.select("li.num > dl > dd").first().text();
+		Element phoneNumberTag = page.select("li.num > dl > dd").first();
+		if (phoneNumberTag == null) {
+			return "";
+		}
+		return phoneNumberTag.text();
 	}
 
 	private String getAddress() {
 		return page.select("li.addr > div.layer_addr").text();
+	}
+
+	private String getOpeningHours() {
+		return page.select("li.time dd").text().trim();
 	}
 
 	private String getPageUrl() {
