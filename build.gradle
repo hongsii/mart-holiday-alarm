@@ -25,7 +25,7 @@ repositories {
     mavenCentral()
 }
 
-ext['hibernate.version'] = '5.3.0.CR1'
+ext['hibernate.version'] = '5.3.0.Final'
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
