@@ -3,11 +3,11 @@ package com.hongsi.martholidayalarm.common.mart;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,18 +31,25 @@ public class MartControllerTest {
 	private MartService martService;
 
 	@Test
-	public void 마트타입으로_리스트_요청() throws Exception {
+	public void 마트타입으로_소문자로_리스트_요청() throws Exception {
 		mockMvc.perform(get("/api/mart/emart/list")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martService, times(1)).getMartsByMartType(any(String.class));
+		verify(martService, times(1)).getMartsByMartType(any(MartType.class));
+	}
+
+	@Test
+	public void 마트타입으로_대문자로_리스트_요청() throws Exception {
+		mockMvc.perform(get("/api/mart/emart/list")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andDo(print())
+				.andExpect(status().isOk());
+		verify(martService, times(1)).getMartsByMartType(any(MartType.class));
 	}
 
 	@Test
 	public void 잘못된_마트타입으로_리스트_요청() throws Exception {
-		when(martService.getMartsByMartType(any(String.class)))
-				.thenThrow(IllegalArgumentException.class);
 		mockMvc.perform(get("/api/mart/hongmart/list")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
