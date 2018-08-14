@@ -17,7 +17,7 @@ import lombok.Getter;
 public class MartDto {
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-			.ofPattern("yyyy-MM-dd HH24:MI:SS").withLocale(Locale.KOREAN);
+			.ofPattern("yyyy-MM-dd HH:mm:ss").withLocale(Locale.KOREAN);
 
 	@ApiModelProperty(value = "고유 아이디", dataType = "java.lang.Long", required = true, position = 1)
 	private Long id;
