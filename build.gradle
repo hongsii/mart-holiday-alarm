@@ -2,6 +2,7 @@ buildscript {
     ext {
         springBootVersion = '2.0.0.RELEASE'
         querydslVersion = '4.2.1'
+        swaggerVersion = '2.8.0'
     }
     repositories {
         mavenCentral()
@@ -35,6 +36,10 @@ dependencies {
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
     compile group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
     compile group: 'com.querydsl', name: 'querydsl-apt', version: "${querydslVersion}"
+
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: "${swaggerVersion}"
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: "${swaggerVersion}"
+    compile group: 'io.springfox', name: 'springfox-core', version: "${swaggerVersion}"
 
     runtime('com.h2database:h2')
     compileOnly('org.projectlombok:lombok')
@@ -70,5 +75,5 @@ compileJava.dependsOn(generateQuerydsl)
 
 clean.doLast {
     querydslOutput.deleteDir()
-    println ">> Delete $querydslOutput";
+    println ">> Delete $querydslOutput"
 }
