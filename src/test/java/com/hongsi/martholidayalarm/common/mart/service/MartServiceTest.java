@@ -1,9 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
@@ -177,17 +174,9 @@ public class MartServiceTest {
 		savedMarts.add(mart);
 		martService.saveAll(savedMarts);
 
-		String martTypeStr = "emart";
-		List<MartDto> marts = martService.getMartsByMartType(martTypeStr);
+		MartType martType = MartType.EMART;
+		List<MartDto> marts = martService.getMartsByMartType(martType);
 
 		assertThat(marts).isNotEmpty().hasSize(1);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void 잘못된_마트타입으로_MartDTO_리스트조회() {
-		String martTypeStr = "honghong";
-		List<MartDto> marts = martService.getMartsByMartType(martTypeStr);
-
-		verify(martService, never()).getMartsByMartType(any(String.class));
 	}
 }

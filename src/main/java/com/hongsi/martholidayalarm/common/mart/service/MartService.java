@@ -39,8 +39,7 @@ public class MartService {
 		return martRepository.findBranchByMartTypeAndRegion(martType, region);
 	}
 
-	public List<MartDto> getMartsByMartType(String martTypeStr) throws IllegalArgumentException {
-		MartType martType = MartType.typeOf(martTypeStr);
+	public List<MartDto> getMartsByMartType(MartType martType) throws IllegalArgumentException {
 		return martRepository.findByMartType(martType)
 				.stream()
 				.map(MartDto::new)

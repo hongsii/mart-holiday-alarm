@@ -35,9 +35,11 @@ public class KakaoBotControllerTest {
 	@MockBean
 	private KakaoBotService kakaoBotService;
 
+	private String PREFIX_URL = "/api/bot/kakao";
+
 	@Test
 	public void 최초_요청시_키보드_확인() throws Exception {
-		mockMvc.perform(get("/keyboard")
+		mockMvc.perform(get(PREFIX_URL + "/keyboard")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk())
@@ -47,14 +49,14 @@ public class KakaoBotControllerTest {
 
 	@Test
 	public void 채팅방_나갈시_이전_유저요청_삭제() throws Exception {
-		mockMvc.perform(delete("/chat_room/1234")
+		mockMvc.perform(delete(PREFIX_URL + "/chat_room/1234")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
 	}
 
 	@Test
 	public void 친구삭제시_이전_유저요청_삭제() throws Exception {
-		mockMvc.perform(delete("/friend/1234")
+		mockMvc.perform(delete(PREFIX_URL + "/friend/1234")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
 		verify(kakaoBotService, times(1)).deleteUserRequest(any(String.class));
@@ -62,7 +64,7 @@ public class KakaoBotControllerTest {
 
 	@Test
 	public void 삭제_요청시_id생략() throws Exception {
-		mockMvc.perform(delete("/friend/")
+		mockMvc.perform(delete(PREFIX_URL + "/friend/")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isNotFound());
 		verify(kakaoBotService, never()).deleteUserRequest(any(String.class));
