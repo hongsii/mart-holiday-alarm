@@ -22,10 +22,12 @@ public class MessageTest {
 				.address("서울 성동구 뚝섬로 379")
 				.phoneNumber("02-3408-1234")
 				.url("http://store.emart.com/branch/list.do?id=1038")
-				.holidays(asList(Holiday.builder().date(LocalDate.of(2018, 6, 20)).build()))
+				.openingHours("11:00~23:00")
+				.holidays(asList(Holiday.builder().date(LocalDate.now()).build()))
 				.build();
 
 		Message message = new Message(mart);
 		assertThat(message.getText()).isNotBlank();
+		System.out.println(message.getText());
 	}
 }
