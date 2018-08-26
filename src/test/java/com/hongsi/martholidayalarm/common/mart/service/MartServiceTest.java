@@ -70,26 +70,18 @@ public class MartServiceTest {
 	@Test
 	public void 마트타입_조회() {
 		List<Mart> marts = new ArrayList<>();
-		marts.add(Mart.builder()
-				.realId("1")
-				.martType(MartType.EMART)
-				.region("서울")
-				.build());
-		marts.add(Mart.builder()
-				.realId("2")
-				.martType(MartType.EMART)
-				.region("경상")
-				.build());
-		marts.add(Mart.builder()
-				.realId("1")
-				.martType(MartType.LOTTEMART)
-				.region("서울")
-				.build());
-		marts.add(Mart.builder()
-				.realId("2")
-				.martType(MartType.LOTTEMART)
-				.region("경상")
-				.build());
+
+		int i = 1;
+		String[] regions = {"서울", "부산"};
+		for (MartType martType : MartType.values()) {
+			for (String region : regions) {
+				marts.add(Mart.builder()
+						.realId(String.valueOf(i++))
+						.martType(martType)
+						.region(region)
+						.build());
+			}
+		}
 		martRepository.saveAll(marts);
 
 		List<MartType> martTypes = martService.getMartTypes();

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,36 +38,19 @@ public class KakaoBotServiceTest {
 	@Before
 	public void setUp() {
 		List<Mart> marts = new ArrayList<>();
-		marts.add(Mart.builder()
-				.realId("1")
-				.martType(MartType.EMART)
-				.branchName("서울점")
-				.region("서울")
-				.build());
-		marts.add(Mart.builder()
-				.realId("2")
-				.martType(MartType.EMART)
-				.branchName("강남점")
-				.region("서울")
-				.build());
-		marts.add(Mart.builder()
-				.realId("3")
-				.martType(MartType.EMART)
-				.branchName("경기점")
-				.region("경기")
-				.build());
-		marts.add(Mart.builder()
-				.realId("4")
-				.martType(MartType.EMART)
-				.branchName("경주")
-				.region("경상")
-				.build());
-		marts.add(Mart.builder()
-				.realId("1")
-				.martType(MartType.LOTTEMART)
-				.branchName("부산점")
-				.region("부산")
-				.build());
+		int i = 1;
+		String[] regions = {"서울", "부산", "경기"};
+		String[] branchNames = {"강남점", "부산점", "경기점"};
+		for (MartType martType : MartType.values()) {
+			for (int index = 0; index < regions.length; index++) {
+				marts.add(Mart.builder()
+						.realId(String.valueOf(i++))
+						.martType(martType)
+						.region(regions[index])
+						.branchName(branchNames[index])
+						.build());
+			}
+		}
 		martRepository.saveAll(marts);
 	}
 
@@ -86,9 +70,10 @@ public class KakaoBotServiceTest {
 
 		BotResponse botResponse = kakaoBotService.parse(userRequest);
 		assertThat("_마트 휴일 조회", is(userRequest.getPath()));
-		assertArrayEquals(Arrays.stream(MartType.values()).map(martType -> martType.getName())
-						.collect(Collectors.toList()).toArray(),
-				botResponse.getKeyboard().getButtons());
+		Assertions.assertThat(botResponse.getKeyboard().getButtons())
+				.containsOnlyElementsOf(Arrays.stream(MartType.values())
+						.map(martType -> martType.getName())
+						.collect(Collectors.toList()));
 	}
 
 	@Test
