@@ -55,6 +55,7 @@ public class Message {
 		message.add(TITLE_PREFIX + mart.getMartType().getName() + " > " + mart.getBranchName())
 				.add(ITEM_PREFIX + "주소\n" + INFO_PREFIX + mart.getAddress())
 				.add(ITEM_PREFIX + "전화번호\n" + INFO_PREFIX + mart.getPhoneNumber())
+				.add(ITEM_PREFIX + "영업시간\n" + INFO_PREFIX + mart.getOpeningHours())
 				.add(ITEM_PREFIX + "휴일");
 		for (Holiday holiday : mart.getHolidays()) {
 			if (holiday.isUpcoming()) {

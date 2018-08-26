@@ -29,7 +29,7 @@ public class RegularHoliday {
 	}
 
 	private void parseWeeks() {
-		final Pattern weekPattern = Pattern.compile("(첫|둘|셋|넷|다섯|[1-5])(\\s+)?[째|주]");
+		final Pattern weekPattern = Pattern.compile("첫|둘|셋|넷|다섯|[1-5]");
 		Matcher matcher = weekPattern.matcher(regularHolidayText);
 		while (matcher.find()) {
 			weeks.add(getWeekFromText(matcher.group()));
@@ -37,8 +37,7 @@ public class RegularHoliday {
 	}
 
 	private int getWeekFromText(String textOfWeek) {
-		String weekText = textOfWeek.substring(0, 1);
-		switch (weekText) {
+		switch (textOfWeek) {
 			case "첫":
 			case "1":
 				return 1;
