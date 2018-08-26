@@ -3,6 +3,7 @@ package com.hongsi.martholidayalarm.common.mart.domain;
 import com.hongsi.martholidayalarm.crawler.domain.Crawlable;
 import com.hongsi.martholidayalarm.crawler.domain.EmartCrawler;
 import com.hongsi.martholidayalarm.crawler.domain.HomeplusCrawler;
+import com.hongsi.martholidayalarm.crawler.domain.HomeplusExpressCrawler;
 import com.hongsi.martholidayalarm.crawler.domain.LottemartCrawler;
 import com.hongsi.martholidayalarm.crawler.domain.MartCrawler;
 import lombok.Getter;
@@ -26,7 +27,15 @@ public enum MartType implements Crawlable {
 		public MartCrawler getMartCrawler() {
 			return new HomeplusCrawler();
 		}
+	},
+	HOMEPLUS_EXPRESS("홈플러스 익스프레스") {
+		@Override
+		public MartCrawler getMartCrawler() {
+			return new HomeplusExpressCrawler();
+		}
 	};
+
+
 
 	private String name;
 

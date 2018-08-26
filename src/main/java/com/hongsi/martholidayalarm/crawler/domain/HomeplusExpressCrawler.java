@@ -9,7 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 @Slf4j
-public class HomeplusCrawler implements MartCrawler {
+public class HomeplusExpressCrawler implements MartCrawler {
 
 	@Override
 	public List<MartPage> crawl() throws Exception {
@@ -18,7 +18,7 @@ public class HomeplusCrawler implements MartCrawler {
 			try {
 				pages.add(getPageFrom(linkTag));
 			} catch (Exception e) {
-				log.error("[Page Crawling Error - Homeplus] message : {} / link : {}",
+				log.error("[Page Crawling Error - HomeplusExpress] message : {} / link : {}",
 						linkTag, e.getMessage());
 			}
 		}
@@ -31,18 +31,19 @@ public class HomeplusCrawler implements MartCrawler {
 				.data("__EVENTTARGET", "")
 				.data("__EVENTARGUMENT", "")
 				.data("__LASTFOCUS", "")
-				.data("__VIEWSTATE",
-						"/wEPDwUJLTc2MDkzMDI3D2QWAmYPZBYCAgUPZBYCAgEPZBYCAgEPEGRkFgFmZBgBBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WAwUkY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRzdG9yZXR5cGUxBSRjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJHN0b3JldHlwZTIFJGN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkc3RvcmV0eXBlM+aYO9PJofU5uQQJJZRZ2bboir3I")
+				.data("__VIEWSTATE", "")
 				.data("ctl00$ContentPlaceHolder1$Region_Code", "")
 				.data("ctl00$ContentPlaceHolder1$srch_name", "")
 				.data("ctl00$ContentPlaceHolder1$Button1", "")
-				.data("ctl00$ContentPlaceHolder1$storetype1", "on")
+				.data("ctl00$ContentPlaceHolder1$storetype1", "")
+				.data("ctl00$ContentPlaceHolder1$storetype2", "on")
 				.post()
 				.select(".type > .name > a");
+
 	}
 
 	private MartPage getPageFrom(Element linkTag) throws Exception {
 		String url = HomeplusPage.BASE_URL + linkTag.attr("href").trim();
-		return new HomeplusPage(MartType.HOMEPLUS, url);
+		return new HomeplusPage(MartType.HOMEPLUS_EXPRESS, url);
 	}
 }

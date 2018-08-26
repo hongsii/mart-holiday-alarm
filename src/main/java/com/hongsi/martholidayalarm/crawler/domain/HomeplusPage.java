@@ -3,8 +3,8 @@ package com.hongsi.martholidayalarm.crawler.domain;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.crawler.exception.PageNotFoundException;
 import com.hongsi.martholidayalarm.crawler.util.CrawlUtil;
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,17 +13,21 @@ public class HomeplusPage extends MartPage {
 
 	public static final String BASE_URL = "http://corporate.homeplus.co.kr";
 
-	private MartType martype;
+	private MartType martType;
 
-	HomeplusPage(MartType martType, String url) throws IOException {
+	HomeplusPage(MartType martType, String url) throws Exception {
 		super(url);
-		martype = martType;
+		// 홈플러스는 페이지가 존재하지 않으면 리다이렉션되기 때문에 가져온 페이지 내 정보가 있는지 확인
+		if (page.body().text().isEmpty()) {
+			throw new PageNotFoundException();
+		}
+		this.martType = martType;
 	}
 
 	@Override
 	public Mart getInfo() {
 		return Mart.builder()
-				.martType(martype)
+				.martType(martType)
 				.realId(getRealId())
 				.region(getRegion())
 				.branchName(getBranchName())
@@ -65,8 +69,7 @@ public class HomeplusPage extends MartPage {
 	}
 
 	private List<Holiday> getHolidays() {
-		String holidayText = page.select(".col-lg-4.time > span.off").text();
-		System.out.println(holidayText);
+		String holidayText = page.select(".time > span.off").text();
 		RegularHoliday regularHoliday = new RegularHoliday(holidayText);
 		return regularHoliday.makeRegularHolidays();
 	}
