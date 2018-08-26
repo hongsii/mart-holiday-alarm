@@ -5,7 +5,6 @@ import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import com.hongsi.martholidayalarm.crawler.domain.MartCrawler;
 import com.hongsi.martholidayalarm.crawler.domain.MartPage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +50,9 @@ public class MartCrawlerScheduler {
 				List<MartPage> crawledPages = martCrawler.crawl();
 				pages.addAll(crawledPages);
 				log.info("MartType : {}, Count : {}", martType.getName(), crawledPages.size());
-			} catch (IOException ie) {
-				log.error("Can't find url of {}", martType.getName());
+			} catch (Exception e) {
+				log.error("[Crawling Error] - Can't crawl url of {} / message : ",
+						martType.getName(), e.getMessage());
 			}
 			stopWatch.stop();
 		}

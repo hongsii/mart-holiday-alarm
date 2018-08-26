@@ -33,8 +33,7 @@ public class LottemartCrawler implements MartCrawler {
 	}
 
 	private MartPage getPageFrom(Element linkTag) throws IOException {
-		final String PAGE_LINK_ATTR = "href";
-		return new LottemartPage(LottemartPage.BASE_URL + linkTag.attr(PAGE_LINK_ATTR));
+		return new LottemartPage(LottemartPage.BASE_URL + linkTag.attr("href"));
 	}
 
 	private boolean isLastPage(Elements linkTags) {
