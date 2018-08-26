@@ -1,8 +1,6 @@
 package com.hongsi.martholidayalarm.crawler.domain;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import java.time.DayOfWeek;
@@ -10,12 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class RegularHolidayTest {
 
 	@Test
@@ -26,10 +19,11 @@ public class RegularHolidayTest {
 		RegularHoliday regularHoliday1 = new RegularHoliday(regularHolidayText1);
 		RegularHoliday regularHoliday2 = new RegularHoliday(regularHolidayText2);
 
-		assertEquals(2, regularHoliday1.getWeeks().get(0).intValue());
-		assertEquals(DayOfWeek.SUNDAY, regularHoliday1.getDayOfWeeks().get(0));
-		assertEquals(4, regularHoliday2.getWeeks().get(0).intValue());
-		assertEquals(DayOfWeek.WEDNESDAY, regularHoliday2.getDayOfWeeks().get(0));
+		assertThat(regularHoliday1.getWeeks()).first().isEqualTo(2);
+		assertThat(regularHoliday1.getDayOfWeeks()).first().isEqualTo(DayOfWeek.SUNDAY);
+
+		assertThat(regularHoliday2.getWeeks()).first().isEqualTo(4);
+		assertThat(regularHoliday2.getDayOfWeeks()).first().isEqualTo(DayOfWeek.WEDNESDAY);
 	}
 
 	@Test
@@ -38,12 +32,25 @@ public class RegularHolidayTest {
 
 		RegularHoliday regularHoliday = new RegularHoliday(regularHolidayText);
 
-		assertEquals(2, regularHoliday.getWeeks().size());
-		assertEquals(2, regularHoliday.getDayOfWeeks().size());
-		assertEquals(2, regularHoliday.getWeeks().get(0).intValue());
-		assertEquals(4, regularHoliday.getWeeks().get(1).intValue());
-		assertEquals(DayOfWeek.MONDAY, regularHoliday.getDayOfWeeks().get(0));
-		assertEquals(DayOfWeek.SUNDAY, regularHoliday.getDayOfWeeks().get(1));
+		assertThat(regularHoliday.getWeeks()).hasSize(2);
+		assertThat(regularHoliday.getWeeks()).element(0).isEqualTo(2);
+		assertThat(regularHoliday.getWeeks()).element(1).isEqualTo(4);
+		assertThat(regularHoliday.getDayOfWeeks()).hasSize(2);
+		assertThat(regularHoliday.getDayOfWeeks()).element(0).isEqualTo(DayOfWeek.MONDAY);
+		assertThat(regularHoliday.getDayOfWeeks()).element(1).isEqualTo(DayOfWeek.SUNDAY);
+	}
+
+	@Test
+	public void 두개_이상의_휴일일_때_객체_생성_확인2() {
+		String regularHolidayText = "(단, 매월 2,4번째 일요일 휴점)";
+
+		RegularHoliday regularHoliday = new RegularHoliday(regularHolidayText);
+
+		assertThat(regularHoliday.getWeeks()).hasSize(2);
+		assertThat(regularHoliday.getWeeks()).element(0).isEqualTo(2);
+		assertThat(regularHoliday.getWeeks()).element(1).isEqualTo(4);
+		assertThat(regularHoliday.getDayOfWeeks()).hasSize(1);
+		assertThat(regularHoliday.getDayOfWeeks()).first().isEqualTo(DayOfWeek.SUNDAY);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -79,6 +86,6 @@ public class RegularHolidayTest {
 		expected.add(Holiday.builder()
 				.date(LocalDate.of(2018, 6, 27))
 				.build());
-		assertThat(holidays, is(expected));
+		assertThat(holidays).containsOnlyElementsOf(expected);
 	}
 }
