@@ -171,4 +171,50 @@ public class MartServiceTest {
 
 		assertThat(marts).isNotEmpty().hasSize(1);
 	}
+
+	@Test
+	public void 아이디로_지점_조회() {
+		List<Mart> savedMarts = new ArrayList<>();
+		Mart mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build();
+		mart.addHoliday(Holiday.builder()
+				.mart(mart)
+				.date(LocalDate.of(2018, 8, 9))
+				.build());
+		savedMarts.add(mart);
+		martService.saveAll(savedMarts);
+
+		List<Long> ids = Arrays.asList(1L);
+		List<MartDto> marts = martService.getMartsById(ids);
+
+		assertThat(marts).hasSize(1);
+		assertThat(marts.get(0).getId()).isEqualTo(1L);
+	}
+
+	@Test
+	public void 여러_아이디로_지점_조회() {
+		List<Mart> savedMarts = new ArrayList<>();
+		savedMarts.add(Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.build());
+		savedMarts.add(Mart.builder()
+				.martType(MartType.EMART)
+				.realId("2")
+				.build());
+		savedMarts.add(Mart.builder()
+				.martType(MartType.LOTTEMART)
+				.realId("3")
+				.build());
+		martService.saveAll(savedMarts);
+
+		List<Long> ids = Arrays.asList(2L, 3L);
+		List<MartDto> marts = martService.getMartsById(ids);
+
+		assertThat(marts).hasSize(2);
+		assertThat(marts.get(0).getId()).isEqualTo(2L);
+		assertThat(marts.get(1).getId()).isEqualTo(3L);
+	}
 }
