@@ -40,8 +40,15 @@ public class MartService {
 	}
 
 	public List<MartDto> getMartsByMartType(MartType martType) throws IllegalArgumentException {
-		return martRepository.findByMartType(martType)
-				.stream()
+		return toDto(martRepository.findByMartType(martType));
+	}
+
+	public List<MartDto> getMartsById(List<Long> ids) {
+		return toDto(martRepository.findAllById(ids));
+	}
+
+	private List<MartDto> toDto(List<Mart> marts) {
+		return marts.stream()
 				.map(MartDto::new)
 				.collect(Collectors.toList());
 	}
