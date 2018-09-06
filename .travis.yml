@@ -1,14 +1,14 @@
 language: java
 jdk:
   - openjdk8
-  branches:
-    only:
-      - master
-  cache:
-    directories:
-      - "$HOME/.m2/repository"
-      - "$HOME/.gradle"
-  script: "./gradlew clean build"
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - "$HOME/.m2/repository"
+    - "$HOME/.gradle"
+script: "./gradlew clean build"
 before_deploy:
   - zip -r martholidayalarm *
 deploy:
@@ -39,9 +39,7 @@ deploy:
 notifications:
   email:
     recipients:
-    - pozt1234@gmail.com
+      - pozt1234@gmail.com
   slack:
     rooms:
-    - secure: "ayr1H61KdgWiVmcbFMzbC2hHOBqdnvEdwE7mBV/M320ljrGhKiaV15hTHGejVo3QgOf8tLSrdtfWQ67yh+gAXkTCpdpnJII9gfyF3j2Vihp4pSKx3HqwybHIavH1uvLXsT5YX/F5XRGkghNwC/NlOFN9Q1dw64lsZnQdZ+3dd6WC4JHB70nMr0eksGSMM53e70ilm6H31wZSHN3ElfiNsyA54mMRdiT0Y28xM1AlJeAKp8HFrkaZzprhd6vxtSmZcSa9pGmgqcmMmhcLqtWBJzcFlAn+Pwlm4XrppM6c5zlJKcTBRcOaiL0ZrAXXLTJI3U0oD6hqN9TA1vJu73WhiEo/1o54+81fpSjRQIBqIfHwQXZOYBan85Ny9XAlqDJQXm/y4kn1K7mOHZNliwQQBhVixyYHCAsvk8WkK1jpiR6xNeMXNjxUH5rmM4VWQmemUG0DjTIWhk/NRmq7FfXDOCiQXoHeGqxvJr5A7JxG+HG4vB/LA+fPWW8Uv60pKq37PkI70R/INN93JF2w/wgjXURU9y3uQaddVzA7/9A0nOP7s2VVHAYCrnFomZWGmPjqu3Nv8SvRq2GMM9peIlrYyGHPhWMpoRG4gEX9tnLlH1hLkXSxiwQh9Q7wF0+bdxBc+TjPSMG045MfSu90L7wxIuA626iq4QAEZ29hF1aLNvU="
-      on_success: always
-      on_failure: always
+      - secure: "ayr1H61KdgWiVmcbFMzbC2hHOBqdnvEdwE7mBV/M320ljrGhKiaV15hTHGejVo3QgOf8tLSrdtfWQ67yh+gAXkTCpdpnJII9gfyF3j2Vihp4pSKx3HqwybHIavH1uvLXsT5YX/F5XRGkghNwC/NlOFN9Q1dw64lsZnQdZ+3dd6WC4JHB70nMr0eksGSMM53e70ilm6H31wZSHN3ElfiNsyA54mMRdiT0Y28xM1AlJeAKp8HFrkaZzprhd6vxtSmZcSa9pGmgqcmMmhcLqtWBJzcFlAn+Pwlm4XrppM6c5zlJKcTBRcOaiL0ZrAXXLTJI3U0oD6hqN9TA1vJu73WhiEo/1o54+81fpSjRQIBqIfHwQXZOYBan85Ny9XAlqDJQXm/y4kn1K7mOHZNliwQQBhVixyYHCAsvk8WkK1jpiR6xNeMXNjxUH5rmM4VWQmemUG0DjTIWhk/NRmq7FfXDOCiQXoHeGqxvJr5A7JxG+HG4vB/LA+fPWW8Uv60pKq37PkI70R/INN93JF2w/wgjXURU9y3uQaddVzA7/9A0nOP7s2VVHAYCrnFomZWGmPjqu3Nv8SvRq2GMM9peIlrYyGHPhWMpoRG4gEX9tnLlH1hLkXSxiwQh9Q7wF0+bdxBc+TjPSMG045MfSu90L7wxIuA626iq4QAEZ29hF1aLNvU="
