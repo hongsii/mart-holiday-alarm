@@ -1,41 +1,41 @@
 language: java
 jdk:
-- openjdk8
-branches:
-  only:
-  - master
-cache:
-  directories:
-  - "$HOME/.m2/repository"
-  - "$HOME/.gradle"
-script: "./gradlew clean build"
+  - openjdk8
+  branches:
+    only:
+      - master
+  cache:
+    directories:
+      - "$HOME/.m2/repository"
+      - "$HOME/.gradle"
+  script: "./gradlew clean build"
 before_deploy:
-- zip -r martholidayalarm *
+  - zip -r martholidayalarm *
 deploy:
-- provider: s3
-  access_key_id: "$AWS_ACCESS_KEY"
-  secret_access_key: "$AWS_SECRET_KEY"
-  bucket: martholidayalarm-deploy
-  region: ap-northeast-2
-  skip_cleanup: true
-  acl: public_read
-  wait-until-deployed: true
-  on:
-    repo: hongsii/mart-holiday-alarm
-    branch: master
-- provider: codedeploy
-  access_key_id: "$AWS_ACCESS_KEY"
-  secret_access_key: "$AWS_SECRET_KEY"
-  bucket: martholidayalarm-deploy
-  key: martholidayalarm.zip
-  bundle_type: zip
-  application: martholidayalarm
-  deployment_group: martholidayalarm-group
-  region: ap-northeast-2
-  wait-until-deployed: true
-  on:
-    repo: hongsii/mart-holiday-alarm
-    branch: master
+  - provider: s3
+    access_key_id: "$AWS_ACCESS_KEY"
+    secret_access_key: "$AWS_SECRET_KEY"
+    bucket: martholidayalarm-deploy
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: public_read
+    wait-until-deployed: true
+    on:
+      repo: hongsii/mart-holiday-alarm
+      branch: master
+  - provider: codedeploy
+    access_key_id: "$AWS_ACCESS_KEY"
+    secret_access_key: "$AWS_SECRET_KEY"
+    bucket: martholidayalarm-deploy
+    key: martholidayalarm.zip
+    bundle_type: zip
+    application: martholidayalarm
+    deployment_group: martholidayalarm-group
+    region: ap-northeast-2
+    wait-until-deployed: true
+    on:
+      repo: hongsii/mart-holiday-alarm
+      branch: master
 notifications:
   email:
     recipients:
