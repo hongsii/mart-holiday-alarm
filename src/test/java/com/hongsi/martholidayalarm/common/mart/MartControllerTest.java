@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart;
 
-import static org.assertj.core.util.Arrays.asList;
+import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
