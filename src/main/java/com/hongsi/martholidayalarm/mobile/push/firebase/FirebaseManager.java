@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FirebaseManager {
 
-	public static final String PROJECT_ID = "martholiday-22010";
+	public static final String PROJECT_ID = "mart-holiday-b4599";
 	public static final String DATABASE_URL = "https://" + PROJECT_ID + ".firebaseio.com";
 	private static final String SERVICE_KEY_FILE =
 			CommonConstants.EXTERNAL_CONFIG_FILEPATH + "serviceAccountKey.json";
