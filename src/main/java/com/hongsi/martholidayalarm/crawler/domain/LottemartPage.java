@@ -112,10 +112,15 @@ public class LottemartPage extends MartPage {
 				monthDay.getDayOfMonth());
 	}
 
+	/*
+	 * 롯데마트는 휴무일의 연도를 표시하지 않기 때문에 계산이 필요
+	 * 11-12월 사이에 1월 휴무일이 표시될 것이라 예상
+	 * 크롤러가 실행될 때의 월(11-12월일 때)보다 작은 월이 수집되면 내년으로 연도 파싱
+	 */
 	private int getYearFromMonth(Month parsedMonth) {
 		YearMonth currentYearMonth = YearMonth.now();
-		return (currentYearMonth.getMonth().getValue() >= Month.OCTOBER.getValue()
-				&& parsedMonth.getValue() >= Month.JANUARY.getValue()) ?
+		return (currentYearMonth.getMonth().getValue() >= Month.NOVEMBER.getValue()
+				&& parsedMonth.getValue() < currentYearMonth.getMonth().getValue()) ?
 				currentYearMonth.getYear() + 1 : currentYearMonth.getYear();
 	}
 
