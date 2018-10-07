@@ -89,7 +89,11 @@ public class Mart extends BaseEntity {
 
 	public void update(Mart savedMart) {
 		id = savedMart.getId();
-		holidays.removeIf(holiday -> savedMart.getHolidays().contains(holiday));
+		holidays.removeIf(holiday -> savedMart.hasSameHoliday(holiday));
+	}
+
+	public boolean hasSameHoliday(Holiday holiday) {
+		return holidays.contains(holiday);
 	}
 
 	@Override

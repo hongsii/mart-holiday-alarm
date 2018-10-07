@@ -45,4 +45,50 @@ public class MartTest {
 				.date(LocalDate.of(2018, 6, 22))
 				.build());
 	}
+
+	@Test
+	public void hasSameHoliday() {
+		Mart mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1000")
+				.region("서울")
+				.branchName("성수점")
+				.address("서울 성동구 뚝섬로 379")
+				.phoneNumber("02-3408-1234")
+				.url("http://store.emart.com/branch/list.do?id=1038")
+				.holidays(asList(Holiday.builder()
+								.date(LocalDate.of(2018, 10, 6)).build(),
+						Holiday.builder()
+								.date(LocalDate.of(2018, 10, 8)).build()
+				))
+				.build();
+
+		Holiday other = Holiday.builder()
+				.date(LocalDate.of(2018, 10, 6)).build();
+
+		assertThat(mart.hasSameHoliday(other)).isTrue();
+	}
+
+	@Test
+	public void hasNotSameHoliday() {
+		Mart mart = Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1000")
+				.region("서울")
+				.branchName("성수점")
+				.address("서울 성동구 뚝섬로 379")
+				.phoneNumber("02-3408-1234")
+				.url("http://store.emart.com/branch/list.do?id=1038")
+				.holidays(asList(Holiday.builder()
+								.date(LocalDate.of(2018, 10, 6)).build(),
+						Holiday.builder()
+								.date(LocalDate.of(2018, 10, 8)).build()
+				))
+				.build();
+
+		Holiday other = Holiday.builder()
+				.date(LocalDate.of(2018, 10, 7)).build();
+
+		assertThat(mart.hasSameHoliday(other)).isFalse();
+	}
 }

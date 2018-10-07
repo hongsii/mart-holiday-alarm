@@ -220,4 +220,47 @@ public class MartServiceTest {
 		assertThat(marts.get(0).getId()).isEqualTo(2L);
 		assertThat(marts.get(1).getId()).isEqualTo(3L);
 	}
+
+	@Test
+	public void getMartsHavingSameHoliday() {
+		List<Mart> savedMarts = new ArrayList<>();
+		savedMarts.add(Mart.builder()
+				.martType(MartType.EMART)
+				.realId("1")
+				.holidays(Arrays.asList(
+						Holiday.builder()
+								.date(LocalDate.of(2018, 10, 6)).build(),
+						Holiday.builder()
+								.date(LocalDate.of(2018, 10, 7)).build()
+				))
+				.build());
+		savedMarts.add(Mart.builder()
+				.martType(MartType.EMART)
+				.realId("2")
+				.holidays(Arrays.asList(
+						Holiday.builder()
+								.date(LocalDate.of(2018, 10, 8)).build(),
+						Holiday.builder()
+								.date(LocalDate.of(2018, 10, 9)).build()
+				))
+				.build());
+		savedMarts.add(Mart.builder()
+				.martType(MartType.LOTTEMART)
+				.realId("3")
+				.holidays(Arrays.asList(
+						Holiday.builder()
+								.date(LocalDate.of(2018, 10, 6)).build()
+				))
+				.build());
+		martService.saveAll(savedMarts);
+
+		List<Long> ids = Arrays.asList(1L, 2L, 3L);
+		Holiday holiday = Holiday.builder()
+				.date(LocalDate.of(2018, 10, 6)).build();
+		List<MartDto> marts = martService.getMartsHavingSameHoliday(ids, holiday);
+
+		assertThat(marts).hasSize(2);
+		assertThat(marts.get(0).getId()).isEqualTo(1L);
+		assertThat(marts.get(1).getId()).isEqualTo(3L);
+	}
 }

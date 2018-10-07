@@ -5,6 +5,7 @@ import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import com.hongsi.martholidayalarm.crawler.domain.MartCrawler;
 import com.hongsi.martholidayalarm.crawler.domain.MartPage;
+import com.hongsi.martholidayalarm.mobile.push.firebase.service.FavoriteService;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,12 @@ import org.springframework.util.StopWatch;
 public class MartCrawlerScheduler {
 
 	private final MartService martService;
+	private final FavoriteService favoriteService;
 
 	private StopWatch stopWatch;
 
 	//	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
-	@Scheduled(cron = "0 0 3 ? * MON")
+	@Scheduled(cron = "0 0 3 ? * *")
 	public void crawlMart() {
 		log.info("Start Mart crawling");
 		stopWatch = new StopWatch("MartCrawler");
@@ -59,11 +61,12 @@ public class MartCrawlerScheduler {
 		return pages;
 	}
 
-	@Scheduled(cron = "0 30 3 ? * MON")
+	@Scheduled(cron = "0 30 3 ? * *")
 	public void removeNotUpdatedMart() {
 		log.info("Start remove not updated Marts");
 		int minusDays = 14;
-		martService.removeNotUpdatedMart(minusDays);
+		List<Long> deletedIds = martService.removeNotUpdatedMart(minusDays);
+		favoriteService.removeFavoritedMart(deletedIds);
 		log.info("End remove not updated Marts");
 	}
 }
