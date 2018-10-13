@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart.service;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
@@ -43,8 +44,14 @@ public class MartService {
 		return toDto(martRepository.findByMartType(martType));
 	}
 
-	public List<MartDto> getMartsById(List<Long> ids) {
+	public List<MartDto> getMartsById(Iterable<Long> ids) {
 		return toDto(martRepository.findAllById(ids));
+	}
+
+	public List<MartDto> getMartsHavingSameHoliday(Iterable<Long> ids, Holiday holiday) {
+		List<Mart> marts = martRepository.findAllById(ids);
+		marts.removeIf(mart -> !mart.hasSameHoliday(holiday));
+		return toDto(marts);
 	}
 
 	private List<MartDto> toDto(List<Mart> marts) {
@@ -65,30 +72,28 @@ public class MartService {
 		martRepository.saveAll(marts);
 	}
 
-
 	@Transactional
-	public int removeNotUpdatedMart(int days) {
+	public List<Long> removeNotUpdatedMart(int days) {
 		LocalDateTime conditionTime = martRepository.findMaxModifiedDate();
 		log.info("Last modified date of Mart : {}, minus days : {}", conditionTime, days);
 		conditionTime = conditionTime.minusDays(days);
 		log.info("Condition time for finding not updated Mart : {}", conditionTime);
 		List<Mart> notUpdatedMarts = martRepository
 				.findByModifiedDateLessThanOrEqual(conditionTime);
-		if (notUpdatedMarts.isEmpty()) {
-			log.info("Not exists Mart to remove");
-			return 0;
-		}
 
 		List<Long> ids = new ArrayList<>();
-		for (Mart mart : notUpdatedMarts) {
-			log.info(" > Mart info to remove [Id : {}, CreatedDate : {}, ModifiedDate : {}"
-							+ ", MartType : {}, Region : {}, BranchName : {}]",
-					mart.getId(), mart.getCreatedDate(), mart.getModifiedDate(), mart.getMartType(),
-					mart.getRegion(), mart.getBranchName());
-			ids.add(mart.getId());
+		if (!notUpdatedMarts.isEmpty()) {
+			for (Mart mart : notUpdatedMarts) {
+				log.info(" > Mart info to remove [Id : {}, CreatedDate : {}, ModifiedDate : {}"
+								+ ", MartType : {}, Region : {}, BranchName : {}]",
+						mart.getId(), mart.getCreatedDate(), mart.getModifiedDate(),
+						mart.getMartType(),
+						mart.getRegion(), mart.getBranchName());
+				ids.add(mart.getId());
+			}
+			holidayRepository.deleteByMartIds(ids);
+			martRepository.deleteByIds(ids);
 		}
-		holidayRepository.deleteByMartIds(ids);
-		martRepository.deleteByIds(ids);
-		return ids.size();
+		return ids;
 	}
 }

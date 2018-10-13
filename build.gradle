@@ -41,6 +41,8 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: "${swaggerVersion}"
     compile group: 'io.springfox', name: 'springfox-core', version: "${swaggerVersion}"
 
+    compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.4.0'
+
     runtime('com.h2database:h2')
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')

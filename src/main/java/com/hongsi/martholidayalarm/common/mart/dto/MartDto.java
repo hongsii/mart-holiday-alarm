@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart.dto;
 
+import com.hongsi.martholidayalarm.common.exception.NoHolidayException;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import io.swagger.annotations.ApiModel;
@@ -51,7 +52,7 @@ public class MartDto {
 	private String url;
 
 	@ApiModelProperty(value = "휴무일", dataType = "java.lang.String", position = 11, allowEmptyValue = true)
-	private List<String> holidays;
+	private List<Holiday> holidays;
 
 	public MartDto(Mart entity) {
 		id = entity.getId();
@@ -64,7 +65,8 @@ public class MartDto {
 		address = entity.getAddress();
 		openingHours = entity.getOpeningHours();
 		url = entity.getUrl();
-		holidays = toHolidayDto(entity.getHolidays());
+		holidays = entity.getHolidays();
+//		holidays = toHolidayDto(entity.getHolidays());
 	}
 
 	private String formatLocalDateTime(LocalDateTime localDateTime) {
@@ -79,5 +81,18 @@ public class MartDto {
 			}
 		}
 		return dates;
+	}
+
+	public List<String> getHolidays() {
+		return toHolidayDto(holidays);
+	}
+
+	public Holiday getUpcomingHoliday() throws NoHolidayException {
+		for (Holiday holiday : holidays) {
+			if (holiday.isUpcoming()) {
+				return holiday;
+			}
+		}
+		throw new NoHolidayException();
 	}
 }
