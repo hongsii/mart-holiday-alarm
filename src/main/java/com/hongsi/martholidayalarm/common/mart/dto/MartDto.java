@@ -52,7 +52,7 @@ public class MartDto {
 	private String url;
 
 	@ApiModelProperty(value = "휴무일", dataType = "java.lang.String", position = 11, allowEmptyValue = true)
-	private List<Holiday> holidays;
+	private List<String> holidays;
 
 	public MartDto(Mart entity) {
 		id = entity.getId();
@@ -65,8 +65,7 @@ public class MartDto {
 		address = entity.getAddress();
 		openingHours = entity.getOpeningHours();
 		url = entity.getUrl();
-		holidays = entity.getHolidays();
-//		holidays = toHolidayDto(entity.getHolidays());
+		holidays = toHolidayDto(entity.getHolidays());
 	}
 
 	private String formatLocalDateTime(LocalDateTime localDateTime) {
@@ -83,16 +82,10 @@ public class MartDto {
 		return dates;
 	}
 
-	public List<String> getHolidays() {
-		return toHolidayDto(holidays);
-	}
-
-	public Holiday getUpcomingHoliday() throws NoHolidayException {
-		for (Holiday holiday : holidays) {
-			if (holiday.isUpcoming()) {
-				return holiday;
-			}
+	public String getUpcomingHoliday() throws NoHolidayException {
+		if (holidays.isEmpty()) {
+			throw new NoHolidayException();
 		}
-		throw new NoHolidayException();
+		return holidays.get(0);
 	}
 }

@@ -8,7 +8,9 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Message.Builder;
 import com.google.firebase.messaging.Notification;
 import com.hongsi.martholidayalarm.common.exception.NoHolidayException;
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
+import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,7 +39,9 @@ public class FirebaseMessageSender {
 
 	private static Notification makeNotification(MartDto mart) throws NoHolidayException {
 		String title = String.format("%s %s", mart.getMartType(), mart.getBranchName());
-		String message = String.format("내일[%s]은 쉬는 날이에요!!", mart.getUpcomingHoliday());
+		LocalDate holiday = LocalDate.parse(mart.getUpcomingHoliday(), MartDto.DATE_TIME_FORMATTER);
+		String message = String.format("내일[%s]은 쉬는 날이에요!!"
+				, holiday.format(Holiday.DAYOFMONTH_FORMATTER));
 		return new Notification(title, message);
 	}
 
