@@ -24,6 +24,8 @@ public class Holiday extends BaseEntity {
 
 	public static final DateTimeFormatter DEFAULT_FORMATTER_WITH_DAYOFWEEK = DateTimeFormatter
 			.ofPattern("yyyy-MM-dd (EE)").withLocale(Locale.KOREAN);
+	public static final DateTimeFormatter DAYOFMONTH_FORMATTER = DateTimeFormatter
+			.ofPattern("dd일 (EE)").withLocale(Locale.KOREAN);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +54,10 @@ public class Holiday extends BaseEntity {
 
 	public void addedFromMart(Mart mart) {
 		this.mart = mart;
+	}
+
+	public String getFormattedHoliday(DateTimeFormatter dateTimeFormatter) {
+		return date.format(dateTimeFormatter);
 	}
 
 	@Override

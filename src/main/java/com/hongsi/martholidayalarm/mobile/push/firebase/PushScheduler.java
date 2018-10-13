@@ -1,11 +1,11 @@
 package com.hongsi.martholidayalarm.mobile.push.firebase;
 
+import com.hongsi.martholidayalarm.common.exception.NoHolidayException;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import com.hongsi.martholidayalarm.mobile.push.firebase.service.FavoriteService;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,11 @@ public class PushScheduler {
 	private final MartService martService;
 	private final FavoriteService favoriteService;
 
-	//		@Scheduled(initialDelay = 9000, fixedDelay = 90000)
-	@Scheduled(cron = "0 0 9 ? * *")
+	@Scheduled(cron = "${schedule.cron.push:0 0 11 ? * *}")
 	public void notifyHoliday() {
-		favoriteService.removeFavoritedMart(Arrays.asList(1L, 140L));
-
 		Set<Long> ids = favoriteService.getFavoritedMartIds();
-		LocalDate tomorrow = LocalDate.now().plusDays(1);
 		Holiday holiday = Holiday.builder()
-				.date(tomorrow)
+				.date(LocalDate.now().plusDays(1))
 				.build();
 		List<MartDto> marts = martService.getMartsHavingSameHoliday(ids, holiday);
 
@@ -37,13 +33,11 @@ public class PushScheduler {
 		log.info("PushScheduler mart size for push : {}", marts.size());
 
 		for (MartDto mart : marts) {
-			FirebaseMessageSender.sendToTopic(mart.getId().toString(),
-					FirebaseMessageSender.makeNotification(mart));
+			try {
+				FirebaseMessageSender.sendToTopic(mart);
+			} catch (NoHolidayException e) {
+				log.error("{} [martId : {}]", e.getMessage(), mart.getId());
+			}
 		}
-	}
-
-	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
-	public void test() {
-		favoriteService.removeFavoritedMart(Arrays.asList(1L, 140L));
 	}
 }

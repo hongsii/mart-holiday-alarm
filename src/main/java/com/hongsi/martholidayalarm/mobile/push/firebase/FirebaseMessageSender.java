@@ -5,7 +5,9 @@ import com.google.firebase.messaging.Aps;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Message.Builder;
 import com.google.firebase.messaging.Notification;
+import com.hongsi.martholidayalarm.common.exception.NoHolidayException;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,27 +15,36 @@ import lombok.extern.slf4j.Slf4j;
 public class FirebaseMessageSender {
 
 	public static String sendToToken(String token, Notification notification) {
-		Message message = Message.builder()
+		Message message = getDefaultMessage(notification)
 				.setToken(token)
-				.setNotification(notification)
-				.setApnsConfig(getApnsConfig())
 				.build();
 		return send(message);
 	}
 
 	public static String sendToTopic(String topic, Notification notification) {
-		Message message = Message.builder()
+		Message message = getDefaultMessage(notification)
 				.setTopic(topic)
-				.setNotification(notification)
-				.setApnsConfig(getApnsConfig())
 				.build();
 		return send(message);
 	}
 
-	public static Notification makeNotification(MartDto mart) {
+	public static String sendToTopic(MartDto mart) throws NoHolidayException {
+		Message message = getDefaultMessage(makeNotification(mart))
+				.setTopic(mart.getId().toString())
+				.build();
+		return send(message);
+	}
+
+	private static Notification makeNotification(MartDto mart) throws NoHolidayException {
 		String title = String.format("%s %s", mart.getMartType(), mart.getBranchName());
-		String message = String.format("내일[%s] 쉬는 날입니다.", mart.getHolidays().get(0));
+		String message = String.format("내일[%s]은 쉬는 날이에요!!", mart.getUpcomingHoliday());
 		return new Notification(title, message);
+	}
+
+	private static Builder getDefaultMessage(Notification notification) {
+		return Message.builder()
+				.setNotification(notification)
+				.setApnsConfig(getApnsConfig());
 	}
 
 	private static ApnsConfig getApnsConfig() {

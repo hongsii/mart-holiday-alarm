@@ -96,6 +96,10 @@ public class Mart extends BaseEntity {
 		return holidays.contains(holiday);
 	}
 
+	public boolean hasHoliday() {
+		return holidays.size() > 0;
+	}
+
 	@Override
 	public String toString() {
 		return "Mart{" +
