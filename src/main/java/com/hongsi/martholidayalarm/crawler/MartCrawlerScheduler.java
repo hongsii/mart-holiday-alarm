@@ -24,8 +24,7 @@ public class MartCrawlerScheduler {
 
 	private StopWatch stopWatch;
 
-	//	@Scheduled(initialDelay = 9000, fixedDelay = 90000)
-	@Scheduled(cron = "0 0 3 ? * *")
+	@Scheduled(cron = "${schedule.cron.crawler:0 0 3 ? * *}")
 	public void crawlMart() {
 		log.info("Start Mart crawling");
 		stopWatch = new StopWatch("MartCrawler");
@@ -61,7 +60,7 @@ public class MartCrawlerScheduler {
 		return pages;
 	}
 
-	@Scheduled(cron = "0 30 3 ? * *")
+	@Scheduled(cron = "${schedule.cron.delete:0 30 3 ? * *}")
 	public void removeNotUpdatedMart() {
 		log.info("Start remove not updated Marts");
 		int minusDays = 14;
