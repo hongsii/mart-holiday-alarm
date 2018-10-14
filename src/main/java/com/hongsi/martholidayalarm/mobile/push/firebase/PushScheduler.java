@@ -6,6 +6,7 @@ import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
 import com.hongsi.martholidayalarm.mobile.push.firebase.service.FavoriteService;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,10 @@ public class PushScheduler {
 	public void notifyHoliday() {
 		Set<Long> ids = favoriteService.getFavoritedMartIds();
 		Holiday holiday = Holiday.builder()
-				.date(LocalDate.now().plusDays(1))
+				.date(LocalDate.now())
 				.build();
+		log.info("PushScheduler current time : {}", LocalDateTime.now());
+		log.info("PushScheduler holiday : {}", holiday.toString());
 		List<MartDto> marts = martService.getMartsHavingSameHoliday(ids, holiday);
 
 		log.info("PushScheduler favorite id size : {}", ids.size());
