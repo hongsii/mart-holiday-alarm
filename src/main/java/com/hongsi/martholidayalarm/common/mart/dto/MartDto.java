@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hongsi.martholidayalarm.common.exception.NoHolidayException;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
@@ -82,6 +83,8 @@ public class MartDto {
 		return dates;
 	}
 
+	@JsonIgnore
+	@ApiModelProperty(hidden = true)
 	public String getUpcomingHoliday() throws NoHolidayException {
 		if (holidays.isEmpty()) {
 			throw new NoHolidayException();
