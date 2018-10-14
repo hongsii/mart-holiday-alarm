@@ -39,7 +39,8 @@ public class FirebaseMessageSender {
 
 	private static Notification makeNotification(MartDto mart) throws NoHolidayException {
 		String title = String.format("%s %s", mart.getMartType(), mart.getBranchName());
-		LocalDate holiday = LocalDate.parse(mart.getUpcomingHoliday(), MartDto.DATE_TIME_FORMATTER);
+		LocalDate holiday = LocalDate.parse(mart.getUpcomingHoliday()
+				, Holiday.DEFAULT_FORMATTER_WITH_DAYOFWEEK);
 		String message = String.format("오늘[%s]은 쉬는 날이에요!!"
 				, holiday.format(Holiday.DAYOFMONTH_FORMATTER));
 		return new Notification(title, message);
