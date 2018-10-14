@@ -23,9 +23,9 @@ import lombok.NoArgsConstructor;
 public class Holiday extends BaseEntity {
 
 	public static final DateTimeFormatter DEFAULT_FORMATTER_WITH_DAYOFWEEK = DateTimeFormatter
-			.ofPattern("yyyy-MM-dd (EE)").withLocale(Locale.KOREAN);
+			.ofPattern("yyyy-M-d (EE)").withLocale(Locale.KOREAN);
 	public static final DateTimeFormatter DAYOFMONTH_FORMATTER = DateTimeFormatter
-			.ofPattern("dd일 (EE)").withLocale(Locale.KOREAN);
+			.ofPattern("d일").withLocale(Locale.KOREAN);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Holiday extends BaseEntity {
 	@Column
 	private LocalDate date;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "mart_id")
 	private Mart mart;
 

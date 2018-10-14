@@ -26,7 +26,7 @@ public class PushScheduler {
 	public void notifyHoliday() {
 		Set<Long> ids = favoriteService.getFavoritedMartIds();
 		Holiday holiday = Holiday.builder()
-				.date(LocalDate.now())
+				.date(LocalDate.now().plusDays(1))
 				.build();
 		log.info("PushScheduler current time : {}", LocalDateTime.now());
 		log.info("PushScheduler holiday : {}", holiday.toString());
