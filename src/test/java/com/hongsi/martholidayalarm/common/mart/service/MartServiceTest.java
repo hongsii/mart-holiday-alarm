@@ -254,10 +254,9 @@ public class MartServiceTest {
 				.build());
 		martService.saveAll(savedMarts);
 
-		List<Long> ids = Arrays.asList(1L, 2L, 3L);
 		Holiday holiday = Holiday.builder()
 				.date(LocalDate.of(2018, 10, 6)).build();
-		List<MartDto> marts = martService.getMartsHavingSameHoliday(ids, holiday);
+		List<MartDto> marts = martService.getMartsHavingSameHoliday(holiday);
 
 		assertThat(marts).hasSize(2);
 		assertThat(marts.get(0).getId()).isEqualTo(1L);
