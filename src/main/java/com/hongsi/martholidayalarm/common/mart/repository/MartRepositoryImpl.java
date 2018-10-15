@@ -1,7 +1,9 @@
 package com.hongsi.martholidayalarm.common.mart.repository;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
+import com.hongsi.martholidayalarm.common.mart.domain.QHoliday;
 import com.hongsi.martholidayalarm.common.mart.domain.QMart;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
@@ -64,6 +66,18 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 		return jpaQueryFactory
 				.selectFrom(mart)
 				.where(mart.modifiedDate.loe(conditionTime))
+				.fetch();
+	}
+
+	@Override
+	public List<Mart> findHavingSameHoliday(Holiday holidayParam) {
+		QMart mart = QMart.mart;
+		QHoliday holiday = QHoliday.holiday;
+
+		return jpaQueryFactory
+				.select(mart)
+				.from(mart).innerJoin(holiday).on(holiday.mart.id.eq(mart.id))
+				.where(holiday.date.eq(holidayParam.getDate()))
 				.fetch();
 	}
 }
