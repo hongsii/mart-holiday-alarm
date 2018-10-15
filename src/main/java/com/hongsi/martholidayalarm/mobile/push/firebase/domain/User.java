@@ -13,12 +13,10 @@ public class User {
 
 	private List<Long> favorites;
 
-	//	@PropertyName("device_token")
 	public String getDeviceToken() {
 		return deviceToken;
 	}
 
-	//	@PropertyName("device_token")
 	public void setDeviceToken(String deviceToken) {
 		this.deviceToken = deviceToken;
 	}
@@ -32,5 +30,9 @@ public class User {
 	public void setFavorites(
 			List<Long> favorites) {
 		this.favorites = favorites;
+	}
+
+	public boolean hasSameMartId(Long martId) {
+		return favorites.contains(martId);
 	}
 }

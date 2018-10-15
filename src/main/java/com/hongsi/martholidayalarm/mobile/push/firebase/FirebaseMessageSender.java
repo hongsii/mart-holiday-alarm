@@ -11,6 +11,7 @@ import com.hongsi.martholidayalarm.common.exception.NoHolidayException;
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,11 +31,17 @@ public class FirebaseMessageSender {
 		return send(message);
 	}
 
-	public static String sendToTopic(MartDto mart) throws NoHolidayException {
-		Message message = getDefaultMessage(makeNotification(mart))
-				.setTopic(mart.getId().toString())
-				.build();
-		return send(message);
+	public static void sendToToken(String token, List<MartDto> marts) {
+		for (MartDto mart : marts) {
+			try {
+				Message message = getDefaultMessage(makeNotification(mart))
+						.setToken(token)
+						.build();
+				send(message);
+			} catch (NoHolidayException e) {
+				log.error("{} [token : {}, martId : {}]", e.getMessage(), token, mart.getId());
+			}
+		}
 	}
 
 	private static Notification makeNotification(MartDto mart) throws NoHolidayException {

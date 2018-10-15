@@ -8,11 +8,9 @@ import com.hongsi.martholidayalarm.mobile.push.firebase.FirebaseMessageTopicMana
 import com.hongsi.martholidayalarm.mobile.push.firebase.domain.User;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +21,6 @@ import org.springframework.stereotype.Service;
 public class FavoriteService {
 
 	public static final String NODE_NAME = "favorites";
-
-	public Set<Long> getFavoritedMartIds() {
-		Set<Long> martIds = new HashSet<>();
-		List<User> users = getUsers();
-		for (User user : users) {
-			martIds.addAll(user.getFavorites());
-		}
-		return martIds;
-	}
 
 	public void removeFavoritedMart(List<Long> deletedIds) {
 		List<User> users = getUsers();
@@ -61,7 +50,7 @@ public class FavoriteService {
 		}
 	}
 
-	private List<User> getUsers() {
+	public List<User> getUsers() {
 		List<User> users = new ArrayList<>();
 		try {
 			CountDownLatch latch = new CountDownLatch(1);

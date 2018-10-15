@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.common.mart.repository;
 
+import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import java.time.LocalDateTime;
@@ -16,4 +17,6 @@ public interface MartRepositoryCustom {
 	LocalDateTime findMaxModifiedDate();
 
 	List<Mart> findByModifiedDateLessThanOrEqual(LocalDateTime localDateTime);
+
+	List<Mart> findHavingSameHoliday(Holiday holiday);
 }
