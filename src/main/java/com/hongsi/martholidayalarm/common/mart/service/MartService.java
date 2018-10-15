@@ -48,10 +48,8 @@ public class MartService {
 		return toDto(martRepository.findAllById(ids));
 	}
 
-	public List<MartDto> getMartsHavingSameHoliday(Iterable<Long> ids, Holiday holiday) {
-		List<Mart> marts = martRepository.findAllById(ids);
-		marts.removeIf(mart -> !mart.hasSameHoliday(holiday));
-		return toDto(marts);
+	public List<MartDto> getMartsHavingSameHoliday(Holiday holiday) {
+		return toDto(martRepository.findHavingSameHoliday(holiday));
 	}
 
 	private List<MartDto> toDto(List<Mart> marts) {

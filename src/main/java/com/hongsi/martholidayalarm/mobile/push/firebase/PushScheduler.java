@@ -1,18 +1,20 @@
 package com.hongsi.martholidayalarm.mobile.push.firebase;
 
-import com.hongsi.martholidayalarm.common.exception.NoHolidayException;
+import static com.hongsi.martholidayalarm.common.mart.domain.QHoliday.holiday;
+
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
+import com.hongsi.martholidayalarm.mobile.push.firebase.domain.User;
 import com.hongsi.martholidayalarm.mobile.push.firebase.service.FavoriteService;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 @Component
 @RequiredArgsConstructor
@@ -22,25 +24,34 @@ public class PushScheduler {
 	private final MartService martService;
 	private final FavoriteService favoriteService;
 
+	private StopWatch stopWatch;
+
 	@Scheduled(cron = "${schedule.cron.push:0 0 11 ? * *}")
-	public void notifyHoliday() {
-		Set<Long> ids = favoriteService.getFavoritedMartIds();
-		Holiday holiday = Holiday.builder()
+	public void notifyHolidayToUser() {
+		stopWatch = new StopWatch("MobilePush");
+
+		stopWatch.start("FirebaseUsers");
+		List<User> users = favoriteService.getUsers();
+		stopWatch.stop();
+
+		stopWatch.start("marts");
+		Holiday tomorrow = Holiday.builder()
 				.date(LocalDate.now().plusDays(1))
 				.build();
-		log.info("PushScheduler current time : {}", LocalDateTime.now());
-		log.info("PushScheduler holiday : {}", holiday.toString());
-		List<MartDto> marts = martService.getMartsHavingSameHoliday(ids, holiday);
+		List<MartDto> marts = martService.getMartsHavingSameHoliday(tomorrow);
+		stopWatch.stop();
 
-		log.info("PushScheduler favorite id size : {}", ids.size());
-		log.info("PushScheduler mart size for push : {}", marts.size());
-
-		for (MartDto mart : marts) {
-			try {
-				FirebaseMessageSender.sendToTopic(mart);
-			} catch (NoHolidayException e) {
-				log.error("{} [martId : {}]", e.getMessage(), mart.getId());
-			}
+		stopWatch.start("pushToToken");
+		for (User user : users) {
+			List<MartDto> favoritedMarts = marts.stream()
+					.filter(martDto -> user.hasSameMartId(martDto.getId()))
+					.collect(Collectors.toList());
+			FirebaseMessageSender.sendToToken(user.getDeviceToken(), favoritedMarts);
 		}
+		stopWatch.stop();
+
+		log.info("PushScheduler target holiday : {}", holiday.toString());
+		log.info("PushScheduler users : {}", users.size());
+		log.info(stopWatch.prettyPrint());
 	}
 }
