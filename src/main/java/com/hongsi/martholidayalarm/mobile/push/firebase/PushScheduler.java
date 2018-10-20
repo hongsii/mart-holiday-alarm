@@ -1,7 +1,5 @@
 package com.hongsi.martholidayalarm.mobile.push.firebase;
 
-import static com.hongsi.martholidayalarm.common.mart.domain.QHoliday.holiday;
-
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
@@ -50,7 +48,7 @@ public class PushScheduler {
 		}
 		stopWatch.stop();
 
-		log.info("PushScheduler target holiday : {}", holiday.toString());
+		log.info("PushScheduler target holiday : {}", tomorrow.toString());
 		log.info("PushScheduler users : {}", users.size());
 		log.info(stopWatch.prettyPrint());
 	}
