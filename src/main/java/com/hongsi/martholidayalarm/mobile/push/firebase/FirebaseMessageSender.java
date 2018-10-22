@@ -48,7 +48,7 @@ public class FirebaseMessageSender {
 		String title = String.format("%s %s", mart.getMartType(), mart.getBranchName());
 		LocalDate holiday = LocalDate.parse(mart.getUpcomingHoliday()
 				, Holiday.DEFAULT_FORMATTER_WITH_DAYOFWEEK);
-		String message = String.format("내일(%s)은 쉬는 날이에요!!"
+		String message = String.format("내일(%s)은 쉬는 날이에요!!🤗"
 				, holiday.format(Holiday.DAYOFMONTH_FORMATTER));
 		return new Notification(title, message);
 	}

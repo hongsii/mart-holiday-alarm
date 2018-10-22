@@ -4,15 +4,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.hongsi.martholidayalarm.mobile.push.firebase.FirebaseDatabaseManager;
-import com.hongsi.martholidayalarm.mobile.push.firebase.FirebaseMessageTopicManager;
 import com.hongsi.martholidayalarm.mobile.push.firebase.domain.User;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,33 +16,26 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class FavoriteService {
 
-	public static final String NODE_NAME = "favorites";
+	public static final String NODE_USERS = "users";
 
 	public void removeFavoritedMart(List<Long> deletedIds) {
 		List<User> users = getUsers();
-		Map<String, List<String>> topics = new HashMap<>();
 		for (User user : users) {
 			Iterator<Long> favoriteIterator = user.getFavorites().iterator();
+			boolean hasDeletedMart = false;
 			while (favoriteIterator.hasNext()) {
 				Long martId = favoriteIterator.next();
 				if (deletedIds.contains(martId)) {
-					List<String> tokensToBeUnscribed = topics
-							.getOrDefault(martId.toString(), new ArrayList<>());
-					tokensToBeUnscribed.add(user.getDeviceToken());
-
-					topics.put(martId.toString(), tokensToBeUnscribed);
-
+					hasDeletedMart = true;
 					favoriteIterator.remove();
 				}
 			}
-			FirebaseDatabaseManager.getReference().child("users").child(user.getDeviceToken())
-					.setValueAsync(user);
-		}
 
-		try {
-			FirebaseMessageTopicManager.unsubscribe(topics);
-		} catch (InterruptedException | ExecutionException e) {
-			log.error("can't unsubscribe - message : {}", e.getMessage());
+			if (hasDeletedMart) {
+				FirebaseDatabaseManager.getReference().child(NODE_USERS)
+						.child(user.getDeviceToken())
+						.setValueAsync(user);
+			}
 		}
 	}
 
@@ -54,7 +43,7 @@ public class FavoriteService {
 		List<User> users = new ArrayList<>();
 		try {
 			CountDownLatch latch = new CountDownLatch(1);
-			FirebaseDatabaseManager.getReference().child("users")
+			FirebaseDatabaseManager.getReference().child(NODE_USERS)
 					.addListenerForSingleValueEvent(new ValueEventListener() {
 						@Override
 						public void onDataChange(DataSnapshot dataSnapshot) {
