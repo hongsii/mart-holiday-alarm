@@ -48,7 +48,7 @@ public class MartController {
 	}
 
 	@ApiOperation(value = "지점ID로 조회")
-	@ApiImplicitParam(name = "ids", value = "지점ID (한 개 또는 그 이상)", required = true, dataType = "array", paramType = "path", allowMultiple = true)
+	@ApiImplicitParam(name = "ids", value = "지점ID (한 개 또는 그 이상)", required = true, paramType = "path", allowMultiple = true)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "OK"),
 			@ApiResponse(code = 404, message = "There is no exist mart for id")
