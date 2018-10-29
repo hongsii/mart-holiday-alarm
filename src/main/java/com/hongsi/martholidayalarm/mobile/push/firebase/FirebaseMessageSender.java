@@ -32,12 +32,15 @@ public class FirebaseMessageSender {
 	}
 
 	public static void sendToToken(String token, List<MartDto> marts) {
+		log.info("token : {} / mart size : {}", token, marts.size());
 		for (MartDto mart : marts) {
 			try {
+				log.info("id : {} / branchName : {}", mart.getId(), mart.getBranchName());
 				Message message = getDefaultMessage(makeNotification(mart))
 						.setToken(token)
 						.build();
-				send(message);
+				String messageId = send(message);
+				log.info("message id : {}", messageId);
 			} catch (NoHolidayException e) {
 				log.error("{} [token : {}, martId : {}]", e.getMessage(), token, mart.getId());
 			}
