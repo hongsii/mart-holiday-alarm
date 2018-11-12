@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.mart;
+package com.hongsi.martholidayalarm.api.mart.controller;
 
 import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
@@ -18,14 +18,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Deprecated
 @RestController
 @RequestMapping("/api/mart")
 @AllArgsConstructor
@@ -54,7 +53,8 @@ public class MartController {
 			@ApiResponse(code = 404, message = "There is no exist mart for id")
 	})
 	@GetMapping(value = "/branch/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<MartDto>> getBranches(@PathVariable("ids") @Valid Set<Long> ids) {
+	public ResponseEntity<List<MartDto>> getBranches(
+			@PathVariable("ids") @Valid Set<Long> ids) {
 		List<MartDto> marts = martService.getMartsById(new ArrayList<>(ids));
 		if (marts.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -65,11 +65,5 @@ public class MartController {
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		dataBinder.registerCustomEditor(MartType.class, new MartTypeParameterConverter());
-	}
-
-	@ExceptionHandler(IllegalArgumentException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "This request has invalid parameters, check parameters")
-	public ResponseEntity<String> handleBadRequest(IllegalArgumentException exception) {
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 }
