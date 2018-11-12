@@ -1,6 +1,6 @@
-package com.hongsi.martholidayalarm.common.mart;
+package com.hongsi.martholidayalarm.api.mart;
 
-import com.hongsi.martholidayalarm.common.mart.converter.MartTypeParameterConverter;
+import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
 import com.hongsi.martholidayalarm.common.mart.service.MartService;
