@@ -6,7 +6,9 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LottemartCrawler implements MartCrawler {
 
 	private int currentPage = 1;
