@@ -23,11 +23,4 @@ public enum MartType {
 		}
 		throw new IllegalArgumentException("해당 마트 타입이 존재하지 않습니다.");
 	}
-
-	public static MartType typeOf(String martType) {
-		if (martType == null) {
-			throw new NullPointerException("MartType is null");
-		}
-		return Enum.valueOf(MartType.class, martType.trim().toUpperCase());
-	}
 }
