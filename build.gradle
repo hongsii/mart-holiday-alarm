@@ -31,6 +31,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-aop')
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
