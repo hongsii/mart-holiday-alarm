@@ -33,7 +33,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-aop')
 
-    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.0'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
     compile group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
