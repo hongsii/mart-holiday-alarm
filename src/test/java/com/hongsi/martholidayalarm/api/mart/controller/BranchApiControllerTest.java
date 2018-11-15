@@ -1,7 +1,7 @@
 package com.hongsi.martholidayalarm.api.mart.controller;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,10 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.hongsi.martholidayalarm.api.exception.ResourceNotFoundException;
 import com.hongsi.martholidayalarm.api.mart.dto.MartResponseDto;
 import com.hongsi.martholidayalarm.api.mart.service.BranchApiService;
 import com.hongsi.martholidayalarm.common.mart.domain.MartType;
-import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class BranchApiControllerTest {
 
 	@Test
 	public void 여러개의_아이디로_마트_지점_조회() throws Exception {
-		when(branchApiService.getMartsById(any(List.class)))
+		when(branchApiService.getMartsById(any()))
 				.thenReturn(asList(
 						MartResponseDto.builder().id(2L).martType(MartType.EMART.getName()).build(),
 						MartResponseDto.builder().id(3L).martType(MartType.LOTTEMART.getName()).build()
@@ -44,7 +44,19 @@ public class BranchApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(2)));
+				.andExpect(jsonPath("$[0].id", is(2)));
+	}
+
+	@Test
+	public void 요청한_아이디가_존재하지_않을때() throws Exception {
+		when(branchApiService.getMartsById(any()))
+				.thenThrow(new ResourceNotFoundException());
+
+		mockMvc.perform(get("/api/branches/2,3")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andDo(print())
+				.andExpect(status().isNotFound())
+				.andExpect(status().reason("Not found resource of request"));
 	}
 
 	@Test

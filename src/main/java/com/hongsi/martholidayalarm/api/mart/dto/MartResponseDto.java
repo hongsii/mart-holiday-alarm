@@ -2,16 +2,20 @@ package com.hongsi.martholidayalarm.api.mart.dto;
 
 import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.common.mart.domain.MartType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import javax.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@NoArgsConstructor
 public class MartResponseDto {
 
 	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
@@ -30,17 +34,23 @@ public class MartResponseDto {
 	private List<String> holidays;
 
 	public MartResponseDto(Mart entity) {
-		id = entity.getId();
-		createdDate = formatLocalDateTime(entity.getCreatedDate());
-		modifiedDate = formatLocalDateTime(entity.getModifiedDate());
-		martType = entity.getMartType().getName();
-		branchName = entity.getBranchName();
-		region = entity.getRegion();
-		phoneNumber = entity.getPhoneNumber();
-		address = entity.getAddress();
-		openingHours = entity.getOpeningHours();
-		url = entity.getUrl();
-		holidays = toHolidayDto(entity.getHolidays());
+		try {
+			id = entity.getId();
+			createdDate = formatLocalDateTime(
+					Optional.ofNullable(entity.getCreatedDate()).orElse(LocalDateTime.now()));
+			modifiedDate = formatLocalDateTime(
+					Optional.ofNullable(entity.getModifiedDate()).orElse(LocalDateTime.now()));
+			martType = Optional.ofNullable(entity.getMartType()).orElse(MartType.EMART).getName();
+			branchName = Optional.ofNullable(entity.getBranchName()).orElse("");
+			region = Optional.ofNullable(entity.getRegion()).orElse("");
+			phoneNumber = Optional.ofNullable(entity.getPhoneNumber()).orElse("");
+			address = Optional.ofNullable(entity.getAddress()).orElse("");
+			openingHours = Optional.ofNullable(entity.getOpeningHours()).orElse("");
+			url = Optional.ofNullable(entity.getUrl()).orElse("");
+			holidays = toHolidayDto(entity.getHolidays());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Builder

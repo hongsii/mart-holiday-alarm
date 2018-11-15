@@ -31,12 +31,11 @@ public class MartApiControllerTest {
 
 	@Test
 	public void 마트타입으로_소문자로_리스트_요청() throws Exception {
-		System.out.println(getFirstMartType().toString().toUpperCase());
 		mockMvc.perform(get("/api/marts/" + getFirstMartType().toString().toLowerCase())
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martApiService, times(1)).getMartsByMartType(any(MartType.class));
+		verify(martApiService, times(1)).getMartsByMartType(any());
 	}
 
 	@Test
@@ -45,7 +44,7 @@ public class MartApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martApiService, times(1)).getMartsByMartType(any(MartType.class));
+		verify(martApiService, times(1)).getMartsByMartType(any());
 	}
 
 	private MartType getFirstMartType() {
