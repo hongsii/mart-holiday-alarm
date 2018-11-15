@@ -22,9 +22,7 @@ spring:
 
 logging:
   level:
-    root: DEBUG
-    org.hibernate: INFO
-    sun.rmi: INFO
+    org.hibernate.SQL: DEBUG
 
 ---
 
