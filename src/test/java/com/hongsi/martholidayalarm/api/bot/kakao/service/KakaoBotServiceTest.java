@@ -1,20 +1,19 @@
-package com.hongsi.martholidayalarm.bot.kakao.service;
+package com.hongsi.martholidayalarm.api.bot.kakao.service;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
-import com.hongsi.martholidayalarm.bot.kakao.domain.Button;
-import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
-import com.hongsi.martholidayalarm.bot.kakao.dto.BotResponse;
-import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
-import com.hongsi.martholidayalarm.common.mart.domain.Mart;
-import com.hongsi.martholidayalarm.common.mart.domain.MartType;
-import com.hongsi.martholidayalarm.common.mart.repository.MartRepository;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.hongsi.martholidayalarm.api.bot.kakao.domain.Button;
+import com.hongsi.martholidayalarm.api.bot.kakao.domain.UserRequest;
+import com.hongsi.martholidayalarm.api.bot.kakao.dto.BotResponse;
+import com.hongsi.martholidayalarm.api.bot.kakao.repository.KakaoBotRepository;
+import com.hongsi.martholidayalarm.mart.domain.Mart;
+import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
@@ -37,21 +36,16 @@ public class KakaoBotServiceTest {
 
 	@Before
 	public void setUp() {
-		List<Mart> marts = new ArrayList<>();
-		int i = 1;
 		String[] regions = {"서울", "부산", "경기"};
 		String[] branchNames = {"강남점", "부산점", "경기점"};
-		for (MartType martType : MartType.values()) {
-			for (int index = 0; index < regions.length; index++) {
-				marts.add(Mart.builder()
-						.realId(String.valueOf(i++))
-						.martType(martType)
+		martRepository.saveAll(IntStream.range(0, regions.length)
+				.mapToObj(index -> Mart.builder()
+						.realId(String.valueOf(index + 1))
+						.martType(MartType.EMART)
 						.region(regions[index])
 						.branchName(branchNames[index])
-						.build());
-			}
-		}
-		martRepository.saveAll(marts);
+						.build())
+				.collect(Collectors.toList()));
 	}
 
 	@After
@@ -71,9 +65,7 @@ public class KakaoBotServiceTest {
 		BotResponse botResponse = kakaoBotService.parse(userRequest);
 		assertThat("_마트 휴일 조회", is(userRequest.getPath()));
 		Assertions.assertThat(botResponse.getKeyboard().getButtons())
-				.containsOnlyElementsOf(Arrays.stream(MartType.values())
-						.map(martType -> martType.getName())
-						.collect(Collectors.toList()));
+				.containsOnlyElementsOf(asList(MartType.EMART.getDisplayName()));
 	}
 
 	@Test

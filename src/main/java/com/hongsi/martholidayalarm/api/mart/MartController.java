@@ -1,15 +1,14 @@
-package com.hongsi.martholidayalarm.api.mart.controller;
+package com.hongsi.martholidayalarm.api.mart;
 
-import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
-import com.hongsi.martholidayalarm.common.mart.domain.MartType;
-import com.hongsi.martholidayalarm.common.mart.dto.MartDto;
-import com.hongsi.martholidayalarm.common.mart.service.MartService;
+import com.hongsi.martholidayalarm.api.converter.MartTypeParameterConverter;
+import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.mart.dto.MartResponse;
+import com.hongsi.martholidayalarm.mart.service.MartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.validation.Valid;
@@ -40,9 +39,12 @@ public class MartController {
 	@ApiOperation(value = "특정 마트의 지점 조회")
 	@ApiImplicitParam(name = "mart_type", value = "마트타입 (대소문자 구분하지 않음)", required = true, dataType = "string", paramType = "path")
 	@GetMapping(value = "/{mart_type}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<MartDto>> getMarts(
+	public ResponseEntity<List<MartResponse>> getMarts(
 			@PathVariable("mart_type") @Valid MartType martType) {
-		List<MartDto> marts = martService.getMartsByMartType(martType);
+		List<MartResponse> marts = martService.findMartsByMartType(martType);
+		if (martType == MartType.EMART) {
+			marts.addAll(martService.findMartsByMartType(MartType.EMART_TRADERS));
+		}
 		return new ResponseEntity<>(marts, HttpStatus.OK);
 	}
 
@@ -53,12 +55,9 @@ public class MartController {
 			@ApiResponse(code = 404, message = "There is no exist mart for id")
 	})
 	@GetMapping(value = "/branch/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<MartDto>> getBranches(
+	public ResponseEntity<List<MartResponse>> getBranches(
 			@PathVariable("ids") @Valid Set<Long> ids) {
-		List<MartDto> marts = martService.getMartsById(new ArrayList<>(ids));
-		if (marts.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		List<MartResponse> marts = martService.findMartsById(ids);
 		return new ResponseEntity<>(marts, HttpStatus.OK);
 	}
 

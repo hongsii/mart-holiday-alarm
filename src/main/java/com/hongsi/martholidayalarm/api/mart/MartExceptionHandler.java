@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.mart.controller;
+package com.hongsi.martholidayalarm.api.mart;
 
 import com.hongsi.martholidayalarm.api.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
