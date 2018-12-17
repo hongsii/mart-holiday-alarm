@@ -1,10 +1,10 @@
-package com.hongsi.martholidayalarm.mobile.push.firebase.service;
+package com.hongsi.martholidayalarm.mobile.push.service;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.hongsi.martholidayalarm.mobile.push.domain.User;
 import com.hongsi.martholidayalarm.mobile.push.firebase.FirebaseDatabaseManager;
-import com.hongsi.martholidayalarm.mobile.push.firebase.domain.User;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

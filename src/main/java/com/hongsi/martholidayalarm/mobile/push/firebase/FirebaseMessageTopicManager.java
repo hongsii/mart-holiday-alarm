@@ -35,7 +35,7 @@ public class FirebaseMessageTopicManager {
 	}
 
 	public static FirebaseMessaging getInstance() {
-		return FirebaseMessaging.getInstance(FirebaseManager.getInstance());
+		return FirebaseMessaging.getInstance(FirebaseAppManager.getInstance());
 	}
 
 	private static void printResult(TopicManagementResponse response) {

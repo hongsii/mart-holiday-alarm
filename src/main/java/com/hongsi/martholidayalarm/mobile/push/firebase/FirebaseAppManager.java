@@ -11,7 +11,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class FirebaseManager {
+public class FirebaseAppManager {
 
 	public static final String PROJECT_ID = "mart-holiday-b4599";
 	public static final String DATABASE_URL = "https://" + PROJECT_ID + ".firebaseio.com";
@@ -20,7 +20,7 @@ public class FirebaseManager {
 	private static final List<String> SCOPES = Arrays
 			.asList("https://www.googleapis.com/auth/firebase.messaging");
 
-	private FirebaseManager() {
+	private FirebaseAppManager() {
 	}
 
 	public static FirebaseApp getInstance() {

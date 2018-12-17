@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.mobile.push.firebase;
+package com.hongsi.martholidayalarm.mobile.push;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
