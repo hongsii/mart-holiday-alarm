@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface MartCrawler {
 
-	List<MartPage> crawl() throws Exception;
+	List<CrawlerMartData> crawl();
 }

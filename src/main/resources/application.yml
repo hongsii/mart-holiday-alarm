@@ -5,6 +5,9 @@ spring:
   http:
     encoding:
       force: true
+  jpa:
+    hibernate:
+      ddl-auto: none
 
 ---
 
@@ -19,12 +22,6 @@ spring:
   h2:
     console:
       enabled: false
-
-logging:
-  level:
-    root: DEBUG
-    org.hibernate: INFO
-    sun.rmi: INFO
 
 ---
 

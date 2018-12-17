@@ -8,7 +8,7 @@ public class FirebaseDatabaseManager {
 	public static final String DEFAULT_NODE = "/";
 
 	public static FirebaseDatabase getInstance() {
-		return FirebaseDatabase.getInstance(FirebaseManager.getInstance());
+		return FirebaseDatabase.getInstance(FirebaseAppManager.getInstance());
 	}
 
 	public static DatabaseReference getReference() {

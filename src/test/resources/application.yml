@@ -6,5 +6,14 @@ spring:
 
 spring:
   profiles: dev
-  jap:
+  output:
+    ansi.enabled: always
+  jpa:
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.type: trace
