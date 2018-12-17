@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.bot.kakao.domain;
+package com.hongsi.martholidayalarm.api.bot.kakao.domain;
 
 import com.hongsi.martholidayalarm.common.domain.BaseEntity;
 import javax.persistence.Column;

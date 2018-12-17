@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.bot.kakao.dto;
+package com.hongsi.martholidayalarm.api.bot.kakao.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -1,16 +1,15 @@
-package com.hongsi.martholidayalarm.bot.kakao.service;
+package com.hongsi.martholidayalarm.api.bot.kakao.service;
 
-import com.hongsi.martholidayalarm.bot.kakao.domain.Button;
-import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
-import com.hongsi.martholidayalarm.bot.kakao.dto.BotResponse;
-import com.hongsi.martholidayalarm.bot.kakao.dto.Keyboard;
-import com.hongsi.martholidayalarm.bot.kakao.dto.Message;
-import com.hongsi.martholidayalarm.bot.kakao.repository.KakaoBotRepository;
-import com.hongsi.martholidayalarm.common.mart.domain.Mart;
-import com.hongsi.martholidayalarm.common.mart.domain.MartType;
-import com.hongsi.martholidayalarm.common.mart.service.MartService;
+import com.hongsi.martholidayalarm.api.bot.kakao.domain.Button;
+import com.hongsi.martholidayalarm.api.bot.kakao.domain.UserRequest;
+import com.hongsi.martholidayalarm.api.bot.kakao.dto.BotResponse;
+import com.hongsi.martholidayalarm.api.bot.kakao.dto.Keyboard;
+import com.hongsi.martholidayalarm.api.bot.kakao.dto.Message;
+import com.hongsi.martholidayalarm.api.bot.kakao.repository.KakaoBotRepository;
+import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.mart.dto.MartResponse;
+import com.hongsi.martholidayalarm.mart.service.MartService;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +41,7 @@ public class KakaoBotService {
 			MartType martType = MartType
 					.of(userRequest.getBeforeRequest(Button.MARTTYPE));
 			String branchName = userRequest.getBeforeRequest(Button.BRANCH);
-			Mart mart = martService.getMart(martType, branchName);
+			MartResponse mart = martService.findMartByMartTypeAndBranchName(martType, branchName);
 			return new Message(mart);
 		}
 		return new Message(selectedButton.getMessage());
@@ -56,17 +55,14 @@ public class KakaoBotService {
 		try {
 			switch (userRequest.getButton()) {
 				case DEFAULT:
-					return martService.getMartTypes()
-							.stream()
-							.map(martType -> martType.getName())
-							.collect(Collectors.toList());
+					return martService.findMartTypeDisplayNames();
 				case MARTTYPE:
-					MartType martType = MartType.of(userRequest.getBeforeRequest(Button.MARTTYPE));
-					return martService.getRegions(martType);
+					String beforeRequest = userRequest.getBeforeRequest(Button.MARTTYPE);
+					return martService.findRegionsByMartType(MartType.of(beforeRequest));
 				case REGION:
-					martType = MartType.of(userRequest.getBeforeRequest(Button.MARTTYPE));
+					MartType martType = MartType.of(userRequest.getBeforeRequest(Button.MARTTYPE));
 					String region = userRequest.getBeforeRequest(Button.REGION);
-					return martService.getBranches(martType, region);
+					return martService.findBranchNamesByMartTypeAndRegion(martType, region);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("Can not create response : " + e.getMessage());

@@ -1,6 +1,6 @@
-package com.hongsi.martholidayalarm.bot.kakao.dto;
+package com.hongsi.martholidayalarm.api.bot.kakao.dto;
 
-import com.hongsi.martholidayalarm.bot.kakao.domain.UserRequest;
+import com.hongsi.martholidayalarm.api.bot.kakao.domain.UserRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
-package com.hongsi.martholidayalarm.bot.kakao.dto;
+package com.hongsi.martholidayalarm.api.bot.kakao.dto;
 
-import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.mart.dto.MartResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class MessageButton {
 		this.url = url;
 	}
 
-	public MessageButton(Mart mart) {
+	public MessageButton(MartResponse mart) {
 		label = mart.getBranchName() + " 상세보기";
 		url = mart.getUrl();
 	}

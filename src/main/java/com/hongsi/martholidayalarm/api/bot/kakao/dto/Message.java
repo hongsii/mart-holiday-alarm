@@ -1,8 +1,7 @@
-package com.hongsi.martholidayalarm.bot.kakao.dto;
+package com.hongsi.martholidayalarm.api.bot.kakao.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hongsi.martholidayalarm.common.mart.domain.Holiday;
-import com.hongsi.martholidayalarm.common.mart.domain.Mart;
+import com.hongsi.martholidayalarm.mart.dto.MartResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.StringJoiner;
@@ -19,10 +18,10 @@ public class Message {
 	@ApiModelProperty(name = "내용", value = "text", dataType = "java.lang.String")
 	private String text;
 
-	@ApiModelProperty(name = "이미지", value = "photo", dataType = "com.hongsi.martholidayalarm.bot.kakao.dto.Photo")
+	@ApiModelProperty(name = "이미지", value = "photo", dataType = "com.hongsi.martholidayalarm.api.bot.kakao.dto.Photo")
 	private Photo photo;
 
-	@ApiModelProperty(name = "링크 버튼", value = "message_button", dataType = "com.hongsi.martholidayalarm.bot.kakao.dto.MessageButton")
+	@ApiModelProperty(name = "링크 버튼", value = "message_button", dataType = "com.hongsi.martholidayalarm.api.bot.kakao.dto.MessageButton")
 	@JsonProperty("message_button")
 	private MessageButton messageButton;
 
@@ -41,27 +40,24 @@ public class Message {
 		this.messageButton = messageButton;
 	}
 
-	public Message(Mart mart) {
+	public Message(MartResponse mart) {
 		text = makeBranchInfo(mart);
 		messageButton = new MessageButton(mart);
 	}
 
-	private String makeBranchInfo(Mart mart) {
+	private String makeBranchInfo(MartResponse mart) {
 		final String TITLE_PREFIX = "※ ";
 		final String ITEM_PREFIX = "\n• ";
 		final String INFO_PREFIX = "  ▪︎ ";
 
 		StringJoiner message = new StringJoiner(LINE_SEPARATOR);
-		message.add(TITLE_PREFIX + mart.getMartType().getName() + " > " + mart.getBranchName())
+		message.add(TITLE_PREFIX + mart.getMartType() + " > " + mart.getBranchName())
 				.add(ITEM_PREFIX + "주소\n" + INFO_PREFIX + mart.getAddress())
 				.add(ITEM_PREFIX + "전화번호\n" + INFO_PREFIX + mart.getPhoneNumber())
 				.add(ITEM_PREFIX + "영업시간\n" + INFO_PREFIX + mart.getOpeningHours())
 				.add(ITEM_PREFIX + "휴일");
-		for (Holiday holiday : mart.getHolidays()) {
-			if (holiday.isUpcoming()) {
-				message.add(INFO_PREFIX + holiday.getFormattedHolidayWithDayOfWeek());
-			}
-		}
+		mart.getHolidays().stream()
+				.forEach(holiday -> message.add(INFO_PREFIX + holiday));
 		return message.toString();
 	}
 
