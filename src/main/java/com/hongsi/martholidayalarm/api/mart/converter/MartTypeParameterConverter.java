@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.converter;
+package com.hongsi.martholidayalarm.api.mart.converter;
 
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.beans.PropertyEditorSupport;
