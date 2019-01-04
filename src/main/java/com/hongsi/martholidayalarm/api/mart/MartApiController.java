@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.api.mart;
 
-import com.hongsi.martholidayalarm.api.converter.MartTypeParameterConverter;
+import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.dto.MartResponse;
 import com.hongsi.martholidayalarm.mart.service.MartService;
@@ -29,13 +29,13 @@ public class MartApiController {
 		return ResponseEntity.ok(marts);
 	}
 
-	@GetMapping(value = "/type")
+	@GetMapping(value = "/types")
 	public ResponseEntity<List<String>> getMartTypeNames() {
 		List<String> names = martService.findMartTypeNames();
 		return ResponseEntity.ok(names);
 	}
 
-	@GetMapping(value = "/type/{mart_type}")
+	@GetMapping(value = "/types/{mart_type}")
 	public ResponseEntity<List<MartResponse>> getMartsByMartType(
 			@PathVariable("mart_type") @Valid MartType martType) {
 		List<MartResponse> marts = martService.findMartsByMartType(martType);
