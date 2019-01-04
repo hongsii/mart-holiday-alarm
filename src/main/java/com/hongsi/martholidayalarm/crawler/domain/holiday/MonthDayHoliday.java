@@ -58,8 +58,7 @@ public class MonthDayHoliday {
 	}
 
 	private boolean isMonthOfNextYear() {
-		return NEXT_YEAR_CONDITION.stream()
-				.anyMatch(month -> month.equals(this.month));
+		return NEXT_YEAR_CONDITION.contains(this.month);
 	}
 
 	@Override
