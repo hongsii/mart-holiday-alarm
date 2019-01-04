@@ -25,6 +25,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(MartApiController.class)
 public class MartApiControllerTest {
 
+	private static final String MART_URL = "/api/marts";
+	private static final String MART_TYPE_URL = MART_URL + "/types";
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -33,7 +36,7 @@ public class MartApiControllerTest {
 
 	@Test
 	public void 아이디로_마트_조회() throws Exception {
-		mockMvc.perform(get("/api/marts/1,2")
+		mockMvc.perform(get(appendPathVariable(MART_URL, "1,2"))
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
@@ -42,7 +45,7 @@ public class MartApiControllerTest {
 
 	@Test
 	public void 마트타입조회() throws Exception {
-		mockMvc.perform(get("/api/marts/type")
+		mockMvc.perform(get(MART_TYPE_URL)
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
@@ -51,7 +54,7 @@ public class MartApiControllerTest {
 
 	@Test
 	public void 마트타입으로_소문자로_리스트_요청() throws Exception {
-		mockMvc.perform(get("/api/marts/type/" + getFirstMartTypeName().toLowerCase())
+		mockMvc.perform(get(appendPathVariable(MART_TYPE_URL, getFirstMartTypeName().toLowerCase()))
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
@@ -60,7 +63,7 @@ public class MartApiControllerTest {
 
 	@Test
 	public void 마트타입으로_대문자로_리스트_요청() throws Exception {
-		mockMvc.perform(get("/api/marts/type/" + getFirstMartTypeName().toUpperCase())
+		mockMvc.perform(get(appendPathVariable(MART_TYPE_URL, getFirstMartTypeName().toUpperCase()))
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
@@ -69,10 +72,17 @@ public class MartApiControllerTest {
 
 	@Test
 	public void 잘못된_마트타입으로_리스트_요청() throws Exception {
-		mockMvc.perform(get("/api/marts/hongmart")
+		mockMvc.perform(get(appendPathVariable(MART_URL, "hongmart"))
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isBadRequest());
+	}
+
+	private String appendPathVariable(String url, String pathVariable) {
+		if (pathVariable.startsWith("/")) {
+			return url + pathVariable;
+		}
+		return url + "/" + pathVariable;
 	}
 
 	private String getFirstMartTypeName() {
