@@ -1,6 +1,7 @@
 package com.hongsi.martholidayalarm.api.mart;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +41,8 @@ public class MartApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martService, times(1)).findMartsById(Stream.of(1L, 2L).collect(Collectors.toSet()));
+		verify(martService, times(1)).findMartsById(eq(Stream.of(1L, 2L)
+				.collect(Collectors.toSet())), any());
 	}
 
 	@Test
@@ -58,7 +60,7 @@ public class MartApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martService, times(1)).findMartsByMartType(any());
+		verify(martService, times(1)).findMartsByMartType(any(), any());
 	}
 
 	@Test
@@ -67,7 +69,7 @@ public class MartApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martService, times(1)).findMartsByMartType(any());
+		verify(martService, times(1)).findMartsByMartType(any(), any());
 	}
 
 	@Test
