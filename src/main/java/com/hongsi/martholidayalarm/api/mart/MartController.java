@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,13 +40,15 @@ public class MartController {
 	@ApiOperation(value = "특정 마트의 지점 조회")
 	@ApiImplicitParam(name = "mart_type", value = "마트타입 (대소문자 구분하지 않음)", required = true, dataType = "string", paramType = "path")
 	@GetMapping(value = "/{mart_type}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<MartResponse>> getMarts(
+	public ResponseEntity<?> getMarts(
 			@PathVariable("mart_type") @Valid MartType martType) {
 		List<MartResponse> marts = martService.findMartsByMartType(martType);
 		if (martType == MartType.EMART) {
 			marts.addAll(martService.findMartsByMartType(MartType.EMART_TRADERS));
 		}
-		return new ResponseEntity<>(marts, HttpStatus.OK);
+		return new ResponseEntity<>(marts.stream()
+				.map(MartResponse::toTempResponse)
+				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "지점ID로 조회")
@@ -55,10 +58,12 @@ public class MartController {
 			@ApiResponse(code = 404, message = "There is no exist mart for id")
 	})
 	@GetMapping(value = "/branch/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<MartResponse>> getBranches(
+	public ResponseEntity<?> getBranches(
 			@PathVariable("ids") @Valid Set<Long> ids) {
 		List<MartResponse> marts = martService.findMartsById(ids);
-		return new ResponseEntity<>(marts, HttpStatus.OK);
+		return new ResponseEntity<>(marts.stream()
+				.map(MartResponse::toTempResponse)
+				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@InitBinder

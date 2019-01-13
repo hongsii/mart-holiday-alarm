@@ -49,7 +49,7 @@ public class MartApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andDo(print())
 				.andExpect(status().isOk());
-		verify(martService, times(1)).findMartTypeNames();
+		verify(martService, times(1)).findMartTypes();
 	}
 
 	@Test

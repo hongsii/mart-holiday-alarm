@@ -1,7 +1,6 @@
 package com.hongsi.martholidayalarm.mart.dto;
 
 import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -14,7 +13,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MartResponse {
+@Deprecated
+public class DeprecatedMartResponse {
 
 	public static final String EMPTY = "";
 	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
@@ -23,7 +23,7 @@ public class MartResponse {
 	private String createdDate;
 	private String modifiedDate;
 	@NotBlank
-	private MartTypeResponse martType;
+	private String martType;
 	private String branchName;
 	private String region;
 	private String phoneNumber;
@@ -32,13 +32,13 @@ public class MartResponse {
 	private String url;
 	private List<String> holidays;
 
-	public MartResponse(Mart entity) {
+	public DeprecatedMartResponse(Mart entity) {
 		id = entity.getId();
 		createdDate = formatDate(Optional.ofNullable(entity.getCreatedDate())
 				.orElse(LocalDateTime.now()));
 		modifiedDate = formatDate(Optional.ofNullable(entity.getModifiedDate())
 				.orElse(LocalDateTime.now()));
-		martType = MartTypeResponse.from(entity.getMartType());
+		martType = entity.getMartType().getDisplayName();
 		branchName = Optional.ofNullable(entity.getBranchName())
 				.orElse(EMPTY);
 		region = Optional.ofNullable(entity.getRegion()).orElse(EMPTY);
@@ -54,13 +54,13 @@ public class MartResponse {
 	}
 
 	@Builder
-	public MartResponse(Long id, String createdDate, String modifiedDate,
-			@NotBlank MartType martType, String branchName, String region, String phoneNumber,
+	public DeprecatedMartResponse(Long id, String createdDate, String modifiedDate,
+			@NotBlank String martType, String branchName, String region, String phoneNumber,
 			String address, String openingHours, String url, List<String> holidays) {
 		this.id = id;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
-		this.martType = MartTypeResponse.from(martType);
+		this.martType = martType;
 		this.branchName = branchName;
 		this.region = region;
 		this.phoneNumber = phoneNumber;
@@ -75,21 +75,5 @@ public class MartResponse {
 			localDateTime = LocalDateTime.now();
 		}
 		return localDateTime.format(DATE_TIME_FORMATTER);
-	}
-
-	public DeprecatedMartResponse toTempResponse() {
-		return DeprecatedMartResponse.builder()
-				.address(address)
-				.branchName(branchName)
-				.createdDate(createdDate)
-				.modifiedDate(modifiedDate)
-				.id(id)
-				.martType(martType.getDisplayName())
-				.openingHours(openingHours)
-				.phoneNumber(phoneNumber)
-				.region(region)
-				.url(url)
-				.holidays(holidays)
-				.build();
 	}
 }
