@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.mart.service;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
@@ -7,15 +8,16 @@ import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartData;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.dto.MartResponse;
+import com.hongsi.martholidayalarm.mart.dto.MartTypeResponse;
 import com.hongsi.martholidayalarm.mart.dto.PushMart;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,26 +28,23 @@ public class MartService {
 
 	private final MartRepository martRepository;
 
-	public List<MartResponse> findMartsById(Collection<Long> ids) {
-		return toResponses(martRepository.findAllById(ids));
+	public List<MartResponse> findMarts(Sort sort) {
+		return toResponses(martRepository.findMarts(sort));
 	}
 
-	public List<String> findMartTypeNames() {
+	public List<MartResponse> findMartsById(Collection<Long> ids, Sort sort) {
+		return toResponses(martRepository.findMartsById(ids, sort));
+	}
+
+	public List<MartTypeResponse> findMartTypes() {
 		return martRepository.findMartTypesByGrouping()
 				.stream()
-				.map(MartType::name)
+				.map(MartTypeResponse::from)
 				.collect(toList());
 	}
 
-	public List<String> findMartTypeDisplayNames() {
-		return martRepository.findMartTypesByGrouping()
-				.stream()
-				.map(MartType::getDisplayName)
-				.collect(toList());
-	}
-
-	public List<MartResponse> findMartsByMartType(MartType martType) {
-		return toResponses(martRepository.findAllByMartTypeOrderByBranchName(martType));
+	public List<MartResponse> findMartsByMartType(MartType martType, Sort sort) {
+		return toResponses(martRepository.findMartsByMartType(martType, sort));
 	}
 
 	public List<PushMart> findPushMartsByHoliday(Holiday holiday) {
@@ -99,7 +98,7 @@ public class MartService {
 				.openingHours(martData.getOpeningHours())
 				.url(martData.getUrl())
 				.holidays(martData.getHolidays().stream()
-						.collect(Collectors.toCollection(TreeSet::new)))
+						.collect(toCollection(TreeSet::new)))
 				.build();
 	}
 

@@ -8,8 +8,10 @@ import com.hongsi.martholidayalarm.api.bot.kakao.dto.Message;
 import com.hongsi.martholidayalarm.api.bot.kakao.repository.KakaoBotRepository;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.dto.MartResponse;
+import com.hongsi.martholidayalarm.mart.dto.MartTypeResponse;
 import com.hongsi.martholidayalarm.mart.service.MartService;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +57,9 @@ public class KakaoBotService {
 		try {
 			switch (userRequest.getButton()) {
 				case DEFAULT:
-					return martService.findMartTypeDisplayNames();
+					return martService.findMartTypes().stream()
+							.map(MartTypeResponse::getDisplayName)
+							.collect(Collectors.toList());
 				case MARTTYPE:
 					String beforeRequest = userRequest.getBeforeRequest(Button.MARTTYPE);
 					return martService.findRegionsByMartType(MartType.of(beforeRequest));
