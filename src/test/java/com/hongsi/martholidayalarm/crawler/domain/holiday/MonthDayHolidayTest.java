@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import java.time.Month;
 import java.time.MonthDay;
+import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class MonthDayHolidayTest {
 	public void Holiday로_변경() {
 		MonthDayHoliday monthDayHoliday = newInstance(Month.MAY);
 
-		assertThat(monthDayHoliday.toHoliday()).isEqualTo(Holiday.of(2018, 5, 1));
+		assertThat(monthDayHoliday.toHoliday()).isEqualTo(Holiday.of(Year.now().getValue(), 5, 1));
 	}
 
 	private MonthDayHoliday newInstance(Month october) {
