@@ -22,8 +22,7 @@ public class MartResponse {
 	private Long id;
 	private String createdDate;
 	private String modifiedDate;
-	@NotBlank
-	private MartTypeResponse martType;
+	private String martType;
 	private String branchName;
 	private String region;
 	private String phoneNumber;
@@ -38,7 +37,7 @@ public class MartResponse {
 				.orElse(LocalDateTime.now()));
 		modifiedDate = formatDate(Optional.ofNullable(entity.getModifiedDate())
 				.orElse(LocalDateTime.now()));
-		martType = MartTypeResponse.from(entity.getMartType());
+		martType = entity.getMartType().getDisplayName();
 		branchName = Optional.ofNullable(entity.getBranchName())
 				.orElse(EMPTY);
 		region = Optional.ofNullable(entity.getRegion()).orElse(EMPTY);
@@ -60,7 +59,7 @@ public class MartResponse {
 		this.id = id;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
-		this.martType = MartTypeResponse.from(martType);
+		this.martType = martType.getDisplayName();
 		this.branchName = branchName;
 		this.region = region;
 		this.phoneNumber = phoneNumber;
@@ -84,7 +83,7 @@ public class MartResponse {
 				.createdDate(createdDate)
 				.modifiedDate(modifiedDate)
 				.id(id)
-				.martType(martType.getDisplayName())
+				.martType(martType)
 				.openingHours(openingHours)
 				.phoneNumber(phoneNumber)
 				.region(region)
