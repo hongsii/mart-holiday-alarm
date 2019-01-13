@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.0.RELEASE'
+        springBootVersion = '2.1.1.RELEASE'
         querydslVersion = '4.2.1'
         swaggerVersion = '2.8.0'
     }
@@ -25,13 +25,12 @@ repositories {
     mavenCentral()
 }
 
-ext['hibernate.version'] = '5.3.0.Final'
-
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-aop')
+
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
