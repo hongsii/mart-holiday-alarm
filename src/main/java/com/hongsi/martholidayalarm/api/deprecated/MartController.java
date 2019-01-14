@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.mart;
+package com.hongsi.martholidayalarm.api.deprecated;
 
 import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
 import com.hongsi.martholidayalarm.mart.domain.MartSortBuilder;
