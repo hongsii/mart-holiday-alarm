@@ -3,6 +3,7 @@ package com.hongsi.martholidayalarm.mart.service;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
+import com.hongsi.martholidayalarm.api.exception.ResourceNotFoundException;
 import com.hongsi.martholidayalarm.mart.domain.Holiday;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartData;
@@ -34,6 +35,12 @@ public class MartService {
 
 	public List<MartResponse> findMartsById(Collection<Long> ids, Sort sort) {
 		return toResponses(martRepository.findMartsById(ids, sort));
+	}
+
+	public MartResponse findMartById(Long id) {
+		Mart mart = martRepository.findById(id)
+				.orElseThrow(ResourceNotFoundException::new);
+		return new MartResponse(mart);
 	}
 
 	public List<MartTypeResponse> findMartTypes() {

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.hongsi.martholidayalarm.mart.domain.Mart;
 import com.hongsi.martholidayalarm.mart.domain.MartTest;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.mart.dto.MartResponse;
 import com.hongsi.martholidayalarm.mart.repository.MartRepository;
 import java.util.Optional;
 import org.junit.Test;
@@ -50,5 +51,16 @@ public class MartServiceTest {
 
 		verify(martRepository, never()).save(newMart);
 		assertThat(updatedMart.getBranchName()).isEqualTo(newMart.getBranchName());
+	}
+
+	@Test
+	public void 아이디로_조회() {
+		Mart newMart = MartTest.newMart;
+		when(martRepository.findById(newMart.getId()))
+				.thenReturn(Optional.of(newMart));
+
+		MartResponse savedMart = martService.findMartById(newMart.getId());
+
+		assertThat(savedMart.getId()).isEqualTo(newMart.getId());
 	}
 }

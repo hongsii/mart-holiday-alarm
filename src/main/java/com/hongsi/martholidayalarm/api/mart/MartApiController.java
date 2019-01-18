@@ -36,13 +36,19 @@ public class MartApiController {
 		return ResponseEntity.ok(marts);
 	}
 
-	@GetMapping(value = "/{ids}")
-	public ResponseEntity<?> getMartsById(
-			@PathVariable("ids") Set<Long> ids,
+	@GetMapping(params = "ids")
+	public ResponseEntity<?> getMartsByIds(
+			@RequestParam(name = "ids") Set<Long> ids,
 			@RequestParam(name = "sort", required = false) MartOrderRequest... martOrderRequest) {
 		Sort sort = MartSortBuilder.parseSort(martOrderRequest);
 		List<MartResponse> marts = martService.findMartsById(ids, sort);
 		return ResponseEntity.ok(marts);
+	}
+
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<?> getMartsById(@PathVariable Long id) {
+		MartResponse mart = martService.findMartById(id);
+		return ResponseEntity.ok(mart);
 	}
 
 	@GetMapping(value = "/types")

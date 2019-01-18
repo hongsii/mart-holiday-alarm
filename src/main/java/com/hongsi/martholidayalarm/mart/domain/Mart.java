@@ -121,7 +121,7 @@ public class Mart extends BaseEntity {
 	}
 
 	public Holidays getHolidays() {
-		return new Holidays(holidays);
+		return Holidays.of(holidays);
 	}
 
 	@Override

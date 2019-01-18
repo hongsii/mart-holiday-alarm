@@ -1,6 +1,5 @@
 package com.hongsi.martholidayalarm.mart.service;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.hongsi.martholidayalarm.mart.domain.Mart;
@@ -51,16 +50,5 @@ public class MartServiceTest2 {
 				.build();
 
 		assertThat(martService.save(updateMart)).isEqualTo(savedMart);
-	}
-
-	@Test
-	public void saveAll() {
-		martRepository.save(Mart.builder()
-				.realId("10")
-				.martType(MartType.EMART)
-				.branchName("테스트점")
-				.build());
-
-		martService.saveMarts(asList(MartTest.newMart));
 	}
 }

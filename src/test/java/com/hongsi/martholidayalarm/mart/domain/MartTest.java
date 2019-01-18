@@ -94,7 +94,7 @@ public class MartTest {
 				.extracting(Mart::getRegion, Mart::getBranchName, Mart::getAddress,
 						Mart::getPhoneNumber, Mart::getOpeningHours, Mart::getHolidays)
 				.containsExactly(region, branchName, address, phoneNumber, openingHours,
-						new Holidays(holidays));
+						Holidays.of(holidays));
 	}
 
 	@Test(expected = CannotChangeException.class)
