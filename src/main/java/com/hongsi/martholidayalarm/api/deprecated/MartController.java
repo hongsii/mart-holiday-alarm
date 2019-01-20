@@ -1,10 +1,10 @@
 package com.hongsi.martholidayalarm.api.deprecated;
 
 import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
-import com.hongsi.martholidayalarm.mart.domain.MartOrder.Property;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
-import com.hongsi.martholidayalarm.mart.dto.MartResponse;
-import com.hongsi.martholidayalarm.mart.service.MartService;
+import com.hongsi.martholidayalarm.domain.mart.MartOrder.Property;
+import com.hongsi.martholidayalarm.domain.mart.MartType;
+import com.hongsi.martholidayalarm.service.MartService;
+import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -44,14 +44,14 @@ public class MartController {
 	@GetMapping(value = "/{mart_type}/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getMarts(
 			@PathVariable("mart_type") @Valid MartType martType) {
-		List<MartResponse> marts = martService
+		List<MartDto.Response> marts = martService
 				.findMartsByMartType(martType, defaultSort());
 		if (martType == MartType.EMART) {
 			marts.addAll(martService
 					.findMartsByMartType(MartType.EMART_TRADERS, defaultSort()));
 		}
 		return new ResponseEntity<>(marts.stream()
-				.map(MartResponse::toTempResponse)
+				.map(MartDto.Response::toTempResponse)
 				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 
@@ -64,9 +64,9 @@ public class MartController {
 	@GetMapping(value = "/branch/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getBranches(
 			@PathVariable("ids") @Valid Set<Long> ids) {
-		List<MartResponse> marts = martService.findMartsById(ids, defaultSort());
+		List<MartDto.Response> marts = martService.findMartsById(ids, defaultSort());
 		return new ResponseEntity<>(marts.stream()
-				.map(MartResponse::toTempResponse)
+				.map(MartDto.Response::toTempResponse)
 				.collect(Collectors.toList()), HttpStatus.OK);
 	}
 

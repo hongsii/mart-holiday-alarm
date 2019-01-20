@@ -13,18 +13,22 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.hongsi.martholidayalarm.api.docs.CommonApiDocumentConfigure;
-import com.hongsi.martholidayalarm.mart.domain.Holiday;
-import com.hongsi.martholidayalarm.mart.domain.Mart;
-import com.hongsi.martholidayalarm.mart.domain.MartTest;
-import com.hongsi.martholidayalarm.mart.domain.MartType;
-import com.hongsi.martholidayalarm.mart.dto.MartResponse;
-import com.hongsi.martholidayalarm.mart.dto.MartTypeResponse;
-import com.hongsi.martholidayalarm.mart.service.MartService;
+import com.hongsi.martholidayalarm.domain.mart.Holiday;
+import com.hongsi.martholidayalarm.domain.mart.Location;
+import com.hongsi.martholidayalarm.domain.mart.Mart;
+import com.hongsi.martholidayalarm.domain.mart.MartTest;
+import com.hongsi.martholidayalarm.domain.mart.MartType;
+import com.hongsi.martholidayalarm.service.MartService;
+import com.hongsi.martholidayalarm.service.dto.mart.LocationDto;
+import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
+import com.hongsi.martholidayalarm.service.dto.mart.MartDto.Response;
+import com.hongsi.martholidayalarm.service.dto.mart.MartTypeDto;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -53,7 +57,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 
 	@Test
 	public void 전체_마트_조회() throws Exception {
-		List<MartResponse> response = MartTest.newMartsResponse;
+		List<MartDto.Response> response = MartTest.newMartsResponse;
 		given(martService.findMarts(any())).willReturn(response);
 
 		ResultActions result = mockMvc.perform(
@@ -74,7 +78,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 
 	@Test
 	public void 아이디로_다수_마트_조회() throws Exception {
-		List<MartResponse> response = MartTest.newMartsResponse;
+		List<MartDto.Response> response = MartTest.newMartsResponse;
 		given(martService.findMartsById(new LinkedHashSet<>(asList(1L, 5L)), Sort.by("id")))
 				.willReturn(response);
 
@@ -98,8 +102,51 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 	}
 
 	@Test
+	public void 좌표로_마트_조회() throws Exception {
+		List<Response> response = asList(
+				Response.of(
+						Mart.builder()
+								.id(1L)
+								.martType(MartType.EMART)
+								.branchName("가든5점")
+								.region("서울")
+								.phoneNumber("02-411-1234")
+								.address("서울특별시 송파구 충민로 10")
+								.openingHours("10:00~23:00")
+								.url("http://store.emart.com/branch/list.do?id=1140")
+								.holidays(new TreeSet<>(asList(
+										Holiday.of(2019, 1, 1), Holiday.of(2019, 1, 11))))
+								.location(Location.of(37.47915561, 127.11836061, 2.1302443883659024))
+								.build()
+				)
+		);
+
+		given(martService.findMartsByLocation(any(LocationDto.Request.class))).willReturn(response);
+		ResultActions result = mockMvc.perform(
+				get("/api/marts?latitude=37.460000&longitude=127.118000&distance=3")
+						.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+		);
+
+		result.andExpect(status().isOk())
+				.andDo(document("marts-find-by-location",
+						getDocumentRequest(),
+						getDocumentResponse(),
+						requestParameters(
+								parameterWithName("latitude").description("위도")
+										.attributes(key("format").value("-90 <= 위도 <= 90")),
+								parameterWithName("longitude").description("경도")
+										.attributes(key("format").value("-180 <= 경도 <= 180")),
+								parameterWithName("distance").description("마트 거리 범위 (단위 : km)").optional()
+										.attributes(key("default").value("3"))
+						),
+						apiResponseFieldSnippet(getMartFieldDescriptors(true))
+								.and(fieldWithPath("[].location.distance").type(JsonFieldType.NUMBER).description("조회한 위치로부터 거리 (km)"))
+				));
+	}
+
+	@Test
 	public void 아이디로_마트_조회() throws Exception {
-		MartResponse response = new MartResponse(
+		MartDto.Response response = MartDto.Response.of(
 				Mart.builder()
 						.id(1L)
 						.martType(MartType.EMART)
@@ -110,6 +157,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 						.openingHours("10:00~23:00")
 						.url("http://store.emart.com/branch/list.do?id=1140")
 						.holidays(new TreeSet<>(asList(Holiday.of(2019, 1, 1), Holiday.of(2019, 1, 11))))
+						.location(Location.of(37.47915561, 127.11836061))
 						.build()
 		);
 
@@ -130,8 +178,8 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 
 	@Test
 	public void 마트타입조회() throws Exception {
-		List<MartTypeResponse> response = Arrays.stream(MartType.values())
-				.map(MartTypeResponse::from)
+		List<MartTypeDto.Response> response = Arrays.stream(MartType.values())
+				.map(MartTypeDto.Response::of)
 				.collect(toList());
 		given(martService.findMartTypes()).willReturn(response);
 
@@ -154,7 +202,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 
 	@Test
 	public void 마트타입으로_리스트_요청() throws Exception {
-		List<MartResponse> response = MartTest.newMartsResponse;
+		List<MartDto.Response> response = MartTest.newMartsResponse;
 		given(martService.findMartsByMartType(any(MartType.class), any(Sort.class)))
 				.willReturn(response);
 

@@ -54,32 +54,9 @@ include::{snippets}/marts-find-all/http-response.adoc[]
 
 &#160;
 
-[[marts-find-one]]
-=== 단건 조회
-
-마트아이디로 조회
-
-==== Request
-
-include::{snippets}/marts-find-one/path-parameters.adoc[]
-
-===== Request HTTP Example
-
-include::{snippets}/marts-find-one/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/marts-find-one/response-fields-data.adoc[]
-
-===== Response HTTP Example:
-
-include::{snippets}/marts-find-one/http-response.adoc[]
-
-&#160;
-
 
 [[marts-find-by-ids]]
-=== 다건 조회
+=== 아이디로 다건 조회
 
 ==== Request
 
@@ -99,6 +76,51 @@ include::{snippets}/marts-find-by-ids/http-response.adoc[]
 
 &#160;
 
+
+[[marts-find-by-location]]
+=== 좌표로 다건 조회
+
+좌표(위경도)에 가까운 마트 조회
+
+==== Request
+
+include::{snippets}/marts-find-by-location/request-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/marts-find-by-location/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/marts-find-by-location/response-fields-data.adoc[]
+
+===== Response HTTP Example:
+
+include::{snippets}/marts-find-by-location/http-response.adoc[]
+
+&#160;
+
+
+[[marts-find-one]]
+=== 단건 조회
+
+==== Request
+
+include::{snippets}/marts-find-one/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/marts-find-one/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/marts-find-one/response-fields-data.adoc[]
+
+===== Response HTTP Example:
+
+include::{snippets}/marts-find-one/http-response.adoc[]
+
+&#160;
 
 
 [[marts-types-find]]

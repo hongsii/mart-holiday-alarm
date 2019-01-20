@@ -430,7 +430,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_api_공통_응답">API 공통 응답</a></li>
 </ul>
 </li>
-<li><a href="#_마트_api">마트 API</a>
+<li><a href="#mart-api">마트 API</a>
 <ul class="sectlevel2">
 <li><a href="#marts-find-all">전체 조회</a>
 <ul class="sectlevel3">
@@ -438,28 +438,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response">Response</a></li>
 </ul>
 </li>
-<li><a href="#marts-find-one">단건 조회</a>
+<li><a href="#marts-find-by-ids">아이디로 다건 조회</a>
 <ul class="sectlevel3">
 <li><a href="#_request_2">Request</a></li>
 <li><a href="#_response_2">Response</a></li>
 </ul>
 </li>
-<li><a href="#marts-find-by-ids">다건 조회</a>
+<li><a href="#marts-find-by-location">좌표로 다건 조회</a>
 <ul class="sectlevel3">
 <li><a href="#_request_3">Request</a></li>
 <li><a href="#_response_3">Response</a></li>
 </ul>
 </li>
-<li><a href="#marts-types-find">마트타입 조회</a>
+<li><a href="#marts-find-one">단건 조회</a>
 <ul class="sectlevel3">
 <li><a href="#_request_4">Request</a></li>
 <li><a href="#_response_4">Response</a></li>
 </ul>
 </li>
-<li><a href="#marts-find-by-type">마트타입 조회</a>
+<li><a href="#marts-types-find">마트타입 조회</a>
 <ul class="sectlevel3">
 <li><a href="#_request_5">Request</a></li>
 <li><a href="#_response_5">Response</a></li>
+</ul>
+</li>
+<li><a href="#marts-find-by-type">마트타입 조회</a>
+<ul class="sectlevel3">
+<li><a href="#_request_6">Request</a></li>
+<li><a href="#_response_6">Response</a></li>
 </ul>
 </li>
 </ul>
@@ -472,7 +478,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="introduction"><a class="link" href="#introduction">소개</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>마트 API</p>
+<p>API 문서 페이지</p>
 </div>
 </div>
 </div>
@@ -524,7 +530,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_마트_api"><a class="link" href="#_마트_api">마트 API</a></h2>
+<h2 id="mart-api"><a class="link" href="#mart-api">마트 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="marts-find-all"><a class="link" href="#marts-find-all">전체 조회</a></h3>
@@ -537,14 +543,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h5 id="_request_parameters"><a class="link" href="#_request_parameters">Request Parameters</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">파라미터명</th>
+<th class="tableblock halign-left valign-top">필수</th>
 <th class="tableblock halign-left valign-top">포맷</th>
 <th class="tableblock halign-left valign-top">기본 설정</th>
 <th class="tableblock halign-left valign-top">설명</th>
@@ -553,6 +561,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">sort</p></td>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">필드명[:ASC|DESC]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">martType:asc, branchName:asc</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">정렬 방법 - 정렬 방향을 생략하면 ASC로 적용 (다건의 경우 콤마(,)로 구분)</p></td>
@@ -647,6 +656,21 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">휴일</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.latitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.longitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -654,14 +678,14 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 901
+Content-Length: 1083
 Content-Type: application/json;charset=UTF-8
 
 {
   "data" : [ {
     "id" : 1,
-    "createdDate" : "2019-01-20 04:08:55",
-    "modifiedDate" : "2019-01-20 04:08:55",
+    "createdDate" : "2019-01-21 19:56:51",
+    "modifiedDate" : "2019-01-21 19:56:51",
     "martType" : "이마트",
     "branchName" : "가든5점",
     "region" : "서울",
@@ -669,11 +693,15 @@ Content-Type: application/json;charset=UTF-8
     "address" : "서울특별시 송파구 충민로 10",
     "openingHours" : "10:00~23:00",
     "url" : "http://store.emart.com/branch/list.do?id=1140",
-    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ]
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.47915561,
+      "longitude" : 127.11836061
+    }
   }, {
     "id" : 5,
-    "createdDate" : "2019-01-20 04:08:55",
-    "modifiedDate" : "2019-01-20 04:08:55",
+    "createdDate" : "2019-01-21 19:56:51",
+    "modifiedDate" : "2019-01-21 19:56:51",
     "martType" : "이마트",
     "branchName" : "검단점",
     "region" : "인천",
@@ -681,7 +709,11 @@ Content-Type: application/json;charset=UTF-8
     "address" : "인천광역시 서구 서곶로 754",
     "openingHours" : "10:00~23:00",
     "url" : "http://store.emart.com/branch/list.do?id=1101",
-    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ]
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.07915561,
+      "longitude" : 126.11836061
+    }
   } ]
 }</code></pre>
 </div>
@@ -693,29 +725,42 @@ Content-Type: application/json;charset=UTF-8
 </div>
 </div>
 <div class="sect2">
-<h3 id="marts-find-one"><a class="link" href="#marts-find-one">단건 조회</a></h3>
-<div class="paragraph">
-<p>마트아이디로 조회</p>
-</div>
+<h3 id="marts-find-by-ids"><a class="link" href="#marts-find-by-ids">아이디로 다건 조회</a></h3>
 <div class="sect3">
 <h4 id="_request_2"><a class="link" href="#_request_2">Request</a></h4>
 <div class="sect4">
-<h5 id="_path_parameters"><a class="link" href="#_path_parameters">Path Parameters</a></h5>
+<h5 id="_request_parameters_2"><a class="link" href="#_request_parameters_2">Request Parameters</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">파라미터명</th>
+<th class="tableblock halign-left valign-top">필수</th>
+<th class="tableblock halign-left valign-top">포맷</th>
+<th class="tableblock halign-left valign-top">기본 설정</th>
 <th class="tableblock halign-left valign-top">설명</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/api/marts/{id}</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ids</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이디 (다건의 경우 콤마(,)로 구분)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sort</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명[:ASC|DESC]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id:asc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 방법 - 정렬 방향을 생략하면 ASC로 적용 (다건의 경우 콤마(,)로 구분)</p></td>
 </tr>
 </tbody>
 </table>
@@ -724,7 +769,7 @@ Content-Type: application/json;charset=UTF-8
 <h5 id="_request_http_example_2"><a class="link" href="#_request_http_example_2">Request HTTP Example</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/marts/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/marts?ids=1,5 HTTP/1.1
 Host: docs.api.com
 Content-Type: application/json;charset=UTF-8</code></pre>
 </div>
@@ -748,59 +793,79 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마트 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성일시</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>modifiedDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].modifiedDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">수정일시</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>martType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].martType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마트타입</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>branchName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].branchName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">지점명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>region</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].region</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">지역</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneNumber</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].phoneNumber</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">전화번호</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].address</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">주소</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>openingHours</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].openingHours</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">영업시간</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].url</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">홈페이지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>holidays[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].holidays[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">휴일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.latitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.longitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
 </tr>
 </tbody>
 </table>
@@ -809,14 +874,14 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 456
+Content-Length: 1083
 Content-Type: application/json;charset=UTF-8
 
 {
-  "data" : {
+  "data" : [ {
     "id" : 1,
-    "createdDate" : "2019-01-20 04:08:55",
-    "modifiedDate" : "2019-01-20 04:08:55",
+    "createdDate" : "2019-01-21 19:56:51",
+    "modifiedDate" : "2019-01-21 19:56:51",
     "martType" : "이마트",
     "branchName" : "가든5점",
     "region" : "서울",
@@ -824,8 +889,28 @@ Content-Type: application/json;charset=UTF-8
     "address" : "서울특별시 송파구 충민로 10",
     "openingHours" : "10:00~23:00",
     "url" : "http://store.emart.com/branch/list.do?id=1140",
-    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ]
-  }
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.47915561,
+      "longitude" : 127.11836061
+    }
+  }, {
+    "id" : 5,
+    "createdDate" : "2019-01-21 19:56:51",
+    "modifiedDate" : "2019-01-21 19:56:51",
+    "martType" : "이마트",
+    "branchName" : "검단점",
+    "region" : "인천",
+    "phoneNumber" : "032-440-1234",
+    "address" : "인천광역시 서구 서곶로 754",
+    "openingHours" : "10:00~23:00",
+    "url" : "http://store.emart.com/branch/list.do?id=1101",
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.07915561,
+      "longitude" : 126.11836061
+    }
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -836,21 +921,26 @@ Content-Type: application/json;charset=UTF-8
 </div>
 </div>
 <div class="sect2">
-<h3 id="marts-find-by-ids"><a class="link" href="#marts-find-by-ids">다건 조회</a></h3>
+<h3 id="marts-find-by-location"><a class="link" href="#marts-find-by-location">좌표로 다건 조회</a></h3>
+<div class="paragraph">
+<p>좌표(위경도)에 가까운 마트 조회</p>
+</div>
 <div class="sect3">
 <h4 id="_request_3"><a class="link" href="#_request_3">Request</a></h4>
 <div class="sect4">
-<h5 id="_request_parameters_2"><a class="link" href="#_request_parameters_2">Request Parameters</a></h5>
+<h5 id="_request_parameters_3"><a class="link" href="#_request_parameters_3">Request Parameters</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">파라미터명</th>
+<th class="tableblock halign-left valign-top">필수</th>
 <th class="tableblock halign-left valign-top">포맷</th>
 <th class="tableblock halign-left valign-top">기본 설정</th>
 <th class="tableblock halign-left valign-top">설명</th>
@@ -858,16 +948,25 @@ Content-Type: application/json;charset=UTF-8
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ids</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">latitude</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-90 &#8656; 위도 &#8656; 90</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">아이디 (다건의 경우 콤마(,)로 구분)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">sort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명[:ASC|DESC]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id:asc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 방법 - 정렬 방향을 생략하면 ASC로 적용 (다건의 경우 콤마(,)로 구분)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">longitude</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-180 &#8656; 경도 &#8656; 180</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">distance</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마트 거리 범위 (단위 : km)</p></td>
 </tr>
 </tbody>
 </table>
@@ -876,7 +975,7 @@ Content-Type: application/json;charset=UTF-8
 <h5 id="_request_http_example_3"><a class="link" href="#_request_http_example_3">Request HTTP Example</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/marts?ids=1,5 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/marts?latitude=37.460000&amp;longitude=127.118000&amp;distance=3 HTTP/1.1
 Host: docs.api.com
 Content-Type: application/json;charset=UTF-8</code></pre>
 </div>
@@ -959,6 +1058,26 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">휴일</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.latitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.longitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.distance</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회한 위치로부터 거리 (km)</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -966,14 +1085,14 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 901
+Content-Length: 590
 Content-Type: application/json;charset=UTF-8
 
 {
   "data" : [ {
     "id" : 1,
-    "createdDate" : "2019-01-20 04:08:55",
-    "modifiedDate" : "2019-01-20 04:08:55",
+    "createdDate" : "2019-01-21 19:57:04",
+    "modifiedDate" : "2019-01-21 19:57:04",
     "martType" : "이마트",
     "branchName" : "가든5점",
     "region" : "서울",
@@ -981,20 +1100,172 @@ Content-Type: application/json;charset=UTF-8
     "address" : "서울특별시 송파구 충민로 10",
     "openingHours" : "10:00~23:00",
     "url" : "http://store.emart.com/branch/list.do?id=1140",
-    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ]
-  }, {
-    "id" : 5,
-    "createdDate" : "2019-01-20 04:08:55",
-    "modifiedDate" : "2019-01-20 04:08:55",
-    "martType" : "이마트",
-    "branchName" : "검단점",
-    "region" : "인천",
-    "phoneNumber" : "032-440-1234",
-    "address" : "인천광역시 서구 서곶로 754",
-    "openingHours" : "10:00~23:00",
-    "url" : "http://store.emart.com/branch/list.do?id=1101",
-    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ]
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.47915561,
+      "longitude" : 127.11836061,
+      "distance" : 2.1302443883659024
+    }
   } ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#160;</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="marts-find-one"><a class="link" href="#marts-find-one">단건 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_4"><a class="link" href="#_request_4">Request</a></h4>
+<div class="sect4">
+<h5 id="_path_parameters"><a class="link" href="#_path_parameters">Path Parameters</a></h5>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">파라미터명</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/api/marts/{id}</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_request_http_example_4"><a class="link" href="#_request_http_example_4">Request HTTP Example</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/marts/1 HTTP/1.1
+Host: docs.api.com
+Content-Type: application/json;charset=UTF-8</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_4"><a class="link" href="#_response_4">Response</a></h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성일시</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>modifiedDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정일시</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>martType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마트타입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>branchName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지점명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>region</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneNumber</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전화번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>openingHours</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">영업시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">홈페이지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>holidays[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">휴일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>location.latitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>location.longitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_response_http_example_4"><a class="link" href="#_response_http_example_4">Response HTTP Example:</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 547
+Content-Type: application/json;charset=UTF-8
+
+{
+  "data" : {
+    "id" : 1,
+    "createdDate" : "2019-01-21 19:57:04",
+    "modifiedDate" : "2019-01-21 19:57:04",
+    "martType" : "이마트",
+    "branchName" : "가든5점",
+    "region" : "서울",
+    "phoneNumber" : "02-411-1234",
+    "address" : "서울특별시 송파구 충민로 10",
+    "openingHours" : "10:00~23:00",
+    "url" : "http://store.emart.com/branch/list.do?id=1140",
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.47915561,
+      "longitude" : 127.11836061
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -1007,9 +1278,9 @@ Content-Type: application/json;charset=UTF-8
 <div class="sect2">
 <h3 id="marts-types-find"><a class="link" href="#marts-types-find">마트타입 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_4"><a class="link" href="#_request_4">Request</a></h4>
+<h4 id="_request_5"><a class="link" href="#_request_5">Request</a></h4>
 <div class="sect4">
-<h5 id="_request_http_example_4"><a class="link" href="#_request_http_example_4">Request HTTP Example</a></h5>
+<h5 id="_request_http_example_5"><a class="link" href="#_request_http_example_5">Request HTTP Example</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/marts/types HTTP/1.1
@@ -1020,7 +1291,7 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_4"><a class="link" href="#_response_4">Response</a></h4>
+<h4 id="_response_5"><a class="link" href="#_response_5">Response</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1053,7 +1324,7 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_response_http_example_4"><a class="link" href="#_response_http_example_4">Response HTTP Example:</a></h5>
+<h5 id="_response_http_example_5"><a class="link" href="#_response_http_example_5">Response HTTP Example:</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1089,7 +1360,7 @@ Content-Type: application/json;charset=UTF-8
 <div class="sect2">
 <h3 id="marts-find-by-type"><a class="link" href="#marts-find-by-type">마트타입 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_5"><a class="link" href="#_request_5">Request</a></h4>
+<h4 id="_request_6"><a class="link" href="#_request_6">Request</a></h4>
 <div class="sect4">
 <h5 id="_path_parameters_2"><a class="link" href="#_path_parameters_2">Path Parameters</a></h5>
 <table class="tableblock frame-all grid-all spread">
@@ -1112,17 +1383,19 @@ Content-Type: application/json;charset=UTF-8
 </table>
 </div>
 <div class="sect4">
-<h5 id="_request_parameters_3"><a class="link" href="#_request_parameters_3">Request Parameters</a></h5>
+<h5 id="_request_parameters_4"><a class="link" href="#_request_parameters_4">Request Parameters</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">파라미터명</th>
+<th class="tableblock halign-left valign-top">필수</th>
 <th class="tableblock halign-left valign-top">포맷</th>
 <th class="tableblock halign-left valign-top">기본 설정</th>
 <th class="tableblock halign-left valign-top">설명</th>
@@ -1131,6 +1404,7 @@ Content-Type: application/json;charset=UTF-8
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">sort</p></td>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">필드명[:ASC|DESC]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">branchName:asc</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">정렬 방법 - 정렬 방향을 생략하면 ASC로 적용 (다건의 경우 콤마(,)로 구분)</p></td>
@@ -1139,7 +1413,7 @@ Content-Type: application/json;charset=UTF-8
 </table>
 </div>
 <div class="sect4">
-<h5 id="_request_http_example_5"><a class="link" href="#_request_http_example_5">Request HTTP Example</a></h5>
+<h5 id="_request_http_example_6"><a class="link" href="#_request_http_example_6">Request HTTP Example</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/marts/types/emart HTTP/1.1
@@ -1150,7 +1424,7 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_5"><a class="link" href="#_response_5">Response</a></h4>
+<h4 id="_response_6"><a class="link" href="#_response_6">Response</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1225,21 +1499,36 @@ Content-Type: application/json;charset=UTF-8</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">휴일</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.latitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].location.longitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_response_http_example_5"><a class="link" href="#_response_http_example_5">Response HTTP Example:</a></h5>
+<h5 id="_response_http_example_6"><a class="link" href="#_response_http_example_6">Response HTTP Example:</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 901
+Content-Length: 1083
 Content-Type: application/json;charset=UTF-8
 
 {
   "data" : [ {
     "id" : 1,
-    "createdDate" : "2019-01-20 04:08:55",
-    "modifiedDate" : "2019-01-20 04:08:55",
+    "createdDate" : "2019-01-21 19:56:51",
+    "modifiedDate" : "2019-01-21 19:56:51",
     "martType" : "이마트",
     "branchName" : "가든5점",
     "region" : "서울",
@@ -1247,11 +1536,15 @@ Content-Type: application/json;charset=UTF-8
     "address" : "서울특별시 송파구 충민로 10",
     "openingHours" : "10:00~23:00",
     "url" : "http://store.emart.com/branch/list.do?id=1140",
-    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ]
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.47915561,
+      "longitude" : 127.11836061
+    }
   }, {
     "id" : 5,
-    "createdDate" : "2019-01-20 04:08:55",
-    "modifiedDate" : "2019-01-20 04:08:55",
+    "createdDate" : "2019-01-21 19:56:51",
+    "modifiedDate" : "2019-01-21 19:56:51",
     "martType" : "이마트",
     "branchName" : "검단점",
     "region" : "인천",
@@ -1259,7 +1552,11 @@ Content-Type: application/json;charset=UTF-8
     "address" : "인천광역시 서구 서곶로 754",
     "openingHours" : "10:00~23:00",
     "url" : "http://store.emart.com/branch/list.do?id=1101",
-    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ]
+    "holidays" : [ "2019-1-1 (화)", "2019-1-11 (금)" ],
+    "location" : {
+      "latitude" : 37.07915561,
+      "longitude" : 126.11836061
+    }
   } ]
 }</code></pre>
 </div>
@@ -1275,7 +1572,7 @@ Content-Type: application/json;charset=UTF-8
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-01-20 03:02:25 +09:00
+Last updated 2019-01-21 19:55:53 +09:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

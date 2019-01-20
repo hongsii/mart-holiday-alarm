@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm.api.mart.converter;
 
-import com.hongsi.martholidayalarm.mart.domain.MartType;
+import com.hongsi.martholidayalarm.domain.mart.MartType;
 import java.beans.PropertyEditorSupport;
 
 public class MartTypeParameterConverter extends PropertyEditorSupport {

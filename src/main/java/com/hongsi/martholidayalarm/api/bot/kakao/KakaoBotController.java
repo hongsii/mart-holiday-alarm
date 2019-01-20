@@ -1,9 +1,9 @@
 package com.hongsi.martholidayalarm.api.bot.kakao;
 
-import com.hongsi.martholidayalarm.api.bot.kakao.dto.BotResponse;
-import com.hongsi.martholidayalarm.api.bot.kakao.dto.Keyboard;
-import com.hongsi.martholidayalarm.api.bot.kakao.dto.UserRequestDto;
-import com.hongsi.martholidayalarm.api.bot.kakao.service.KakaoBotService;
+import com.hongsi.martholidayalarm.service.KakaoBotService;
+import com.hongsi.martholidayalarm.service.dto.bot.kakao.BotResponse;
+import com.hongsi.martholidayalarm.service.dto.bot.kakao.Keyboard;
+import com.hongsi.martholidayalarm.service.dto.bot.kakao.UserRequestDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

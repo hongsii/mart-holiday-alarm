@@ -11,7 +11,7 @@
 * 프레임워크 : Spring Boot 2.1.1.RELEASE, JPA, Querydsl 4.2.1
 * 데이터베이스 : AWS RDS (MariaDB), Firebase Realtime DB
 * 빌드 환경 : JUnit(AssertJ), Lombok, Gradle, Travis CI, AWS CodeDeploy 
-* 라이브러리 : Swagger 2.8.0, Jsoup 1.10.2, Firebase Messaging
+* 라이브러리 : Spring Rest Docs, Jsoup 1.10.2, Firebase Messaging
 
 -------------------------
 

@@ -1,10 +1,11 @@
 ===== Request Parameters
 |===
-| 파라미터명 | 포맷 | 기본 설정 | 설명
+| 파라미터명 | 필수 | 포맷 | 기본 설정 | 설명
 
 
 {{#parameters}}
 |{{#tableCellContent}}{{name}}{{/tableCellContent}}
+|{{#tableCellContent}}{{^optional}}true{{/optional}}{{/tableCellContent}}
 |{{#tableCellContent}}{{#format}}{{.}}{{/format}}{{/tableCellContent}}
 |{{#tableCellContent}}{{#default}}{{.}}{{/default}}{{/tableCellContent}}
 |{{#tableCellContent}}{{description}}{{/tableCellContent}}

@@ -1,6 +1,6 @@
 package com.hongsi.martholidayalarm;
 
-import com.hongsi.martholidayalarm.common.constant.CommonConstants;
+import com.hongsi.martholidayalarm.constants.CommonConstants;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 

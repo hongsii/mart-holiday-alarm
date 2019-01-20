@@ -31,6 +31,9 @@ public interface MartApiDocumentDescriptor {
 		fieldDescriptors.add(fieldWithPath(path + "openingHours").type(JsonFieldType.STRING).description("영업시간"));
 		fieldDescriptors.add(fieldWithPath(path + "url").type(JsonFieldType.STRING).description("홈페이지"));
 		fieldDescriptors.add(fieldWithPath(path + "holidays[]").type(JsonFieldType.ARRAY).description("휴일"));
+		fieldDescriptors.add(fieldWithPath(path + "location").type(JsonFieldType.OBJECT).description("좌표"));
+		fieldDescriptors.add(fieldWithPath(path + "location.latitude").type(JsonFieldType.NUMBER).description("위도"));
+		fieldDescriptors.add(fieldWithPath(path + "location.longitude").type(JsonFieldType.NUMBER).description("경도"));
 		return fieldDescriptors;
 	}
 
