@@ -17,6 +17,6 @@ public class MartTypeResponse {
 	}
 
 	public static MartTypeResponse from(MartType martType) {
-		return new MartTypeResponse(martType.name(), martType.getDisplayName());
+		return new MartTypeResponse(martType.name().toLowerCase(), martType.getDisplayName());
 	}
 }

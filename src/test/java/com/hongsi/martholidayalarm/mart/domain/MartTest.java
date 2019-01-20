@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.hongsi.martholidayalarm.mart.dto.Holidays;
+import com.hongsi.martholidayalarm.mart.dto.MartResponse;
 import com.hongsi.martholidayalarm.mart.exception.CannotChangeException;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -26,6 +27,35 @@ public class MartTest {
 			.phoneNumber("02-1234-5678")
 			.openingHours("10:00 ~ 11:00")
 			.build();
+
+	public static final List<MartResponse> newMartsResponse = asList(
+			new MartResponse(
+					Mart.builder()
+							.id(1L)
+							.martType(MartType.EMART)
+							.branchName("가든5점")
+							.region("서울")
+							.phoneNumber("02-411-1234")
+							.address("서울특별시 송파구 충민로 10")
+							.openingHours("10:00~23:00")
+							.url("http://store.emart.com/branch/list.do?id=1140")
+							.holidays(new TreeSet<>(asList(Holiday.of(2019, 1, 1), Holiday.of(2019, 1, 11))))
+							.build()
+					),
+			new MartResponse(
+					Mart.builder()
+							.id(5L)
+							.martType(MartType.EMART)
+							.branchName("검단점")
+							.region("인천")
+							.phoneNumber("032-440-1234")
+							.address("인천광역시 서구 서곶로 754")
+							.openingHours("10:00~23:00")
+							.url("http://store.emart.com/branch/list.do?id=1101")
+							.holidays(new TreeSet<>(asList(Holiday.of(2019, 1, 1), Holiday.of(2019, 1, 11))))
+							.build()
+			)
+	);
 
 	private Mart mart;
 

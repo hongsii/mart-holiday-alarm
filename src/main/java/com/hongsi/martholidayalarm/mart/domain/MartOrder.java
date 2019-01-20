@@ -1,10 +1,12 @@
 package com.hongsi.martholidayalarm.mart.domain;
 
-import java.util.Objects;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -32,17 +34,21 @@ public class MartOrder {
 				throw new IllegalArgumentException("Not found sort value");
 			}
 
-			String property = matcher.group(PROPERTY_INDEX);
-			Mart.class.getDeclaredField(property); // exists property or not
+			String propertyName = matcher.group(PROPERTY_INDEX);
+			Property property = Property.of(propertyName);
 
 			String direction = matcher.group(DIRECTION_INDEX);
-			if (Objects.isNull(direction)) {
-				return new MartOrder(Optional.of(Order.asc(property)));
+			if (direction != null) {
+				return of(property.by(direction));
 			}
-			return new MartOrder(Optional.of(new Order(Direction.fromString(direction), property)));
+			return of(property.asc());
 		} catch (Exception e) {
 			return empty();
 		}
+	}
+
+	public static MartOrder of(Order order) {
+		return new MartOrder(Optional.ofNullable(order));
 	}
 
 	public static MartOrder empty() {
@@ -58,5 +64,36 @@ public class MartOrder {
 			throw new IllegalStateException("Not exists Order");
 		}
 		return order.get();
+	}
+
+	@Getter
+	public enum Property {
+
+		id, martType, branchName, region;
+
+		private static String COLUMN_ERROR_MESSAGE = String.format("일치하는 정렬 컬럼이 없습니다.\n- 가능한 정렬 : [%s]",
+				Arrays.stream(values())
+						.map(Property::name)
+						.collect(Collectors.joining(", "))
+		);
+
+		public static Property of(String name) {
+			return Arrays.stream(values())
+					.filter(property -> property.name().equals(name))
+					.findFirst()
+					.orElseThrow(() -> new IllegalArgumentException(COLUMN_ERROR_MESSAGE));
+		}
+
+		public Order asc() {
+			return Order.asc(name());
+		}
+
+		public Order desc() {
+			return Order.desc(name());
+		}
+
+		public Order by(String direction) {
+			return new Order(Direction.fromString(direction), name());
+		}
 	}
 }

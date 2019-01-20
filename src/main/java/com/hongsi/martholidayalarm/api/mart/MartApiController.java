@@ -1,6 +1,7 @@
 package com.hongsi.martholidayalarm.api.mart;
 
 import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
+import com.hongsi.martholidayalarm.mart.domain.MartOrder.Property;
 import com.hongsi.martholidayalarm.mart.domain.MartSortBuilder;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.dto.MartOrderRequest;
@@ -12,6 +13,7 @@ import java.util.Set;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +32,9 @@ public class MartApiController {
 
 	@GetMapping
 	public ResponseEntity<?> getMarts(
-			@RequestParam(name = "sort", required = false) MartOrderRequest... martOrderRequest) {
-		Sort sort = MartSortBuilder.parseSort(martOrderRequest);
+			@RequestParam(name = "sort", required = false) List<MartOrderRequest> martOrderRequest) {
+		Order[] defaultOrders = new Order[]{ Property.martType.asc(), Property.branchName.asc() };
+		Sort sort = MartSortBuilder.parseSort(martOrderRequest, defaultOrders);
 		List<MartResponse> marts = martService.findMarts(sort);
 		return ResponseEntity.ok(marts);
 	}
@@ -39,8 +42,8 @@ public class MartApiController {
 	@GetMapping(params = "ids")
 	public ResponseEntity<?> getMartsByIds(
 			@RequestParam(name = "ids") Set<Long> ids,
-			@RequestParam(name = "sort", required = false) MartOrderRequest... martOrderRequest) {
-		Sort sort = MartSortBuilder.parseSort(martOrderRequest);
+			@RequestParam(name = "sort", required = false) List<MartOrderRequest> martOrderRequest) {
+		Sort sort = MartSortBuilder.parseSort(martOrderRequest, Property.id.asc());
 		List<MartResponse> marts = martService.findMartsById(ids, sort);
 		return ResponseEntity.ok(marts);
 	}
@@ -60,8 +63,8 @@ public class MartApiController {
 	@GetMapping(value = "/types/{martType}")
 	public ResponseEntity<?> getMartsByMartType(
 			@PathVariable @Valid MartType martType,
-			@RequestParam(name = "sort", required = false) MartOrderRequest... martOrderRequest) {
-		Sort sort = MartSortBuilder.parseSort(martOrderRequest);
+			@RequestParam(name = "sort", required = false) List<MartOrderRequest> martOrderRequest) {
+		Sort sort = MartSortBuilder.parseSort(martOrderRequest, Property.branchName.asc());
 		List<MartResponse> marts = martService.findMartsByMartType(martType, sort);
 		return ResponseEntity.ok(marts);
 	}

@@ -1,7 +1,7 @@
 package com.hongsi.martholidayalarm.api.deprecated;
 
 import com.hongsi.martholidayalarm.api.mart.converter.MartTypeParameterConverter;
-import com.hongsi.martholidayalarm.mart.domain.MartSortBuilder;
+import com.hongsi.martholidayalarm.mart.domain.MartOrder.Property;
 import com.hongsi.martholidayalarm.mart.domain.MartType;
 import com.hongsi.martholidayalarm.mart.dto.MartResponse;
 import com.hongsi.martholidayalarm.mart.service.MartService;
@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,10 +45,10 @@ public class MartController {
 	public ResponseEntity<?> getMarts(
 			@PathVariable("mart_type") @Valid MartType martType) {
 		List<MartResponse> marts = martService
-				.findMartsByMartType(martType, MartSortBuilder.defaultSort());
+				.findMartsByMartType(martType, defaultSort());
 		if (martType == MartType.EMART) {
 			marts.addAll(martService
-					.findMartsByMartType(MartType.EMART_TRADERS, MartSortBuilder.defaultSort()));
+					.findMartsByMartType(MartType.EMART_TRADERS, defaultSort()));
 		}
 		return new ResponseEntity<>(marts.stream()
 				.map(MartResponse::toTempResponse)
@@ -63,10 +64,14 @@ public class MartController {
 	@GetMapping(value = "/branch/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getBranches(
 			@PathVariable("ids") @Valid Set<Long> ids) {
-		List<MartResponse> marts = martService.findMartsById(ids, MartSortBuilder.defaultSort());
+		List<MartResponse> marts = martService.findMartsById(ids, defaultSort());
 		return new ResponseEntity<>(marts.stream()
 				.map(MartResponse::toTempResponse)
 				.collect(Collectors.toList()), HttpStatus.OK);
+	}
+
+	private Sort defaultSort() {
+		return Sort.by(Property.martType.asc(), Property.branchName.asc());
 	}
 
 	@InitBinder

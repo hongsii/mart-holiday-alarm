@@ -1,0 +1,147 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+= API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[introduction]]
+== 소개
+
+API 문서 페이지
+
+[[common]]
+== 공통 서버 설정
+
+|===
+| 환경 | Domain
+
+| 기본 URL | `http://docs.api.com`
+|===
+
+=== API 공통 응답
+
+include::{snippets}/common/common-response-fields.adoc[]
+
+
+[[mart-api]]
+== 마트 API
+
+[[marts-find-all]]
+=== 전체 조회
+
+전체 마트를 조회
+
+==== Request
+
+include::{snippets}/marts-find-all/request-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/marts-find-all/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/marts-find-all/response-fields-data.adoc[]
+
+===== Response HTTP Example:
+
+include::{snippets}/marts-find-all/http-response.adoc[]
+
+&#160;
+
+[[marts-find-one]]
+=== 단건 조회
+
+마트아이디로 조회
+
+==== Request
+
+include::{snippets}/marts-find-one/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/marts-find-one/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/marts-find-one/response-fields-data.adoc[]
+
+===== Response HTTP Example:
+
+include::{snippets}/marts-find-one/http-response.adoc[]
+
+&#160;
+
+
+[[marts-find-by-ids]]
+=== 다건 조회
+
+==== Request
+
+include::{snippets}/marts-find-by-ids/request-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/marts-find-by-ids/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/marts-find-by-ids/response-fields-data.adoc[]
+
+===== Response HTTP Example:
+
+include::{snippets}/marts-find-by-ids/http-response.adoc[]
+
+&#160;
+
+
+
+[[marts-types-find]]
+=== 마트타입 조회
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/marts-types-find/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/marts-types-find/response-fields-data.adoc[]
+
+===== Response HTTP Example:
+
+include::{snippets}/marts-types-find/http-response.adoc[]
+
+&#160;
+
+
+
+[[marts-find-by-type]]
+=== 마트타입 조회
+
+==== Request
+
+include::{snippets}/marts-find-by-type/path-parameters.adoc[]
+
+include::{snippets}/marts-find-by-type/request-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/marts-find-by-type/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/marts-find-by-type/response-fields-data.adoc[]
+
+===== Response HTTP Example:
+
+include::{snippets}/marts-find-by-type/http-response.adoc[]
+
+&#160;
+

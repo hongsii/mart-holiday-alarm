@@ -22,6 +22,10 @@ spring:
   h2:
     console:
       enabled: false
+  datasource:
+    hikari:
+      connection-timeout: 10000
+      max-lifetime: 10000
 
 ---
 

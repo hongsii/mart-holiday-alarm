@@ -3,6 +3,7 @@ package com.hongsi.martholidayalarm.mart.domain;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.hongsi.martholidayalarm.mart.domain.MartOrder.Property;
 import java.util.Optional;
 import org.junit.Test;
 import org.springframework.data.domain.Sort.Order;
@@ -47,6 +48,16 @@ public class MartOrderTest {
 	@Test(expected = IllegalStateException.class)
 	public void Sort_생성() {
 		MartOrder.empty().getOrder();
+	}
+
+	@Test
+	public void 이름으로_프로퍼티_조회() {
+		assertThat(Property.of("branchName") == Property.branchName).isTrue();
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void 잘못된_프로퍼티_조회() {
+		Property.of("notFound");
 	}
 
 	private String createOrderValue(String property, String direction) {
