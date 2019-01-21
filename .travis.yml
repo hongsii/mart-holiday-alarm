@@ -43,3 +43,10 @@ notifications:
   slack:
     rooms:
       - secure: "1u0ipFr/ndGCHPaH1AvBjq8y8gjif1pz9O3S42qYwb6ZYOlhjePrAKzgCyW9vYzCEthsjt9S0oFHwozrnBlwfOhdfRkOhifa1Q1g8o49Bi/X9PYsxntpAykaZNzuu396fHW7J8fEpddVBXm4jzlh2LZ+Pm5CDG5l/VptyC2iTYeItQrxLcoQgj3tecyulxBjDPFF2f0PxdITYL8Ia9utinzMtc30ta9A4xJxC8iicsu9xYxL3gvQHV59rzDrPDegjPKD/d+4pilU367odoujGdCIrsJUW/Elypxw9Nu+S3B2iFRAJ9YpCYALyMEVQdhOqMh54QFiMHiPsCE1wPq4KXvUogkWLsOVjEXxurkr6+pLAlH09IKWl2+mlJTScxRixl2FeJK9w2VzGdqAzylepfgWArBWwnMGdKjNvdrHO+FxiDKA55TEXkDCtzvkQ1KYoUtIGEYdHVKca5dgxh2jDJtYNfCztZ+8SVFk/hiEB5FM9DSOdcUGq8Qwuhbth5cMSOJrMN+mT/7LH6YG/mPDb5D8aiCAbZ6FhrqcPbuuEmEE5LMWsW6PMy29aKakvq0Es28cCJM3wtPQVGSwrXOOnxta50uN0eyv9gjPlfgR9NiS9ibhIuTelGwiSrmVGd/sV3eEMr1GIGUnuYDk5hoyzufJ3fJ/SMmzb3lBcXXMWVg="
+    template:
+      - "Build `%{result}` *<%{build_url}|#%{build_number}>* (<%{compare_url}|%{commit}>) - _${repository_name}_ "
+      - "\n*Build Details* "
+      - "- 빌드 시간 : ${duration}"
+      - "- 브랜치 : %{branch}"
+      - "- 커밋 제목 : %{commit_subject}"
+      - "- 커밋 메세지 : %{commit_message}"
