@@ -7,11 +7,11 @@
 
 ## 개발 환경
 
-* 언어 : Java 8
-* 프레임워크 : Spring Boot 2.0.0.RELEASE, JPA + Hibernate(5.3.0.Final) + Querydsl 4.2.1
-* 데이터베이스 : AWS RDS (MariaDB), Firebase
-* 빌드 환경 : JUnit(AssertJ) + Lombok + Gradle, Travis CI + CodeDeploy 
-* 라이브러리 : Swagger 2.8.0, Jsoup 1.10.2, Firebase Messaging
+* 언어 : Java 8 (openjdk 8)
+* 프레임워크 : Spring Boot 2.1.1.RELEASE, JPA, Querydsl 4.2.1
+* 데이터베이스 : AWS RDS (MariaDB), Firebase Realtime DB
+* 빌드 환경 : JUnit(AssertJ), Lombok, Gradle, Travis CI, AWS CodeDeploy 
+* 라이브러리 : Spring Rest Docs, Jsoup 1.10.2, Firebase Messaging
 
 -------------------------
 
