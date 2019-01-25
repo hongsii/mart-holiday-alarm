@@ -4,24 +4,45 @@ jdk:
 branches:
   only:
     - master
+    - develop
 cache:
   directories:
     - "$HOME/.m2/repository"
     - "$HOME/.gradle"
 script: "./gradlew clean build"
+
+env:
+  global:
+    # Set default environment variable
+    - AWS_REGION_DEFAULT=ap-northeast-2
+    - DEPLOY_DIR_DEFAULT=deploy
+
+    # If variable set in travis setting, this variable is overridden by travis setting
+    - AWS_REGION=${AWS_REGION_VARIABLE:-$AWS_REGION_DEFAULT}
+    - DEPLOY_DIR=${DEPLOY_DIR_VARIABLE:-$DEPLOY_DIR_DEFAULT}
+    - APP_NAME=mart-holiday-alarm
+
 before_deploy:
-  - zip -r martholidayalarm *
+  # Print build info
+  - echo $TRAVIS_REPO_SLUG
+  - echo $TRAVIS_BRANCH
+
+  # Zip by branch
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then zip -r martholidayalarm *; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then echo "develop "; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
+
 deploy:
+  # Deploy master branch
   - provider: s3
     access_key_id: "$AWS_ACCESS_KEY"
     secret_access_key: "$AWS_SECRET_KEY"
     bucket: martholidayalarm-deploy
-    region: ap-northeast-2
+    region: $AWS_REGION
     skip_cleanup: true
     acl: public_read
     wait-until-deployed: true
     on:
-      repo: hongsii/mart-holiday-alarm
+      repo: $TRAVIS_REPO_SLUG
       branch: master
   - provider: codedeploy
     access_key_id: "$AWS_ACCESS_KEY"
@@ -31,15 +52,44 @@ deploy:
     bundle_type: zip
     application: martholidayalarm
     deployment_group: martholidayalarm-group
-    region: ap-northeast-2
+    region: $AWS_REGION
     wait-until-deployed: true
     on:
-      repo: hongsii/mart-holiday-alarm
+      repo: $TRAVIS_REPO_SLUG
       branch: master
+
+  # Deploy develop branch
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY2
+    secret_access_key: $AWS_SECRET_KEY2
+    region: $AWS_REGION
+    bucket: $APP_NAME
+    local_dir: $DEPLOY_DIR
+    upload_dir: $DEPLOY_DIR
+    skip_cleanup: true
+    acl: public_read
+    wait-until-deployed: true
+    on:
+      repo: $TRAVIS_REPO_SLUG
+      branch: develop
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY2
+    secret_access_key: $AWS_SECRET_KEY2
+    region: $AWS_REGION
+    bucket: $APP_NAME
+    key: $DEPLOY_DIR/$APP_NAME.zip
+    bundle_type: zip
+    application: $APP_NAME
+    deployment_group: $APP_NAME-group
+    wait-until-deployed: true
+    on:
+      repo: $TRAVIS_REPO_SLUG
+      branch: develop
+
 notifications:
   email:
     recipients:
-      - pozt1234@gmail.com
+      - hongsii.dev@gmail.com
   slack:
     rooms:
       - secure: "1u0ipFr/ndGCHPaH1AvBjq8y8gjif1pz9O3S42qYwb6ZYOlhjePrAKzgCyW9vYzCEthsjt9S0oFHwozrnBlwfOhdfRkOhifa1Q1g8o49Bi/X9PYsxntpAykaZNzuu396fHW7J8fEpddVBXm4jzlh2LZ+Pm5CDG5l/VptyC2iTYeItQrxLcoQgj3tecyulxBjDPFF2f0PxdITYL8Ia9utinzMtc30ta9A4xJxC8iicsu9xYxL3gvQHV59rzDrPDegjPKD/d+4pilU367odoujGdCIrsJUW/Elypxw9Nu+S3B2iFRAJ9YpCYALyMEVQdhOqMh54QFiMHiPsCE1wPq4KXvUogkWLsOVjEXxurkr6+pLAlH09IKWl2+mlJTScxRixl2FeJK9w2VzGdqAzylepfgWArBWwnMGdKjNvdrHO+FxiDKA55TEXkDCtzvkQ1KYoUtIGEYdHVKca5dgxh2jDJtYNfCztZ+8SVFk/hiEB5FM9DSOdcUGq8Qwuhbth5cMSOJrMN+mT/7LH6YG/mPDb5D8aiCAbZ6FhrqcPbuuEmEE5LMWsW6PMy29aKakvq0Es28cCJM3wtPQVGSwrXOOnxta50uN0eyv9gjPlfgR9NiS9ibhIuTelGwiSrmVGd/sV3eEMr1GIGUnuYDk5hoyzufJ3fJ/SMmzb3lBcXXMWVg="
