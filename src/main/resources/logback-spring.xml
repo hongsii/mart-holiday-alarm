@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <property name="PUSH_LOG_FILE" value="./logs/push.log"/>
+  <appender name="PUSH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoder>
+      <pattern>${FILE_LOG_PATTERN}</pattern>
+    </encoder>
+    <file>${PUSH_LOG_FILE}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${PUSH_LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <!-- PUSH LOG -->
+  <logger name="com.hongsi.martholidayalarm.scheduler.PushScheduler" level="info" additivity="false">
+    <appender-ref ref="PUSH_FILE" />
+  </logger>
+  <logger name="com.hongsi.martholidayalarm.domain.push" level="info" additivity="false">
+    <appender-ref ref="PUSH_FILE" />
+  </logger>
+  <logger name="com.hongsi.martholidayalarm.client.firebase" level="info" additivity="false">
+    <appender-ref ref="PUSH_FILE" />
+  </logger>
+</configuration>
