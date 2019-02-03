@@ -30,6 +30,8 @@ public class FirebaseMessageClient {
 			log.error("[ERROR][PUSH][SEND] Message can't send -> ErrorCode : {}, Message : {}",
 					e.getErrorCode(),
 					e.getMessage());
+		} catch (Exception e) {
+			log.error("[ERROR][PUSH][SEND] Message Error -> Message : {}, Cause : {}", e.getMessage(), e.getCause());
 		}
 		return messageId;
 	}
