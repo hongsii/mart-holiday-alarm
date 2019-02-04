@@ -6,6 +6,7 @@ spring:
     encoding:
       force: true
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: none
 
@@ -18,10 +19,6 @@ spring:
   jpa:
     hibernate.ddl-auto: update
     show-sql: true
-    open-in-view: false
-  h2:
-    console:
-      enabled: false
 
 ---
 
