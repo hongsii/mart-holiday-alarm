@@ -1,11 +1,9 @@
-package com.hongsi.martholidayalarm.api.bot.kakao;
+package com.hongsi.martholidayalarm.api.controller;
 
 import com.hongsi.martholidayalarm.service.KakaoBotService;
 import com.hongsi.martholidayalarm.service.dto.bot.kakao.BotResponse;
 import com.hongsi.martholidayalarm.service.dto.bot.kakao.Keyboard;
 import com.hongsi.martholidayalarm.service.dto.bot.kakao.UserRequestDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -24,20 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/bot/kakao")
-@Api(description = "플러스친구 자동응답 API", tags = {"카카오톡봇"})
 public class KakaoBotController {
 
 	private final KakaoBotService kakaoBotService;
 
-	@ApiOperation(value = "대화 시작을 위한 버튼 요청")
 	@GetMapping("/keyboard")
 	public Keyboard makeDefaultKeyboard() {
 		return new Keyboard(Keyboard.DEFAULT_KEYBOARD);
 	}
 
-	@ApiOperation(value = "사용자 요청에 해당하는 버튼 생성")
-	@PostMapping(value = "/message", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
+	@PostMapping(value = "/message", produces = MediaType.APPLICATION_JSON_VALUE)
 	public BotResponse makeResponse(
 			@ApiParam(name = "사용자 요청 정보", value = "버튼 클릭시 요청하는 정보", required = true)
 			@RequestBody @Valid UserRequestDto userRequestDto) {
@@ -48,7 +43,6 @@ public class KakaoBotController {
 		}
 	}
 
-	@ApiOperation(value = "사용자 요청 이력 삭제")
 	@DeleteMapping(value = {"/chat_room/{user_key}", "/friend/{user_key}"}
 			, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> leaveChatRoom(

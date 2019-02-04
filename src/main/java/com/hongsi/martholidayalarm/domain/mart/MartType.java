@@ -1,5 +1,6 @@
 package com.hongsi.martholidayalarm.domain.mart;
 
+import com.hongsi.martholidayalarm.exception.CannotParseMartTypeException;
 import com.hongsi.martholidayalarm.utils.StringUtils;
 import java.util.Arrays;
 
@@ -22,7 +23,7 @@ public enum MartType {
 		return Arrays.stream(values())
 				.filter(martType -> martType.isSameName(findName))
 				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException("해당 마트 타입이 존재하지 않습니다."));
+				.orElseThrow(() -> new CannotParseMartTypeException(name));
 	}
 
 	public boolean isSameName(String name) {

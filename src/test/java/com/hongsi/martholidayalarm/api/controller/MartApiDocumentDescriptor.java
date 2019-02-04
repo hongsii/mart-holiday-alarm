@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.mart;
+package com.hongsi.martholidayalarm.api.controller;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;

@@ -38,6 +38,8 @@ public class CommonDocumentControllerTest extends CommonApiDocumentConfigure {
 				.andDo(document("common",
 						commonResponseFields("common-response", null,
 								attributes(key("title").value("공통 응답")),
+								subsectionWithPath("code").description("응답 코드"),
+								subsectionWithPath("message").description("응답 메세지"),
 								subsectionWithPath("data").description("데이터")
 						)
 				));

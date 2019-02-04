@@ -41,6 +41,18 @@ public class LocationDto {
 		public Location toEntity() {
 			return Location.of(latitude, longitude);
 		}
+
+		public void setLatitude(Double latitude) {
+			this.latitude = latitude;
+		}
+
+		public void setLongitude(Double longitude) {
+			this.longitude = longitude;
+		}
+
+		public void setDistance(Integer distance) {
+			this.distance = distance;
+		}
 	}
 
 	@Getter

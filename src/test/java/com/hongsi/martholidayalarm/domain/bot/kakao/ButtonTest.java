@@ -1,8 +1,7 @@
-package com.hongsi.martholidayalarm.api.bot.kakao.domain;
+package com.hongsi.martholidayalarm.domain.bot.kakao;
 
 import static org.junit.Assert.assertEquals;
 
-import com.hongsi.martholidayalarm.domain.bot.kakao.Button;
 import org.junit.Test;
 
 public class ButtonTest {
