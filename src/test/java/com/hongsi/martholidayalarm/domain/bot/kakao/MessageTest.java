@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.bot.kakao.domain;
+package com.hongsi.martholidayalarm.domain.bot.kakao;
 
 import org.junit.Test;
 

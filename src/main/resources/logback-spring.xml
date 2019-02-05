@@ -2,7 +2,7 @@
 <configuration>
   <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-  <property name="PUSH_LOG_FILE" value="./logs/push.log"/>
+  <property name="PUSH_LOG_FILE" value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp/mart-logs}}}/push.log"/>
   <appender name="PUSH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <encoder>
       <pattern>${FILE_LOG_PATTERN}</pattern>

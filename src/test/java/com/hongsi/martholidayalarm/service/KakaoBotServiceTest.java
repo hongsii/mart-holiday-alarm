@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.bot.kakao.service;
+package com.hongsi.martholidayalarm.service;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -11,7 +11,6 @@ import com.hongsi.martholidayalarm.domain.mart.Mart;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.repository.KakaoBotRepository;
 import com.hongsi.martholidayalarm.repository.MartRepository;
-import com.hongsi.martholidayalarm.service.KakaoBotService;
 import com.hongsi.martholidayalarm.service.dto.bot.kakao.BotResponse;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

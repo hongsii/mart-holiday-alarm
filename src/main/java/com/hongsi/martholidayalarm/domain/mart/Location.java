@@ -63,36 +63,31 @@ public class Location {
 
 		Latitude("위도", -90, 90), Longitude("경도", -180, 180);
 
-		private static final String NULL_MESSAGE = "좌표를 반드시 입력해야합니다.";
-		private static final String INVALID_MESSAGE_FORMAT = "%s는 %d과 %d 사이여야 합니다.";
-
 		private String name;
 		private Double min;
 		private Double max;
 
 		Range(String name, int min, int max) {
 			this.name = name;
-			this.min = Double.valueOf(min);
-			this.max = Double.valueOf(max);
+			this.min = (double) min;
+			this.max = (double) max;
 		}
 
 		public void validate(Double point) {
 			if (Objects.isNull(point)) {
-				throw new IllegalArgumentException(NULL_MESSAGE);
+				throw new IllegalArgumentException("좌표를 반드시 입력해야합니다.");
 			}
 			if (isOutOfMinRange(point) || isOutOfMaxRange(point)) {
-				String message = String.format(INVALID_MESSAGE_FORMAT,
-						name, min.intValue(), max.intValue());
-				throw new LocationOutOfRangeException(message);
+				throw new LocationOutOfRangeException(this);
 			}
 		}
 
 		private boolean isOutOfMinRange(Double point) {
-			return min.compareTo(point) == 1;
+			return min > point;
 		}
 
 		private boolean isOutOfMaxRange(Double point) {
-			return max.compareTo(point) == -1;
+			return max < point;
 		}
 	}
 }
