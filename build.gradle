@@ -37,6 +37,8 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-aop')
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
+    compile group: 'com.ibm.icu', name: 'icu4j', version: '63.1'
+
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
     compile group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
     compile group: 'com.querydsl', name: 'querydsl-apt', version: "${querydslVersion}"
