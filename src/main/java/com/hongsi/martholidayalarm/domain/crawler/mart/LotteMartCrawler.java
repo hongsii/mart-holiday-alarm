@@ -36,7 +36,7 @@ public class LotteMartCrawler extends AbstractMartCrawler {
 				.flatMap(regionCode -> parseRealId(regionCode).stream())
 				.distinct()
 				.map(this::parseData)
-				.map(super::parse)
+				.map(super::toCrawlerMartData)
 				.collect(toList());
 	}
 

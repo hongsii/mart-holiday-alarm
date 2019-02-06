@@ -26,6 +26,7 @@ public interface Crawlable {
 				.address(getAddress())
 				.openingHours(getOpeningHours())
 				.url(getUrl())
+				.holidayText(getHolidayText())
 				.holidays(getHolidays())
 				.build();
 	}
@@ -39,5 +40,6 @@ public interface Crawlable {
 	String getOpeningHours();
 	String getUrl();
 	Location getLocation();
+	String getHolidayText();
 	List<Holiday> getHolidays();
 }

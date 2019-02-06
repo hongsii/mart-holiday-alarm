@@ -1,7 +1,5 @@
 package com.hongsi.martholidayalarm.domain.crawler;
 
-import static java.util.stream.Collectors.toCollection;
-
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
 import com.hongsi.martholidayalarm.domain.mart.Holiday;
 import com.hongsi.martholidayalarm.domain.mart.Location;
@@ -24,12 +22,13 @@ public class CrawlerMartData {
 	private String openingHours;
 	private String url;
 	private Location location;
+	private String holidayText;
 	private List<Holiday> holidays;
 
 	@Builder
 	public CrawlerMartData(MartType martType, String realId, String branchName, String region,
 			String phoneNumber, String address, String openingHours, String url,
-			Location location, List<Holiday> holidays) {
+			Location location, String holidayText, List<Holiday> holidays) {
 		this.martType = martType;
 		this.realId = realId;
 		this.branchName = branchName;
@@ -39,6 +38,7 @@ public class CrawlerMartData {
 		this.openingHours = openingHours;
 		this.url = url;
 		this.location = location;
+		this.holidayText = holidayText;
 		this.holidays = holidays;
 	}
 
@@ -58,7 +58,8 @@ public class CrawlerMartData {
 				.openingHours(openingHours)
 				.url(url)
 				.location(location)
-				.holidays(holidays.stream().collect(toCollection(TreeSet::new)))
+				.holidayText(holidayText)
+				.holidays(new TreeSet<>(holidays))
 				.build();
 	}
 }

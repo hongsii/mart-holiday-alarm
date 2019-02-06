@@ -11,6 +11,7 @@ public class PhoneValidatorTest {
 		assertValidation("02-1234-4560", true);
 		assertValidation("051-1234-4560", true);
 		assertValidation("051-123-4560", true);
+		assertValidation("+82-1899-9900", true);
 	}
 
 	@Test

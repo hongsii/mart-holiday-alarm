@@ -13,7 +13,6 @@ import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartType;
 import com.hongsi.martholidayalarm.domain.crawler.MartCrawler;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import org.mockito.stubbing.Answer;
 
@@ -41,6 +40,7 @@ public class MartCrawlerTest {
 			assertThat(martData.getPhoneNumber()).isNotBlank();
 			assertThat(martData.getAddress()).isNotBlank();
 			assertThat(martData.getOpeningHours()).isNotBlank();
+			assertThat(martData.getHolidayText()).isNotNull();
 		});
 	}
 
@@ -49,15 +49,8 @@ public class MartCrawlerTest {
 			Constructor<AbstractMartCrawler> constructor = crawlerType.getConstructor(
 					LocationConvertClient.class);
 			return constructor.newInstance(locationConvertClient);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new IllegalArgumentException();
 		}
-		throw new IllegalArgumentException();
 	}
 }

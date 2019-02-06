@@ -10,7 +10,8 @@ public enum MartType {
 	EMART_TRADERS("이마트 트레이더스"),
 	LOTTEMART("롯데마트"),
 	HOMEPLUS("홈플러스"),
-	HOMEPLUS_EXPRESS("홈플러스 익스프레스");
+	HOMEPLUS_EXPRESS("홈플러스 익스프레스"),
+	COSTCO("코스트코");
 
 	private String name;
 

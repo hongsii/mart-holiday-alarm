@@ -11,6 +11,7 @@ import com.hongsi.martholidayalarm.domain.mart.Crawlable;
 import com.hongsi.martholidayalarm.domain.mart.Holiday;
 import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
+import com.hongsi.martholidayalarm.utils.MatchSpliterator;
 import com.hongsi.martholidayalarm.utils.RegionParser;
 import com.hongsi.martholidayalarm.utils.ValidationUtils;
 import java.time.format.DateTimeFormatter;
@@ -20,15 +21,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Setter;
 
+@Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Slf4j
 public class LotteMartData implements Crawlable {
 
 	private static final DateTimeFormatter HOLIDAY_FORMATTER = DateTimeFormatter.ofPattern("M/d");
-	private static final List<Pattern> HOLIDAY_PATTERNS = asList(
-			Pattern.compile("\\d+\\/\\d+"), Pattern.compile("\\d+월\\s?\\d+일"));
+	private static final List<Pattern> HOLIDAY_PATTERNS = asList(Pattern.compile("\\d+\\/\\d+"), Pattern.compile("\\d+월\\s?\\d+일"));
+	private static final Pattern PATTERN_HOLIDAY_BY_ONE = Pattern.compile("(.+\\s{0,}[째|쨰]\\s{0,}.요일)(, {0,}.+\\s{0,}[째|쨰]\\s{0,}.요일)+");
+	private static final Pattern PATTERN_EXCLUDE_HOLIDAY = Pattern.compile("(\\d+\\s{0,}월?\\s{0,}\\/?\\s{0,}\\d+\\s{0,}일?)\\s{0,}(\\(?(.요일|月|火|水|木|金|土|日|월|화|수|목|금|토|일)\\)?)?\\s{0,}정상\\s{0,}영업");
 
 	@JsonProperty("brnchCd")
 	private String realId;
@@ -116,6 +118,11 @@ public class LotteMartData implements Crawlable {
 	}
 
 	@Override
+	public String getHolidayText() {
+		return holidayText;
+	}
+
+	@Override
 	public List<Holiday> getHolidays() {
 		List<Holiday> holidays = HOLIDAY_PATTERNS.stream()
 				.map(pattern -> pattern.matcher(holidayText))
@@ -124,24 +131,55 @@ public class LotteMartData implements Crawlable {
 				.orElseGet(Stream::empty)
 				.filter(Holiday::isUpcoming)
 				.collect(Collectors.toList());
-		if (!holidays.isEmpty()) {
-			return holidays;
+
+		// 정기 휴무일로 날짜 생성
+		if (holidays.isEmpty()) {
+			Matcher holidayMatcher = PATTERN_HOLIDAY_BY_ONE.matcher(getHolidayText());
+			if (holidayMatcher.find()) {
+				for (int i = 1; i <= holidayMatcher.groupCount(); i++) {
+					holidays.addAll(generateRegularHoliday(holidayMatcher.group(i)));
+				}
+			} else {
+				holidays.addAll(generateRegularHoliday(getHolidayText()));
+			}
 		}
 
-		return generateRegularHoliday(holidayText);
+		return excludeHoliday(holidays);
 	}
 
 	private Stream<Holiday> parseHoliday(Matcher matcher) {
 		Stream<Holiday> holidayStream = Stream.empty();
 		while (matcher.find()) {
 			// 포매터가 파싱할 수 있게 문자열 변경
-			String holidayText = matcher.group()
-					.replaceAll("월\\s?", "\\/")
-					.replaceAll("일", "");
+			String holidayText = changeToDateFormat(matcher.group());
 			MonthDayHoliday monthDayHoliday = MonthDayHoliday.of(holidayText, HOLIDAY_FORMATTER);
 			Stream<Holiday> parsedHolidayStream = Stream.of(monthDayHoliday.toHoliday());
 			holidayStream = Stream.concat(holidayStream, parsedHolidayStream);
 		}
 		return holidayStream;
+	}
+
+	// 정상 영업 정보도 휴무일 텍스트에 같이 포함되기 때문에 확인해서 제거
+	public List<Holiday> excludeHoliday(List<Holiday> holidays) {
+		String openHolidayText = MatchSpliterator.from(PATTERN_EXCLUDE_HOLIDAY, holidayText, 1)
+				.stream()
+				.findFirst()
+				.map(this::changeToDateFormat)
+				.orElse("");
+
+		try {
+			Holiday openHoliday = MonthDayHoliday.of(openHolidayText, HOLIDAY_FORMATTER).toHoliday();
+			return holidays.stream()
+					.filter(holiday -> !holiday.equals(openHoliday))
+					.collect(Collectors.toList());
+		} catch (Exception e) {
+			return holidays;
+		}
+	}
+
+	private String changeToDateFormat(String openHolidyText) {
+		return openHolidyText
+				.replaceAll("\\s{0,}월\\s{0,}", "\\/")
+				.replaceAll("\\s{0,}일\\s{0,}", "");
 	}
 }

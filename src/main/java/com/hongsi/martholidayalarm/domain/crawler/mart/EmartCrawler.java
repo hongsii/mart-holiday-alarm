@@ -39,15 +39,13 @@ public class EmartCrawler extends AbstractMartCrawler {
 
 		return martData.stream()
 				.filter(EmartData::isValidTarget)
-				.map(super::parse)
+				.map(super::toCrawlerMartData)
 				.collect(Collectors.toList());
 	}
 
 	public List<EmartData> parseMartData() {
 		JsonNode martInfo = JsonParser.parse(MART_URL);
-		return JsonParser
-				.convert(martInfo.get(MART_DATA_KEY), new TypeReference<List<EmartData>>() {
-				});
+		return JsonParser.convert(martInfo.get(MART_DATA_KEY), new TypeReference<List<EmartData>>() {});
 	}
 
 	private List<EmartHolidayData> parseHolidayDataFromYearMonth() {

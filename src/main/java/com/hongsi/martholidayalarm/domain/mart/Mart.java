@@ -33,7 +33,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @Getter
 @Table(uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"mart_type", "real_id"})
+		@UniqueConstraint(columnNames = {"martType", "realId"})
 })
 @DynamicUpdate
 @ToString
@@ -43,33 +43,36 @@ public class Mart extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "mart_type", nullable = false, updatable = false)
+	@Column(nullable = false, updatable = false)
 	@Enumerated(EnumType.STRING)
 	private MartType martType;
 
-	@Column(name = "real_id", nullable = false, updatable = false)
+	@Column(nullable = false, updatable = false)
 	private String realId;
 
-	@Column(name = "branch_name")
+	@Column
 	private String branchName;
 
-	@Column(name = "region")
+	@Column
 	private String region;
 
-	@Column(name = "phone_number")
+	@Column
 	private String phoneNumber;
 
-	@Column(name = "address")
+	@Column
 	private String address;
 
-	@Column(name = "opening_hours")
+	@Column
 	private String openingHours;
 
-	@Column(name = "url")
+	@Column
 	private String url;
 
 	@Embedded
 	private Location location;
+
+	@Column
+	private String holidayText;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "holiday", joinColumns = @JoinColumn(name = "mart_id", referencedColumnName = "id"))
@@ -81,7 +84,7 @@ public class Mart extends BaseEntity {
 	@Builder
 	public Mart(Long id, MartType martType, String realId, String branchName, String region,
 			String phoneNumber, String address, String openingHours, String url,
-			Location location, SortedSet<Holiday> holidays) {
+			Location location, String holidayText, SortedSet<Holiday> holidays) {
 		this.id = id;
 		this.martType = martType;
 		this.realId = realId;
@@ -92,6 +95,7 @@ public class Mart extends BaseEntity {
 		this.openingHours = openingHours;
 		this.url = url;
 		this.location = location;
+		this.holidayText = holidayText;
 		this.holidays = holidays;
 	}
 
@@ -107,6 +111,7 @@ public class Mart extends BaseEntity {
 		if (isNotBlank(updateMart.openingHours)) openingHours = updateMart.openingHours;
 		if (isNotBlank(updateMart.url)) url = updateMart.url;
 		if (isNotBlank(updateMart.location)) location = updateMart.location;
+		if (isNotBlank(updateMart.holidayText)) holidayText = updateMart.holidayText;
 		this.holidays = updateMart.holidays;
 
 		return this;
