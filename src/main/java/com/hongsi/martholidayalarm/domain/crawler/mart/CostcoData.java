@@ -36,6 +36,7 @@ public class CostcoData implements Crawlable {
 	private static final Pattern PATTERN_HOLIDAY_TEXT = Pattern.compile("(매월.+?)(?=의무 휴무합니다.)");
 	private static final Pattern PATTERN_EXCLUDE_HOLIDAY_TEXT = Pattern.compile("(?=\\d+월)(.+?)(?=\\s+?\\(.요일\\)\\s+?정상영업\\s+?합니다.)");
 	private static final DateTimeFormatter HOLIDAY_FORMATTER = DateTimeFormatter.ofPattern("M d");
+	private static final Pattern PATTERN_HOLIDAY_BY_ONE = Pattern.compile("(.+\\s{0,}[째|쨰]\\s{0,}.요일)(, {0,}.+\\s{0,}[째|쨰]\\s{0,}.요일)+");
 
 	@JsonProperty("name")
 	private String realId;
@@ -60,11 +61,6 @@ public class CostcoData implements Crawlable {
 
 	@JsonIgnore
 	private Location location;
-
-	@JsonIgnore
-	private String holidayText;
-	private static final Pattern PATTERN_HOLIDAY_BY_ONE = Pattern
-			.compile("(.+\\s{0,}[째|쨰]\\s{0,}.요일)(, {0,}.+\\s{0,}[째|쨰]\\s{0,}.요일)+");
 
 	@Override
 	public MartType getMartType() {
@@ -116,22 +112,25 @@ public class CostcoData implements Crawlable {
 	}
 
 	@Override
-	public List<Holiday> getHolidays() {
+	public String getHolidayText() {
 		MatchSpliterator matcher = MatchSpliterator.from(PATTERN_HOLIDAY_TEXT, getUnwrappedStoreContent());
-		String holidayText = matcher.stream()
+		return matcher.stream()
 				.findFirst()
 				.map(String::trim)
 				.orElse("");
+	}
 
+	@Override
+	public List<Holiday> getHolidays() {
 		List<Holiday> holidays = getFixedHolidays(LocalDate.now());
 		// 둘째 수요일, 넷째 일요일 처리
-		Matcher holidayMatcher = PATTERN_HOLIDAY_BY_ONE.matcher(holidayText);
+		Matcher holidayMatcher = PATTERN_HOLIDAY_BY_ONE.matcher(getHolidayText());
 		if (holidayMatcher.find()) {
 			for (int i = 1; i <= holidayMatcher.groupCount(); i++) {
 				holidays.addAll(generateRegularHoliday(holidayMatcher.group(i)));
 			}
 		} else {
-			holidays.addAll(generateRegularHoliday(holidayText));
+			holidays.addAll(generateRegularHoliday(getHolidayText()));
 		}
 		return excludeSpecifiedHoliday(holidays);
 	}

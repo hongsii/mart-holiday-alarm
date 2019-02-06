@@ -101,13 +101,18 @@ public class HomePlusData implements Crawlable {
 	}
 
 	@Override
+	public String getHolidayText() {
+		return page.select(REGULAR_HOLIDAY_SELECTOR).text();
+	}
+
+	@Override
 	public List<Holiday> getHolidays() {
 		List<Holiday> holidays = parseHolidays();
 		if (!holidays.isEmpty()) {
 			return holidays;
 		}
 
-		String regularHolidayPattern = page.select(REGULAR_HOLIDAY_SELECTOR).text();
+		String regularHolidayPattern = getHolidayText();
 		return generateRegularHoliday(regularHolidayPattern);
 	}
 

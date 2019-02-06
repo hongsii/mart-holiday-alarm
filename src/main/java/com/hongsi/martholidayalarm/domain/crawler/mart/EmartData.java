@@ -113,6 +113,12 @@ public class EmartData implements Crawlable {
 	}
 
 	@Override
+	public String getHolidayText() {
+		// 이마트는 휴무일 텍스트가 없음
+		return "";
+	}
+
+	@Override
 	public List<Holiday> getHolidays() {
 		return holidays;
 	}
