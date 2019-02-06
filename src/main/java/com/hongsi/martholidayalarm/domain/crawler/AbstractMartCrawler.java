@@ -12,7 +12,7 @@ public abstract class AbstractMartCrawler implements MartCrawler {
 		this.locationConvertClient = locationConvertClient;
 	}
 
-	public CrawlerMartData parse(Crawlable crawlable) {
+	public CrawlerMartData toCrawlerMartData(Crawlable crawlable) {
 		CrawlerMartData crawlerMartData = crawlable.toData();
 		return setAddressInfoFromExternalApi(crawlerMartData);
 	}

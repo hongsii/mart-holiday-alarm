@@ -3,20 +3,37 @@ package com.hongsi.martholidayalarm.utils;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class MatchSpliterator extends AbstractSpliterator<String> {
 
+	private static final int NOT_USE = -1;
+
 	private final Matcher matcher;
+	private int groupIndex;
 
 	public MatchSpliterator(Matcher matcher) {
+		this(matcher, NOT_USE);
+	}
+
+	public MatchSpliterator(Matcher matcher, int groupIndex) {
 		super(matcher.regionEnd() - matcher.regionStart(), ORDERED | IMMUTABLE);
 		this.matcher = matcher;
+		this.groupIndex = groupIndex;
 	}
 
 	public static MatchSpliterator from(Matcher matcher) {
 		return new MatchSpliterator(matcher);
+	}
+
+	public static MatchSpliterator from(Pattern pattern, String text) {
+		return new MatchSpliterator(pattern.matcher(text));
+	}
+
+	public static MatchSpliterator from(Pattern pattern, String text, int groupIndex) {
+		return new MatchSpliterator(pattern.matcher(text), groupIndex);
 	}
 
 	@Override
@@ -24,7 +41,12 @@ public class MatchSpliterator extends AbstractSpliterator<String> {
 		if (!matcher.find()) {
 			return false;
 		}
-		action.accept(matcher.group());
+
+		if (groupIndex == NOT_USE) {
+			action.accept(matcher.group());
+		} else {
+			action.accept(matcher.group(groupIndex));
+		}
 		return true;
 	}
 

@@ -35,7 +35,7 @@ public class HomePlusCrawler extends AbstractMartCrawler {
 				.map(this::parseMartData)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
-				.map(super::parse)
+				.map(super::toCrawlerMartData)
 				.collect(Collectors.toList());
 	}
 
