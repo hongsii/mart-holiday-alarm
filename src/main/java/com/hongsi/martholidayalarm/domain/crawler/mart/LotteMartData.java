@@ -1,7 +1,5 @@
 package com.hongsi.martholidayalarm.domain.crawler.mart;
 
-import static java.util.Arrays.asList;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +12,8 @@ import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.utils.MatchSpliterator;
 import com.hongsi.martholidayalarm.utils.RegionParser;
 import com.hongsi.martholidayalarm.utils.ValidationUtils;
+import lombok.Setter;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.Setter;
+
+import static java.util.Arrays.asList;
 
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -166,6 +167,10 @@ public class LotteMartData implements Crawlable {
 				.findFirst()
 				.map(this::changeToDateFormat)
 				.orElse("");
+
+		if ("".equals(openHolidayText)) {
+			return holidays;
+		}
 
 		try {
 			Holiday openHoliday = MonthDayHoliday.of(openHolidayText, HOLIDAY_FORMATTER).toHoliday();
