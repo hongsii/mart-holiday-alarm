@@ -2,7 +2,10 @@
 <configuration>
   <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-  <property name="PUSH_LOG_FILE" value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp/mart-logs}}}/push.log"/>
+  <property name="DEFAULT_FILE_DIR" value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp/mart-logs}}}"/>
+
+  <!-- PUSH LOG -->
+  <property name="PUSH_LOG_FILE" value="${DEFAULT_FILE_DIR}/push.log"/>
   <appender name="PUSH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <encoder>
       <pattern>${FILE_LOG_PATTERN}</pattern>
@@ -15,7 +18,6 @@
     </rollingPolicy>
   </appender>
 
-  <!-- PUSH LOG -->
   <logger name="com.hongsi.martholidayalarm.scheduler.PushScheduler" level="info" additivity="false">
     <appender-ref ref="PUSH_FILE" />
   </logger>
@@ -24,5 +26,24 @@
   </logger>
   <logger name="com.hongsi.martholidayalarm.client.firebase" level="info" additivity="false">
     <appender-ref ref="PUSH_FILE" />
+  </logger>
+
+  <!-- API LOG -->
+  <property name="API_LOG_INFO" value="${DEFAULT_FILE_DIR}/api.log"/>
+  <appender name="API_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+    </encoder>
+    <file>${API_LOG_INFO}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${API_LOG_INFO}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <logger name="com.hongsi.martholidayalarm.api.interceptor.ApiLogInterceptor" level="info" additivity="false">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="API_LOG_FILE" />
   </logger>
 </configuration>
