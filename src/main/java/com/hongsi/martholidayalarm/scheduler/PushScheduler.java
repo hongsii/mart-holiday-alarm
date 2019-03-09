@@ -1,24 +1,26 @@
 package com.hongsi.martholidayalarm.scheduler;
 
-import static com.hongsi.martholidayalarm.client.firebase.FirebaseMessageClient.sendTokenMessages;
-
+import com.hongsi.martholidayalarm.constants.ProfileType;
 import com.hongsi.martholidayalarm.domain.mart.Holiday;
 import com.hongsi.martholidayalarm.domain.push.PushMart;
 import com.hongsi.martholidayalarm.domain.push.User;
 import com.hongsi.martholidayalarm.service.FavoriteService;
 import com.hongsi.martholidayalarm.service.MartService;
-import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static com.hongsi.martholidayalarm.client.firebase.FirebaseMessageClient.sendTokenMessages;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Profile({"prod1", "prod2"})
+@Profile({ProfileType.PROD1, ProfileType.PROD2})
 public class PushScheduler {
 
 	private final MartService martService;

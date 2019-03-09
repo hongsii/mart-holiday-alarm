@@ -1,11 +1,11 @@
 spring:
   profiles:
-    active: dev
+    active: test
 
 ---
 
 spring:
-  profiles: dev
+  profiles: test
   output:
     ansi.enabled: always
   jpa:
