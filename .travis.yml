@@ -32,7 +32,7 @@ before_deploy:
   - if [ "$TRAVIS_BRANCH" = "develop" ]; then echo "develop "; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
 
 deploy:
-  # Deploy master branch
+  # Deploy temp branch
   - provider: s3
     access_key_id: "$AWS_ACCESS_KEY"
     secret_access_key: "$AWS_SECRET_KEY"
@@ -43,7 +43,7 @@ deploy:
     wait-until-deployed: true
     on:
       repo: $TRAVIS_REPO_SLUG
-      branch: master
+      branch: develop
   - provider: codedeploy
     access_key_id: "$AWS_ACCESS_KEY"
     secret_access_key: "$AWS_SECRET_KEY"
@@ -56,9 +56,9 @@ deploy:
     wait-until-deployed: true
     on:
       repo: $TRAVIS_REPO_SLUG
-      branch: master
+      branch: develop
 
-  # Deploy develop branch
+  # Deploy master branch
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY2
     secret_access_key: $AWS_SECRET_KEY2
@@ -71,7 +71,7 @@ deploy:
     wait-until-deployed: true
     on:
       repo: $TRAVIS_REPO_SLUG
-      branch: develop
+      branch: master
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY2
     secret_access_key: $AWS_SECRET_KEY2
@@ -84,7 +84,7 @@ deploy:
     wait-until-deployed: true
     on:
       repo: $TRAVIS_REPO_SLUG
-      branch: develop
+      branch: master
 
 notifications:
   email:
