@@ -28,8 +28,8 @@ before_deploy:
   - echo $TRAVIS_BRANCH
 
   # Zip by branch
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then zip -r martholidayalarm *; fi
-  - if [ "$TRAVIS_BRANCH" = "develop" ]; then echo "develop "; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "develop "; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then zip -r martholidayalarm *; fi
 
 deploy:
   # Deploy temp branch
