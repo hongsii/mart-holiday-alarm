@@ -1,38 +1,12 @@
 package com.hongsi.martholidayalarm.api.controller;
 
-import static com.hongsi.martholidayalarm.api.controller.MartApiDocumentDescriptor.getMartFieldDescriptors;
-import static com.hongsi.martholidayalarm.api.controller.MartApiDocumentDescriptor.getSortParameterDescriptor;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.restdocs.snippet.Attributes.key;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.hongsi.martholidayalarm.api.docs.CommonApiDocumentConfigure;
-import com.hongsi.martholidayalarm.domain.mart.Holiday;
-import com.hongsi.martholidayalarm.domain.mart.Location;
-import com.hongsi.martholidayalarm.domain.mart.Mart;
-import com.hongsi.martholidayalarm.domain.mart.MartTest;
-import com.hongsi.martholidayalarm.domain.mart.MartType;
+import com.hongsi.martholidayalarm.domain.mart.*;
 import com.hongsi.martholidayalarm.service.MartService;
 import com.hongsi.martholidayalarm.service.dto.mart.LocationDto;
 import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
 import com.hongsi.martholidayalarm.service.dto.mart.MartDto.Response;
 import com.hongsi.martholidayalarm.service.dto.mart.MartTypeDto;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.TreeSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +18,27 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.TreeSet;
+
+import static com.hongsi.martholidayalarm.api.controller.MartApiDocumentDescriptor.getMartFieldDescriptors;
+import static com.hongsi.martholidayalarm.api.controller.MartApiDocumentDescriptor.getSortParameterDescriptor;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(MartApiController.class)
@@ -58,7 +53,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 	@Test
 	public void 전체_마트_조회() throws Exception {
 		List<MartDto.Response> response = MartTest.newMartsResponse;
-		given(martService.findMarts(any())).willReturn(response);
+		given(martService.findAll(any())).willReturn(response);
 
 		ResultActions result = mockMvc.perform(
 				get("/api/marts")
@@ -79,7 +74,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 	@Test
 	public void 아이디로_다수_마트_조회() throws Exception {
 		List<MartDto.Response> response = MartTest.newMartsResponse;
-		given(martService.findMartsById(new LinkedHashSet<>(asList(1L, 5L)), Sort.by("id")))
+		given(martService.findAllById(new LinkedHashSet<>(asList(1L, 5L)), Sort.by("id")))
 				.willReturn(response);
 
 		ResultActions result = mockMvc.perform(
@@ -121,7 +116,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 				)
 		);
 
-		given(martService.findMartsByLocation(any(LocationDto.Request.class))).willReturn(response);
+		given(martService.findAllByLocation(any(LocationDto.Request.class))).willReturn(response);
 		ResultActions result = mockMvc.perform(
 				get("/api/marts?latitude=37.460000&longitude=127.118000&distance=3")
 						.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -161,7 +156,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 						.build()
 		);
 
-		when(martService.findMartById(1L)).thenReturn(response);
+		when(martService.findById(1L)).thenReturn(response);
 		ResultActions result = mockMvc.perform(
 				get("/api/marts/{id}", 1L)
 						.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -203,7 +198,7 @@ public class MartApiControllerTest extends CommonApiDocumentConfigure {
 	@Test
 	public void 마트타입으로_리스트_요청() throws Exception {
 		List<MartDto.Response> response = MartTest.newMartsResponse;
-		given(martService.findMartsByMartType(any(MartType.class), any(Sort.class)))
+		given(martService.findAllByMartType(any(MartType.class), any(Sort.class)))
 				.willReturn(response);
 
 		ResultActions result = mockMvc.perform(

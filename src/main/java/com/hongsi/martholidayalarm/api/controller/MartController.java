@@ -5,26 +5,19 @@ import com.hongsi.martholidayalarm.domain.mart.MartOrder.Property;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.service.MartService;
 import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Deprecated
 @RestController
@@ -45,10 +38,10 @@ public class MartController {
 	public ResponseEntity<?> getMarts(
 			@PathVariable("mart_type") @Valid MartType martType) {
 		List<MartDto.Response> marts = martService
-				.findMartsByMartType(martType, defaultSort());
+				.findAllByMartType(martType, defaultSort());
 		if (martType == MartType.EMART) {
 			marts.addAll(martService
-					.findMartsByMartType(MartType.EMART_TRADERS, defaultSort()));
+					.findAllByMartType(MartType.EMART_TRADERS, defaultSort()));
 		}
 		return new ResponseEntity<>(marts.stream()
 				.map(MartDto.Response::toTempResponse)
@@ -64,7 +57,7 @@ public class MartController {
 	@GetMapping(value = "/branch/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getBranches(
 			@PathVariable("ids") @Valid Set<Long> ids) {
-		List<MartDto.Response> marts = martService.findMartsById(ids, defaultSort());
+		List<MartDto.Response> marts = martService.findAllById(ids, defaultSort());
 		return new ResponseEntity<>(marts.stream()
 				.map(MartDto.Response::toTempResponse)
 				.collect(Collectors.toList()), HttpStatus.OK);

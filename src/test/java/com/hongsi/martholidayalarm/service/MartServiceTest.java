@@ -59,7 +59,7 @@ public class MartServiceTest {
 		when(martRepository.findById(newMart.getId()))
 				.thenReturn(Optional.of(newMart));
 
-		MartDto.Response savedMart = martService.findMartById(newMart.getId());
+		MartDto.Response savedMart = martService.findById(newMart.getId());
 
 		assertThat(savedMart.getId()).isEqualTo(newMart.getId());
 	}
