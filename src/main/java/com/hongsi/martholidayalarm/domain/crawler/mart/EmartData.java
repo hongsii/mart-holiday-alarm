@@ -1,8 +1,5 @@
 package com.hongsi.martholidayalarm.domain.crawler.mart;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,11 +10,17 @@ import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.utils.RegionParser;
 import com.hongsi.martholidayalarm.utils.ValidationUtils;
+import lombok.Builder;
+import lombok.Setter;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import lombok.Setter;
 
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+
+@Builder
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EmartData implements Crawlable {
@@ -72,6 +75,9 @@ public class EmartData implements Crawlable {
 
 	@Override
 	public String getBranchName() {
+		if (getMartType() == MartType.EMART_TRADERS) {
+		    return branchName.replaceAll("트레이더스 ", "");
+		}
 		return branchName;
 	}
 
