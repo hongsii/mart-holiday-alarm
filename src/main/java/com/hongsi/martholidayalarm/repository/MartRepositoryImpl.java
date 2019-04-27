@@ -1,37 +1,30 @@
 package com.hongsi.martholidayalarm.repository;
 
-import static com.querydsl.core.types.dsl.MathExpressions.acos;
-import static com.querydsl.core.types.dsl.MathExpressions.cos;
-import static com.querydsl.core.types.dsl.MathExpressions.radians;
-import static com.querydsl.core.types.dsl.MathExpressions.sin;
-
-import com.hongsi.martholidayalarm.domain.mart.Holiday;
-import com.hongsi.martholidayalarm.domain.mart.Location;
-import com.hongsi.martholidayalarm.domain.mart.Mart;
-import com.hongsi.martholidayalarm.domain.mart.MartType;
-import com.hongsi.martholidayalarm.domain.mart.QHoliday;
-import com.hongsi.martholidayalarm.domain.mart.QMart;
-import com.hongsi.martholidayalarm.domain.push.PushMart;
+import com.hongsi.martholidayalarm.domain.mart.*;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
+
+import static com.querydsl.core.types.dsl.MathExpressions.*;
 
 @AllArgsConstructor
 public class MartRepositoryImpl implements MartRepositoryCustom {
 
 	private final JPAQueryFactory jpaQueryFactory;
+	private final QMart mart = QMart.mart;
+	private final QHoliday holiday = QHoliday.holiday;
 
 	public static OrderSpecifier[] createOrderSpecifier(Sort sort) {
 		PathBuilder orderByExpression = new PathBuilder(Mart.class, "mart");
@@ -44,94 +37,28 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 	}
 
 	@Override
-	public List<Mart> findMarts(Sort sort) {
-		return queryMartFetchHoliday(sort)
+	public List<Mart> findAllWithHoliday(Sort sort) {
+		return selectLeftJoinHoliday(sort)
 				.fetch();
 	}
 
 	@Override
-	public List<Mart> findMartsById(Collection<Long> ids, Sort sort) {
-		final QMart mart = QMart.mart;
-		return queryMartFetchHoliday(sort)
+	public List<Mart> findAllWithHolidayById(Collection<Long> ids, Sort sort) {
+		return selectLeftJoinHoliday(sort)
 				.where(mart.id.in(ids))
 				.fetch();
 	}
 
 	@Override
-	public List<Mart> findMartsByMartType(MartType martType, Sort sort) {
-		final QMart mart = QMart.mart;
-		return queryMartFetchHoliday(sort)
-				.where(mart.martType.eq(martType))
+	public List<Mart> findAllByHolidayInnerJoinHoliday(Holiday condition) {
+		return selectInnerJoinHoliday()
+				.where(holiday.date.eq(condition.getDate()))
 				.fetch();
 	}
 
 	@Override
-	public List<MartType> findMartTypesByGrouping() {
-		final QMart mart = QMart.mart;
-		return jpaQueryFactory.query()
-				.select(mart.martType)
-				.from(mart)
-				.groupBy(mart.martType)
-				.orderBy(mart.martType.asc())
-				.fetch();
-	}
-
-	@Override
-	public List<String> findRegionsByMartType(MartType martType) {
-		final QMart mart = QMart.mart;
-		return jpaQueryFactory.query()
-				.select(mart.region)
-				.from(mart)
-				.where(mart.martType.eq(martType))
-				.groupBy(mart.martType, mart.region)
-				.orderBy(mart.region.asc())
-				.fetch();
-	}
-
-	@Override
-	public List<String> findBranchNamesByMartTypeAndRegion(MartType martType, String region) {
-		final QMart mart = QMart.mart;
-		return jpaQueryFactory.query()
-				.select(mart.branchName)
-				.from(mart)
-				.where(mart.martType.eq(martType)
-						.and(mart.region.eq(region)))
-				.groupBy(mart.martType, mart.branchName)
-				.orderBy(mart.branchName.asc())
-				.fetch();
-	}
-
-	@Override
-	public List<PushMart> findPushMartsByHoliday(Holiday targetHoliday) {
-		final QMart mart = QMart.mart;
-		final QHoliday holiday = QHoliday.holiday;
-		return jpaQueryFactory
-				.select(Projections
-						.constructor(PushMart.class, mart.id, mart.martType, mart.branchName,
-								holiday))
-				.from(mart)
-				.innerJoin(mart.holidays, holiday)
-				.where(holiday.date.eq(targetHoliday.getDate()))
-				.fetch();
-	}
-
-	@Override
-	public List<Mart> findMartsByLocation(Location location, int withinDistance) {
-		final QMart mart = QMart.mart;
-		NumberPath<Double> latitude = mart.location.latitude;
-		NumberPath<Double> longitude = mart.location.longitude;
-		Expression<Double> currentLatitude = Expressions.constant(location.getLatitude());
-		Expression<Double> currentLongitude = Expressions.constant(location.getLongitude());
-		NumberExpression<Double> distanceFormula =
-				acos(cos(radians(currentLatitude))
-						.multiply(cos(radians(latitude)))
-						.multiply(cos(radians(longitude)
-								.subtract(radians(currentLongitude))))
-						.add(sin(radians(currentLatitude))
-								.multiply(sin(radians(latitude)))
-						)
-				)
-						.multiply(Expressions.constant(6371));
+	public List<Mart> findAllByLocation(Location location, int withinDistance) {
+		NumberExpression<Double> distanceFormula = makeDistanceFormulaFromLocation(location);
 		NumberPath<Double> distance = Expressions.numberPath(Double.class, "distance");
 
 		List<Tuple> list = fromLeftJoinFetchHoliday()
@@ -149,21 +76,82 @@ public class MartRepositoryImpl implements MartRepositoryCustom {
 				.collect(Collectors.toList());
 	}
 
-	private JPAQuery<Mart> queryMartFetchHoliday(Sort sort) {
-		return queryMartFetchHoliday()
+	private NumberExpression<Double> makeDistanceFormulaFromLocation(Location location) {
+		Expression<Double> currentLatitude = Expressions.constant(location.getLatitude());
+		Expression<Double> currentLongitude = Expressions.constant(location.getLongitude());
+		final Expression<Integer> TO_KILOMETER = Expressions.constant(6371);
+		return acos(
+				cos(radians(currentLatitude))
+						.multiply(cos(radians(mart.location.latitude)))
+						.multiply(cos(radians(mart.location.longitude)
+								.subtract(radians(currentLongitude)))
+						)
+						.add(sin(radians(currentLatitude))
+								.multiply(sin(radians(mart.location.latitude)))
+						)
+		)
+				.multiply(TO_KILOMETER);
+	}
+
+
+	@Override
+	public List<Mart> findAllByMartType(MartType martType, Sort sort) {
+		return selectLeftJoinHoliday(sort)
+				.where(mart.martType.eq(martType))
+				.fetch();
+	}
+
+	@Override
+	public List<MartType> findMartTypes() {
+		return jpaQueryFactory.query()
+				.select(mart.martType)
+				.from(mart)
+				.groupBy(mart.martType)
+				.orderBy(mart.martType.asc())
+				.fetch();
+	}
+
+	@Override
+	public List<String> findRegionsByMartType(MartType martType) {
+		return jpaQueryFactory.query()
+				.select(mart.region)
+				.from(mart)
+				.where(mart.martType.eq(martType))
+				.groupBy(mart.martType, mart.region)
+				.orderBy(mart.region.asc())
+				.fetch();
+	}
+
+	@Override
+	public List<String> findBranchNamesByMartTypeAndRegion(MartType martType, String region) {
+		return jpaQueryFactory.query()
+				.select(mart.branchName)
+				.from(mart)
+				.where(mart.martType.eq(martType)
+						.and(mart.region.eq(region)))
+				.groupBy(mart.martType, mart.branchName)
+				.orderBy(mart.branchName.asc())
+				.fetch();
+	}
+
+	private JPAQuery<Mart> selectLeftJoinHoliday(Sort sort) {
+		return selectLeftJoinHoliday()
 				.orderBy(createOrderSpecifier(sort));
 	}
 
-	private JPAQuery<Mart> queryMartFetchHoliday() {
-		final QMart mart = QMart.mart;
+	private JPAQuery<Mart> selectInnerJoinHoliday() {
+		return jpaQueryFactory
+				.selectFrom(mart).innerJoin(mart.holidays, holiday)
+				.fetchJoin()
+				.distinct();
+	}
+
+	private JPAQuery<Mart> selectLeftJoinHoliday() {
 		return fromLeftJoinFetchHoliday()
 				.select(mart);
-
 	}
 
 	private JPAQuery<?> fromLeftJoinFetchHoliday() {
-		final QMart mart = QMart.mart;
-		final QHoliday holiday = QHoliday.holiday;
 		return jpaQueryFactory.from(mart).leftJoin(mart.holidays, holiday)
 				.fetchJoin()
 				.distinct();

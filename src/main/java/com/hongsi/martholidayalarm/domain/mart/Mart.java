@@ -1,33 +1,19 @@
 package com.hongsi.martholidayalarm.domain.mart;
 
-import static com.hongsi.martholidayalarm.utils.ValidationUtils.isNotBlank;
-
 import com.hongsi.martholidayalarm.exception.CannotChangeException;
-import java.util.Objects;
-import java.util.SortedSet;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.SortNatural;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Objects;
+import java.util.SortedSet;
+
+import static com.hongsi.martholidayalarm.utils.ValidationUtils.isNotBlank;
 
 @Entity
 @NoArgsConstructor
@@ -119,6 +105,10 @@ public class Mart extends BaseEntity {
 
 	public Holidays getHolidays() {
 		return Holidays.of(holidays);
+	}
+
+	public Holiday getUpcomingHoliday() {
+		return holidays.first();
 	}
 
 	@Override

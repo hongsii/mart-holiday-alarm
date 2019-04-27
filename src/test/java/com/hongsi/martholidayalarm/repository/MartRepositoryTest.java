@@ -1,17 +1,7 @@
 package com.hongsi.martholidayalarm.repository;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.hongsi.martholidayalarm.config.JPAConfig;
-import com.hongsi.martholidayalarm.domain.mart.Holiday;
-import com.hongsi.martholidayalarm.domain.mart.Location;
-import com.hongsi.martholidayalarm.domain.mart.Mart;
-import com.hongsi.martholidayalarm.domain.mart.MartTest;
-import com.hongsi.martholidayalarm.domain.mart.MartType;
-import com.hongsi.martholidayalarm.domain.push.PushMart;
-import java.time.LocalDate;
-import java.util.List;
+import com.hongsi.martholidayalarm.domain.mart.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +10,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -30,8 +26,8 @@ public class MartRepositoryTest {
 	private MartRepository martRepository;
 
 	@Before
-	public void setUp() {
-		martRepository.deleteAll();
+	public void setUp() throws Exception {
+        martRepository.deleteAll();
 	}
 
 	@Test
@@ -42,15 +38,15 @@ public class MartRepositoryTest {
 				.build();
 		martRepository.save(newMart1);
 
-		Mart newMart = Mart.builder()
+		Mart newMart2 = Mart.builder()
 				.martType(MartType.LOTTEMART)
 				.realId(newMart1.getRealId())
 				.build();
-		martRepository.save(newMart);
+		martRepository.save(newMart2);
 
 		assertThat(martRepository.findAll())
 				.hasSize(2)
-				.contains(newMart);
+				.contains(newMart2);
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
@@ -61,28 +57,33 @@ public class MartRepositoryTest {
 				.build();
 		martRepository.save(savedMart);
 
-		Mart newMart = Mart.builder()
+		martRepository.save(Mart.builder()
 				.martType(savedMart.getMartType())
 				.realId(savedMart.getRealId())
-				.build();
-		martRepository.save(newMart);
+				.build());
 	}
 
 	@Test
 	public void 휴일로_마트_조회() {
 		LocalDate now = LocalDate.now().plusDays(1);
 		Holiday parameter = Holiday.of(now);
-		Mart savedMart = Mart.builder()
-				.id(1L)
+		Mart expected = Mart.builder()
 				.martType(MartType.EMART)
 				.realId("1")
 				.branchName("foo점")
 				.holidays(MartTest.createHolidays(parameter, Holiday.of(now.plusDays(5))))
 				.build();
-		martRepository.save(savedMart);
+		martRepository.save(expected);
+		martRepository.save(Mart.builder()
+				.martType(MartType.EMART)
+				.realId("2")
+				.branchName("foo2점")
+				.holidays(MartTest.createHolidays(Holiday.of(now.plusDays(10))))
+				.build());
 
-		assertThat(martRepository.findPushMartsByHoliday(parameter))
-				.containsOnly(new PushMart(1L, MartType.EMART, "foo점", parameter));
+		List<Mart> marts = martRepository.findAllByHolidayInnerJoinHoliday(parameter);
+
+		assertThat(marts).containsOnly(expected);
 	}
 
 	@Test
@@ -106,7 +107,7 @@ public class MartRepositoryTest {
 		);
 		martRepository.saveAll(savedMarts);
 
-		List<Mart> marts = martRepository.findMartsByLocation(
+		List<Mart> marts = martRepository.findAllByLocation(
 				Location.of(36.100000, 127.000000), 5
 		);
 

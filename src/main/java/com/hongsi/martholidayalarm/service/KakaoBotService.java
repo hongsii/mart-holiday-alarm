@@ -9,12 +9,13 @@ import com.hongsi.martholidayalarm.service.dto.bot.kakao.Keyboard;
 import com.hongsi.martholidayalarm.service.dto.bot.kakao.Message;
 import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
 import com.hongsi.martholidayalarm.service.dto.mart.MartTypeDto;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -42,7 +43,7 @@ public class KakaoBotService {
 			MartType martType = MartType
 					.of(userRequest.getBeforeRequest(Button.MARTTYPE));
 			String branchName = userRequest.getBeforeRequest(Button.BRANCH);
-			MartDto.Response mart = martService.findMartByMartTypeAndBranchName(martType, branchName);
+			MartDto.Response mart = martService.findByMartTypeAndBranchName(martType, branchName);
 			return new Message(mart);
 		}
 		return new Message(selectedButton.getMessage());

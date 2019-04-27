@@ -10,20 +10,15 @@ import com.hongsi.martholidayalarm.service.MartService;
 import com.hongsi.martholidayalarm.service.dto.mart.LocationDto;
 import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
 import com.hongsi.martholidayalarm.service.dto.mart.MartOrderDto;
-import java.util.List;
-import java.util.Set;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/marts")
@@ -37,7 +32,7 @@ public class MartApiController {
 			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters) {
 		Order[] defaultOrders = new Order[]{ Property.martType.asc(), Property.branchName.asc() };
 		Sort sort = MartSortBuilder.parseSort(orderParameters, defaultOrders);
-		return ApiResponse.ok(martService.findMarts(sort));
+		return ApiResponse.ok(martService.findAll(sort));
 	}
 
 	@GetMapping(params = "ids")
@@ -45,12 +40,12 @@ public class MartApiController {
 			@RequestParam(name = "ids") Set<Long> ids,
 			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters) {
 		Sort sort = MartSortBuilder.parseSort(orderParameters, Property.id.asc());
-		return ApiResponse.ok(martService.findMartsById(ids, sort));
+		return ApiResponse.ok(martService.findAllById(ids, sort));
 	}
 
 	@GetMapping(params = {"latitude", "longitude"})
 	public ApiResponse<?> getMartsByLocation(@Valid @ModelAttribute LocationDto.Request request) {
-		return ApiResponse.ok(martService.findMartsByLocation(request));
+		return ApiResponse.ok(martService.findAllByLocation(request));
 	}
 
 	@GetMapping(params = "latitude")
@@ -65,7 +60,7 @@ public class MartApiController {
 
 	@GetMapping(value = "/{id}")
 	public ApiResponse<?> getMartsById(@PathVariable Long id) {
-		return ApiResponse.ok(martService.findMartById(id));
+		return ApiResponse.ok(martService.findById(id));
 	}
 
 	@GetMapping(value = "/types")
@@ -78,7 +73,7 @@ public class MartApiController {
 			@PathVariable @Valid MartType martType,
 			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters) {
 		Sort sort = MartSortBuilder.parseSort(orderParameters, Property.branchName.asc());
-		List<MartDto.Response> marts = martService.findMartsByMartType(martType, sort);
+		List<MartDto.Response> marts = martService.findAllByMartType(martType, sort);
 		return ApiResponse.ok(marts);
 	}
 
