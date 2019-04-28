@@ -21,6 +21,7 @@ env:
     - AWS_REGION=${AWS_REGION_VARIABLE:-$AWS_REGION_DEFAULT}
     - DEPLOY_DIR=${DEPLOY_DIR_VARIABLE:-$DEPLOY_DIR_DEFAULT}
     - APP_NAME=mart-holiday-alarm
+    - DEPLOYMENT_GROUP=$APP_NAME-group
 
 before_deploy:
   # Print build info
@@ -28,16 +29,18 @@ before_deploy:
   - echo $TRAVIS_BRANCH
 
   # Zip by branch
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "develop "; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
-  - if [ "$TRAVIS_BRANCH" = "develop" ]; then zip -r martholidayalarm *; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "master"; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then echo "develop "; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
 
 deploy:
-  # Deploy temp branch
+  # develop branch
   - provider: s3
-    access_key_id: "$AWS_ACCESS_KEY"
-    secret_access_key: "$AWS_SECRET_KEY"
-    bucket: martholidayalarm-deploy
+    access_key_id: "$AWS_ACCESS_KEY_DEV"
+    secret_access_key: "$AWS_SECRET_KEY_DEV"
     region: $AWS_REGION
+    bucket: ${APP_NAME}-dev
+    local_dir: $DEPLOY_DIR
+    upload_dir: $DEPLOY_DIR
     skip_cleanup: true
     acl: public_read
     wait-until-deployed: true
@@ -45,20 +48,20 @@ deploy:
       repo: $TRAVIS_REPO_SLUG
       branch: develop
   - provider: codedeploy
-    access_key_id: "$AWS_ACCESS_KEY"
-    secret_access_key: "$AWS_SECRET_KEY"
-    bucket: martholidayalarm-deploy
-    key: martholidayalarm.zip
-    bundle_type: zip
-    application: martholidayalarm
-    deployment_group: martholidayalarm-group
+    access_key_id: "$AWS_ACCESS_KEY_DEV"
+    secret_access_key: "$AWS_SECRET_KEY_DEV"
     region: $AWS_REGION
+    bucket: ${APP_NAME}-dev
+    key: $DEPLOY_DIR/$APP_NAME.zip
+    bundle_type: zip
+    application: $APP_NAME
+    deployment_group: $DEPLOYMENT_GROUP
     wait-until-deployed: true
     on:
       repo: $TRAVIS_REPO_SLUG
       branch: develop
 
-  # Deploy master branch
+  # master branch
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY2
     secret_access_key: $AWS_SECRET_KEY2

@@ -1,7 +1,6 @@
 package com.hongsi.martholidayalarm.scheduler.aspect;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -30,19 +29,5 @@ public class PushLoggingAspect {
 		log.info(stopWatch.prettyPrint());
 		log.info("============ End Push (total : {}) ============",
 				stopWatch.getTotalTimeSeconds());
-	}
-
-	@Before("execution(* com.hongsi.martholidayalarm.mobile.push.service.*.*())"
-			+ "|| execution(* com.hongsi.martholidayalarm.service.MartService.findPushMartsByHoliday(*))")
-	public void beforeRun(JoinPoint joinPoint) {
-		log.info("============ Start {} ============", joinPoint.toShortString());
-		stopWatch.start(joinPoint.toShortString());
-	}
-
-	@After("execution(* com.hongsi.martholidayalarm.mobile.push.service.*.*())"
-			+ "|| execution(* com.hongsi.martholidayalarm.service.MartService.findPushMartsByHoliday(*))")
-	public void afterRun(JoinPoint joinPoint) {
-		stopWatch.stop();
-		log.info("============ End {} ============", joinPoint.toShortString());
 	}
 }

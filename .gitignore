@@ -4,6 +4,7 @@
 !gradle/wrapper/gradle-wrapper.jar
 /out
 /src/main/generated/
+/logs
 
 ### STS ###
 .apt_generated

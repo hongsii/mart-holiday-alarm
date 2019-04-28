@@ -1,13 +1,13 @@
 package com.hongsi.martholidayalarm.repository;
 
-import static com.hongsi.martholidayalarm.repository.MartRepositoryImpl.createOrderSpecifier;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.hongsi.martholidayalarm.domain.mart.QMart;
 import com.querydsl.core.types.OrderSpecifier;
 import org.junit.Test;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+
+import static com.hongsi.martholidayalarm.repository.MartRepositoryImpl.createOrderSpecifier;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MartRepositoryImplTest {
 

@@ -13,6 +13,18 @@ spring:
 ---
 
 spring:
+  profiles: local
+  output:
+    ansi.enabled: always
+  datasource:
+    url: jdbc:mariadb://localhost:3306/martholidayalarm
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+
+---
+
+spring:
   profiles: dev
   output:
     ansi.enabled: always
@@ -23,7 +35,7 @@ spring:
 ---
 
 spring:
-  profiles: prod1
+  profiles: prod1,dev1
 
 server:
   port: 8081
@@ -31,23 +43,7 @@ server:
 ---
 
 spring:
-  profiles: prod2
-
-server:
-  port: 8082
-
----
-
-spring:
-  profiles: beta1
-
-server:
-  port: 8081
-
----
-
-spring:
-  profiles: beta2
+  profiles: prod2,dev2
 
 server:
   port: 8082
