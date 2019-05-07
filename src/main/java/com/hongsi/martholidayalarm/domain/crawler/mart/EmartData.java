@@ -10,7 +10,9 @@ import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.utils.RegionParser;
 import com.hongsi.martholidayalarm.utils.ValidationUtils;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Arrays;
@@ -20,6 +22,8 @@ import java.util.Objects;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
