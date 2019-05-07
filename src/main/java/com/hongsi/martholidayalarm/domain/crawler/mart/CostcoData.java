@@ -1,7 +1,5 @@
 package com.hongsi.martholidayalarm.domain.crawler.mart;
 
-import static java.util.Arrays.asList;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +12,11 @@ import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.utils.MatchSpliterator;
 import com.hongsi.martholidayalarm.utils.RegionParser;
+import lombok.Setter;
+import lombok.ToString;
+import org.jsoup.Jsoup;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -23,9 +26,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import lombok.Setter;
-import lombok.ToString;
-import org.jsoup.Jsoup;
+
+import static java.util.Arrays.asList;
 
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -84,7 +86,7 @@ public class CostcoData implements Crawlable {
 
 	@Override
 	public String getPhoneNumber() {
-		return phone;
+		return StringUtils.isEmpty(phone) ? "1899-9900" : phone;
 	}
 
 	@Override
