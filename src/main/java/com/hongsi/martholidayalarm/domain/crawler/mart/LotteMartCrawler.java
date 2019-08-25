@@ -1,7 +1,5 @@
 package com.hongsi.martholidayalarm.domain.crawler.mart;
 
-import static java.util.stream.Collectors.toList;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClient;
 import com.hongsi.martholidayalarm.domain.crawler.AbstractMartCrawler;
@@ -9,9 +7,13 @@ import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
 import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartType;
 import com.hongsi.martholidayalarm.utils.HtmlParser;
 import com.hongsi.martholidayalarm.utils.JsonParser;
-import java.util.List;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class LotteMartCrawler extends AbstractMartCrawler {
@@ -36,6 +38,7 @@ public class LotteMartCrawler extends AbstractMartCrawler {
 				.flatMap(regionCode -> parseRealId(regionCode).stream())
 				.distinct()
 				.map(this::parseData)
+                .filter(Objects::nonNull)
 				.map(super::toCrawlerMartData)
 				.collect(toList());
 	}
