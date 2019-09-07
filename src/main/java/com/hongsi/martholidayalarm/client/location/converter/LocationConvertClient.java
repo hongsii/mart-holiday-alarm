@@ -1,9 +1,9 @@
 package com.hongsi.martholidayalarm.client.location.converter;
 
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
+import com.hongsi.martholidayalarm.domain.crawler.CrawledMart;
 
 public interface LocationConvertClient {
 
-	LocationConvertResult convert(CrawlerMartData crawlerMartData);
+	LocationConvertResult convert(CrawledMart crawledMart);
 }

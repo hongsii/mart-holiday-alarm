@@ -1,10 +1,9 @@
 package com.hongsi.martholidayalarm.domain.crawler.mart;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClient;
-import com.hongsi.martholidayalarm.domain.crawler.AbstractMartCrawler;
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
 import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartType;
+import com.hongsi.martholidayalarm.domain.crawler.MartCrawler;
+import com.hongsi.martholidayalarm.domain.mart.Crawlable;
 import com.hongsi.martholidayalarm.utils.HtmlParser;
 import com.hongsi.martholidayalarm.utils.JsonParser;
 import org.jsoup.nodes.Element;
@@ -16,7 +15,7 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class LotteMartCrawler extends AbstractMartCrawler {
+public class LotteMartCrawler implements MartCrawler {
 
 	private static final String REGION_URL = CrawlerMartType.LOTTEMART
 			.appendUrl("/bc/branch/holidaystore.do?SITELOC=DC009");
@@ -28,18 +27,13 @@ public class LotteMartCrawler extends AbstractMartCrawler {
 	private static final String REAL_ID_KEY = "brnchCd";
 	private static final String DATA_KEY = "data";
 
-	public LotteMartCrawler(LocationConvertClient locationConvertClient) {
-		super(locationConvertClient);
-	}
-
 	@Override
-	public List<CrawlerMartData> crawl() {
+	public List<Crawlable> crawl() {
 		return parseRegionCode().stream()
 				.flatMap(regionCode -> parseRealId(regionCode).stream())
 				.distinct()
 				.map(this::parseData)
                 .filter(Objects::nonNull)
-				.map(super::toCrawlerMartData)
 				.collect(toList());
 	}
 

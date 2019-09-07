@@ -1,7 +1,7 @@
 package com.hongsi.martholidayalarm.client.location.converter;
 
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
+import com.hongsi.martholidayalarm.domain.crawler.CrawledMart;
 import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import org.junit.Before;
@@ -54,11 +54,11 @@ public class KakaoLocationConvertClientTest {
 		mockRestServiceServer.expect(requestTo(getRequestUri(searchUrl, "홈플러스 익스프레스 잠실점")))
 				.andRespond(withSuccess(expected, MediaType.APPLICATION_JSON_UTF8));
 
-		CrawlerMartData crawlerMartData = CrawlerMartData.builder()
+		CrawledMart crawledMart = CrawledMart.builder()
 				.martType(MartType.HOMEPLUS_EXPRESS)
 				.branchName("잠실점")
 				.build();
-		LocationConvertResult response = locationConvertClient.convert(crawlerMartData);
+		LocationConvertResult response = locationConvertClient.convert(crawledMart);
 
 		assertThat(response.getLocation()).isEqualTo(Location.of(37.507577456249656, 127.09182075113635));
 	}
@@ -72,12 +72,12 @@ public class KakaoLocationConvertClientTest {
 		mockRestServiceServer.expect(ExpectedCount.times(1), requestTo(getRequestUri(addressUrl, "서울시 구로구 우리집")))
 				.andRespond(withSuccess(expected, MediaType.APPLICATION_JSON_UTF8));
 
-		CrawlerMartData crawlerMartData = CrawlerMartData.builder()
+		CrawledMart crawledMart = CrawledMart.builder()
 				.martType(MartType.HOMEPLUS_EXPRESS)
 				.branchName("없는 마트")
 				.address("서울시 구로구 우리집")
 				.build();
-		LocationConvertResult response = locationConvertClient.convert(crawlerMartData);
+		LocationConvertResult response = locationConvertClient.convert(crawledMart);
 
 		assertThat(response.getLocation()).isEqualTo(Location.of(37.507577456249656, 127.09182075113635));
 	}
@@ -90,12 +90,12 @@ public class KakaoLocationConvertClientTest {
 		mockRestServiceServer.expect(requestTo(getRequestUri(addressUrl, "서울시 구로구 우리집")))
 				.andRespond(withSuccess(expected, MediaType.APPLICATION_JSON_UTF8));
 
-		CrawlerMartData crawlerMartData = CrawlerMartData.builder()
+		CrawledMart crawledMart = CrawledMart.builder()
 				.martType(MartType.HOMEPLUS_EXPRESS)
 				.branchName("없는 마트")
 				.address("서울시 구로구 우리집")
 				.build();
-		LocationConvertResult response = locationConvertClient.convert(crawlerMartData);
+		LocationConvertResult response = locationConvertClient.convert(crawledMart);
 
 		assertThat(response).isEqualTo(new LocationConvertResult());
 	}

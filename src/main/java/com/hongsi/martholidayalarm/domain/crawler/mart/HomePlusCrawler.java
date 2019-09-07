@@ -1,41 +1,36 @@
 package com.hongsi.martholidayalarm.domain.crawler.mart;
 
-import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClient;
-import com.hongsi.martholidayalarm.domain.crawler.AbstractMartCrawler;
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
 import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartType;
+import com.hongsi.martholidayalarm.domain.crawler.MartCrawler;
+import com.hongsi.martholidayalarm.domain.mart.Crawlable;
 import com.hongsi.martholidayalarm.exception.PageNotFoundException;
 import com.hongsi.martholidayalarm.utils.HtmlParser;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class HomePlusCrawler extends AbstractMartCrawler {
+public class HomePlusCrawler implements MartCrawler {
 
 	private static final String LIST_URL = CrawlerMartType.HOMEPLUS
 			.appendUrl("/STORE/HyperMarket.aspx");
 	private static final String MART_LINK_SELECTOR = ".type > .name > a";
 	private static final String MART_LINK_ATTR_KEY = "href";
 
-	public HomePlusCrawler(LocationConvertClient locationConvertClient) {
-		super(locationConvertClient);
-	}
-
 	@Override
-	public List<CrawlerMartData> crawl() {
+	public List<Crawlable> crawl() {
 		return HtmlParser.post(LIST_URL, getRequestParams())
 				.select(MART_LINK_SELECTOR).stream()
 				.map(element -> element.attr(MART_LINK_ATTR_KEY).trim())
 				.map(this::parseMartData)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
-				.map(super::toCrawlerMartData)
 				.collect(Collectors.toList());
 	}
 

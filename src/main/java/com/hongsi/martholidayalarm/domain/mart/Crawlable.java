@@ -1,35 +1,11 @@
 package com.hongsi.martholidayalarm.domain.mart;
 
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
 import com.hongsi.martholidayalarm.domain.crawler.holiday.RegularHolidayGenerator;
+
 import java.util.Collections;
 import java.util.List;
 
 public interface Crawlable {
-
-	default List<Holiday> generateRegularHoliday(String holidayText) {
-		try {
-			RegularHolidayGenerator generator = RegularHolidayGenerator.parse(holidayText);
-			return generator.generate();
-		} catch (Exception e) {
-			return Collections.emptyList();
-		}
-	}
-
-	default CrawlerMartData toData() {
-		return CrawlerMartData.builder()
-				.martType(getMartType())
-				.realId(getRealId())
-				.branchName(getBranchName())
-				.region(getRegion())
-				.phoneNumber(getPhoneNumber())
-				.address(getAddress())
-				.openingHours(getOpeningHours())
-				.url(getUrl())
-				.holidayText(getHolidayText())
-				.holidays(getHolidays())
-				.build();
-	}
 
 	MartType getMartType();
 	String getRealId();
@@ -42,4 +18,13 @@ public interface Crawlable {
 	Location getLocation();
 	String getHolidayText();
 	List<Holiday> getHolidays();
+
+	default List<Holiday> generateRegularHoliday(String holidayText) {
+		try {
+			RegularHolidayGenerator generator = RegularHolidayGenerator.parse(holidayText);
+			return generator.generate();
+		} catch (Exception e) {
+			return Collections.emptyList();
+		}
+	}
 }

@@ -2,7 +2,7 @@ package com.hongsi.martholidayalarm.client.location.converter;
 
 import com.hongsi.martholidayalarm.client.location.converter.dto.KakaoLocationSearchResult;
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
+import com.hongsi.martholidayalarm.domain.crawler.CrawledMart;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -28,25 +28,25 @@ public class KakaoLocationConvertClient extends AbstractLocationConvertClient {
 	}
 
 	@Override
-	public LocationConvertResult convert(CrawlerMartData crawlerMartData) {
-		String query = makeQuery(crawlerMartData);
+	public LocationConvertResult convert(CrawledMart crawledMart) {
+		String query = makeQuery(crawledMart);
 		try {
 			return requestToApi(locationConvertClientInfo.getSearchUrl(), query);
 		} catch (Exception e) {
 			log.warn("[CRAWLING][LOCATION] - query : {} / message : {}", query, e.getMessage());
-			return convertToAddress(crawlerMartData);
+			return convertToAddress(crawledMart);
 		}
 	}
 
-	private String makeQuery(CrawlerMartData crawlerMartData) {
-		return String.format("%s %s", crawlerMartData.getMartType().getDisplayName(), crawlerMartData.getBranchName());
+	private String makeQuery(CrawledMart crawledMart) {
+		return String.format("%s %s", crawledMart.getMartType().getDisplayName(), crawledMart.getBranchName());
 	}
 
-	private LocationConvertResult convertToAddress(CrawlerMartData crawlerMartData) {
+	private LocationConvertResult convertToAddress(CrawledMart crawledMart) {
 		try {
-			return requestToApi(locationConvertClientInfo.getAddressUrl(), crawlerMartData.getAddress());
+			return requestToApi(locationConvertClientInfo.getAddressUrl(), crawledMart.getAddress());
 		} catch (Exception e) {
-			log.error("[CRAWLING][LOCATION] - address : {} / message : {}", crawlerMartData.getAddress(), e.getMessage());
+			log.error("[CRAWLING][LOCATION] - address : {} / message : {}", crawledMart.getAddress(), e.getMessage());
 			return new LocationConvertResult();
 		}
 	}

@@ -1,6 +1,9 @@
 package com.hongsi.martholidayalarm.scheduler;
 
+import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClient;
+import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
 import com.hongsi.martholidayalarm.constants.ProfileType;
+import com.hongsi.martholidayalarm.domain.crawler.CrawledMart;
 import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartType;
 import com.hongsi.martholidayalarm.domain.crawler.MartCrawler;
 import com.hongsi.martholidayalarm.domain.mart.Mart;
@@ -13,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ import java.util.List;
 public class MartCrawlerScheduler {
 
 	private final MartService martService;
+	private final LocationConvertClient locationConvertClient;
 
 	@Scheduled(cron = "${schedule.cron.crawler:0 0 3 ? * *}")
 	public void crawlMart() {
@@ -29,10 +34,24 @@ public class MartCrawlerScheduler {
 			MartCrawler martCrawler = ApplicationContextUtils.getApplicationContext()
 					.getBean(crawlerMartType.getMartCrawler());
 
-			List<Mart> savedMarts = martService.saveCrawlerMarts(martCrawler.crawl());
+			List<Mart> crawledMarts = martCrawler.crawl()
+					.stream()
+					.map(CrawledMart::parse)
+					.peek(this::convertLocationIfEmpty)
+                    .map(CrawledMart::toEntity)
+					.collect(Collectors.toList());
+			List<Mart> savedMarts = martService.saveAll(crawledMarts);
 
-			log.info("[CRAWLING][COUNT] MartType : {}, crawl count : {}", crawlerMartType,
-					savedMarts.size());
+			log.info("[CRAWLING] MartType : {}, crawl count : {}", crawlerMartType, savedMarts.size());
 		}
+	}
+
+	private void convertLocationIfEmpty(CrawledMart crawledMart) {
+	    if (crawledMart.hasLocation()) {
+	    	return;
+		}
+
+		LocationConvertResult result = locationConvertClient.convert(crawledMart);
+		crawledMart.setLocation(result.getLocation());
 	}
 }

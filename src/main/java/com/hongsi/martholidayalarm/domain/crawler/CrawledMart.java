@@ -1,17 +1,14 @@
 package com.hongsi.martholidayalarm.domain.crawler;
 
-import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
-import com.hongsi.martholidayalarm.domain.mart.Holiday;
-import com.hongsi.martholidayalarm.domain.mart.Location;
-import com.hongsi.martholidayalarm.domain.mart.Mart;
-import com.hongsi.martholidayalarm.domain.mart.MartType;
+import com.hongsi.martholidayalarm.domain.mart.*;
+import lombok.*;
+
 import java.util.List;
 import java.util.TreeSet;
-import lombok.Builder;
-import lombok.Data;
 
-@Data
-public class CrawlerMartData {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class CrawledMart {
 
 	private MartType martType;
 	private String realId;
@@ -21,14 +18,15 @@ public class CrawlerMartData {
 	private String address;
 	private String openingHours;
 	private String url;
+	@Setter
 	private Location location;
 	private String holidayText;
 	private List<Holiday> holidays;
 
 	@Builder
-	public CrawlerMartData(MartType martType, String realId, String branchName, String region,
-			String phoneNumber, String address, String openingHours, String url,
-			Location location, String holidayText, List<Holiday> holidays) {
+	public CrawledMart(MartType martType, String realId, String branchName, String region,
+					   String phoneNumber, String address, String openingHours, String url,
+					   Location location, String holidayText, List<Holiday> holidays) {
 		this.martType = martType;
 		this.realId = realId;
 		this.branchName = branchName;
@@ -42,9 +40,24 @@ public class CrawlerMartData {
 		this.holidays = holidays;
 	}
 
-	public void setAddressInfo(LocationConvertResult locationConvertResult) {
-		address = locationConvertResult.getAddress(address);
-		location = locationConvertResult.getLocation();
+	public static CrawledMart parse(Crawlable crawlable) {
+		return CrawledMart.builder()
+				.martType(crawlable.getMartType())
+				.realId(crawlable.getRealId())
+				.branchName(crawlable.getBranchName())
+				.region(crawlable.getRegion())
+				.phoneNumber(crawlable.getPhoneNumber())
+				.address(crawlable.getAddress())
+				.openingHours(crawlable.getOpeningHours())
+				.url(crawlable.getUrl())
+                .location(crawlable.getLocation())
+				.holidayText(crawlable.getHolidayText())
+				.holidays(crawlable.getHolidays())
+				.build();
+	}
+
+	public boolean hasLocation() {
+		return location != null;
 	}
 
 	public Mart toEntity() {

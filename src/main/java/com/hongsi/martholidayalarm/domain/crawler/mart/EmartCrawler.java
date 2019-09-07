@@ -2,20 +2,20 @@ package com.hongsi.martholidayalarm.domain.crawler.mart;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClient;
-import com.hongsi.martholidayalarm.domain.crawler.AbstractMartCrawler;
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
 import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartType;
+import com.hongsi.martholidayalarm.domain.crawler.MartCrawler;
+import com.hongsi.martholidayalarm.domain.mart.Crawlable;
 import com.hongsi.martholidayalarm.utils.JsonParser;
+import org.springframework.stereotype.Component;
+
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
 
 @Component
-public class EmartCrawler extends AbstractMartCrawler {
+public class EmartCrawler implements MartCrawler {
 
 	private static final String MART_URL = CrawlerMartType.EMART.appendUrl("/branch/searchList.do");
 	private static final String HOLIDAY_URL_FORMAT = CrawlerMartType.EMART
@@ -25,12 +25,8 @@ public class EmartCrawler extends AbstractMartCrawler {
 	private static final int MAX_ADDITION_MONTH = 2;
 	private static final int ADD_MONTH = 1;
 
-	public EmartCrawler(LocationConvertClient locationConvertClient) {
-		super(locationConvertClient);
-	}
-
 	@Override
-	public List<CrawlerMartData> crawl() {
+	public List<Crawlable> crawl() {
 		List<EmartData> martData = parseMartData();
 
 		List<EmartHolidayData> holidayData = parseHolidayDataFromYearMonth();
@@ -39,7 +35,6 @@ public class EmartCrawler extends AbstractMartCrawler {
 
 		return martData.stream()
 				.filter(EmartData::isValidTarget)
-				.map(super::toCrawlerMartData)
 				.collect(Collectors.toList());
 	}
 
