@@ -15,13 +15,13 @@ public class CrawlerLoggingAspect {
 
 	private StopWatch stopWatch;
 
-	@Before("execution(* com.hongsi.martholidayalarm.scheduler.MartCrawlerScheduler.crawlMart())")
+	@Before("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
 	public void beforeRunningCrawler() {
 		log.info("============ Start Mart crawling ============");
 		stopWatch = new StopWatch("MartCrawler");
 	}
 
-	@After("execution(* com.hongsi.martholidayalarm.scheduler.MartCrawlerScheduler.crawlMart())")
+	@After("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
 	public void afterRunningCrawler() {
 		if (stopWatch.isRunning()) {
 			stopWatch.stop();
@@ -31,13 +31,13 @@ public class CrawlerLoggingAspect {
 		log.info("============    End  crawling    ============");
 	}
 
-	@Before("execution(* com.hongsi.martholidayalarm.domain.crawler.MartCrawler+.crawl())")
+	@Before("execution(* com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler+.crawl())")
 	public void beforeCrawling(JoinPoint joinPoint) {
 		log.info("============ Start {} ============", joinPoint.toShortString());
 		stopWatch.start(joinPoint.toShortString());
 	}
 
-	@After("execution(* com.hongsi.martholidayalarm.domain.crawler.MartCrawler+.crawl())")
+	@After("execution(* com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler+.crawl())")
 	public void afterCrawling(JoinPoint joinPoint) {
 		stopWatch.stop();
 		log.info("============ End {} ============", joinPoint.toShortString());

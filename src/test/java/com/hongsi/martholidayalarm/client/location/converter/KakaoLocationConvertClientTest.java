@@ -1,9 +1,9 @@
 package com.hongsi.martholidayalarm.client.location.converter;
 
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
-import com.hongsi.martholidayalarm.domain.crawler.CrawledMart;
 import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
+import com.hongsi.martholidayalarm.scheduler.crawler.model.CrawledMart;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
