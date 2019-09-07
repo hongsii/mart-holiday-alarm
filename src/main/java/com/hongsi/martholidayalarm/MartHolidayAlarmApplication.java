@@ -1,19 +1,23 @@
 package com.hongsi.martholidayalarm;
 
-import com.hongsi.martholidayalarm.constants.CommonConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
+@Slf4j
 @SpringBootApplication
 public class MartHolidayAlarmApplication {
 
-	public static final String APP_PROPERTIES = "spring.config.location="
-			+ "classpath:application.yml"
-			+ ", " + CommonConstants.EXTERNAL_CONFIG_FILEPATH + "prod-application.yml";
-
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(MartHolidayAlarmApplication.class)
-				.properties(APP_PROPERTIES)
+		ConfigurableApplicationContext context = new SpringApplicationBuilder(MartHolidayAlarmApplication.class)
 				.run(args);
+		printPropertySources(context);
+	}
+
+	private static void printPropertySources(ConfigurableApplicationContext context) {
+		context.getEnvironment()
+				.getPropertySources()
+				.forEach(propertySource -> log.info("{} : {}", propertySource.getName(), propertySource.getSource()));
 	}
 }
