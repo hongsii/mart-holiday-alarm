@@ -1,10 +1,9 @@
 package com.hongsi.martholidayalarm.scheduler.aspect;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
@@ -15,31 +14,25 @@ public class CrawlerLoggingAspect {
 
 	private StopWatch stopWatch;
 
-	@Before("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
-	public void beforeRunningCrawler() {
-		log.info("============ Start Mart crawling ============");
-		stopWatch = new StopWatch("MartCrawler");
-	}
-
-	@After("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
-	public void afterRunningCrawler() {
-		if (stopWatch.isRunning()) {
-			stopWatch.stop();
-		}
-
+	@Around("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
+	public Object totalElapsedTime(ProceedingJoinPoint joinPoint) throws Throwable {
+		log.info("[CRAWLING] start to crawl mart");
+		stopWatch = new StopWatch(getClassName(joinPoint));
+		Object result = joinPoint.proceed();
+		log.info("[CRAWLING] finished to crawl mart");
 		log.info(stopWatch.prettyPrint());
-		log.info("============    End  crawling    ============");
+		return result;
 	}
 
-	@Before("execution(* com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler+.crawl())")
-	public void beforeCrawling(JoinPoint joinPoint) {
-		log.info("============ Start {} ============", joinPoint.toShortString());
-		stopWatch.start(joinPoint.toShortString());
-	}
-
-	@After("execution(* com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler+.crawl())")
-	public void afterCrawling(JoinPoint joinPoint) {
+	@Around("execution(* com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler+.crawl())")
+	public Object recordEachElapsedTime(ProceedingJoinPoint joinPoint) throws Throwable {
+		stopWatch.start(getClassName(joinPoint));
+		Object result = joinPoint.proceed();
 		stopWatch.stop();
-		log.info("============ End {} ============", joinPoint.toShortString());
+		return result;
+	}
+
+	private String getClassName(ProceedingJoinPoint joinPoint) {
+		return joinPoint.getTarget().getClass().getSimpleName();
 	}
 }

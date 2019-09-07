@@ -40,9 +40,9 @@ public class MartCrawlerScheduler {
 					.peek(this::convertLocationIfEmpty)
                     .map(CrawledMart::toEntity)
 					.collect(Collectors.toList());
-			List<Mart> savedMarts = martService.saveAll(crawledMarts);
 
-			log.info("[CRAWLING] MartType : {}, crawl count : {}", crawlerMartType, savedMarts.size());
+			List<Mart> savedMarts = martService.saveAll(crawledMarts);
+			log.info("[CRAWLING] MartType : {}, count : {}", crawlerMartType, savedMarts.size());
 		}
 	}
 
