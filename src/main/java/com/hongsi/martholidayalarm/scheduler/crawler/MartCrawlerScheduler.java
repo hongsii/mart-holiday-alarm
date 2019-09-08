@@ -1,9 +1,7 @@
 package com.hongsi.martholidayalarm.scheduler.crawler;
 
-import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClient;
 import com.hongsi.martholidayalarm.constants.ProfileType;
 import com.hongsi.martholidayalarm.scheduler.crawler.model.CrawlerMartType;
-import com.hongsi.martholidayalarm.service.MartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -22,8 +20,7 @@ public class MartCrawlerScheduler {
 
 	private static final int WAIT_TIME_SECONDS = 20 * 1000;
 
-	private final MartService martService;
-	private final LocationConvertClient locationConvertClient;
+	private final MartCrawlerService martCrawlerService;
 	private final ThreadPoolTaskExecutor defaultThreadPool;
 
 	@Scheduled(cron = "${schedule.cron.crawler:0 0 3 ? * *}")
@@ -34,8 +31,8 @@ public class MartCrawlerScheduler {
 
 	private void startCrawlers() {
 		Arrays.stream(CrawlerMartType.values())
-				.map(crawlerMartType -> new MartCrawlerRunner(martService, locationConvertClient, crawlerMartType))
-                .forEach(runner -> defaultThreadPool.execute(runner));
+				.map(crawlerMartType -> new MartCrawlerRunner(crawlerMartType, martCrawlerService))
+                .forEach(defaultThreadPool::execute);
 	}
 
 	private void awaitCrawlers() throws Exception {
