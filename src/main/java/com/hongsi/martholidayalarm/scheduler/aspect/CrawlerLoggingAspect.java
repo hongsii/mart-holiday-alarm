@@ -1,11 +1,11 @@
 package com.hongsi.martholidayalarm.scheduler.aspect;
 
+import com.hongsi.martholidayalarm.utils.stopwatch.StopWatch;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
 @Aspect
 @Component
@@ -16,19 +16,20 @@ public class CrawlerLoggingAspect {
 
 	@Around("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
 	public Object totalElapsedTime(ProceedingJoinPoint joinPoint) throws Throwable {
-		log.info("[CRAWLING] start to crawl mart");
-		stopWatch = new StopWatch(getClassName(joinPoint));
+        stopWatch = new StopWatch("MartCrawler");
 		Object result = joinPoint.proceed();
-		log.info("[CRAWLING] finished to crawl mart");
 		log.info(stopWatch.prettyPrint());
 		return result;
 	}
 
 	@Around("execution(* com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler+.crawl())")
 	public Object recordEachElapsedTime(ProceedingJoinPoint joinPoint) throws Throwable {
-		stopWatch.start(getClassName(joinPoint));
+		String crawler = getClassName(joinPoint);
+		log.info("[CRAWLING] start crawler : {}", crawler);
+		stopWatch.start(crawler);
 		Object result = joinPoint.proceed();
-		stopWatch.stop();
+		stopWatch.stop(crawler);
+		log.info("[CRAWLING] finished crawler : {}", crawler);
 		return result;
 	}
 
