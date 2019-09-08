@@ -1,12 +1,11 @@
 package com.hongsi.martholidayalarm.scheduler.aspect;
 
+import com.hongsi.martholidayalarm.utils.stopwatch.StopWatch;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
 @Aspect
 @Component
@@ -15,31 +14,26 @@ public class CrawlerLoggingAspect {
 
 	private StopWatch stopWatch;
 
-	@Before("execution(* com.hongsi.martholidayalarm.scheduler.MartCrawlerScheduler.crawlMart())")
-	public void beforeRunningCrawler() {
-		log.info("============ Start Mart crawling ============");
-		stopWatch = new StopWatch("MartCrawler");
-	}
-
-	@After("execution(* com.hongsi.martholidayalarm.scheduler.MartCrawlerScheduler.crawlMart())")
-	public void afterRunningCrawler() {
-		if (stopWatch.isRunning()) {
-			stopWatch.stop();
-		}
-
+	@Around("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
+	public Object totalElapsedTime(ProceedingJoinPoint joinPoint) throws Throwable {
+        stopWatch = new StopWatch("MartCrawler");
+		Object result = joinPoint.proceed();
 		log.info(stopWatch.prettyPrint());
-		log.info("============    End  crawling    ============");
+		return result;
 	}
 
-	@Before("execution(* com.hongsi.martholidayalarm.domain.crawler.MartCrawler+.crawl())")
-	public void beforeCrawling(JoinPoint joinPoint) {
-		log.info("============ Start {} ============", joinPoint.toShortString());
-		stopWatch.start(joinPoint.toShortString());
+	@Around("execution(* com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler+.crawl())")
+	public Object recordEachElapsedTime(ProceedingJoinPoint joinPoint) throws Throwable {
+		String crawler = getClassName(joinPoint);
+		log.info("[CRAWLING] start crawler : {}", crawler);
+		stopWatch.start(crawler);
+		Object result = joinPoint.proceed();
+		stopWatch.stop(crawler);
+		log.info("[CRAWLING] finished crawler : {}", crawler);
+		return result;
 	}
 
-	@After("execution(* com.hongsi.martholidayalarm.domain.crawler.MartCrawler+.crawl())")
-	public void afterCrawling(JoinPoint joinPoint) {
-		stopWatch.stop();
-		log.info("============ End {} ============", joinPoint.toShortString());
+	private String getClassName(ProceedingJoinPoint joinPoint) {
+		return joinPoint.getTarget().getClass().getSimpleName();
 	}
 }
