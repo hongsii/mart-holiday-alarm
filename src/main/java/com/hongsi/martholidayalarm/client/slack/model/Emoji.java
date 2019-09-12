@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Emoji {
 
-    FIRE;
+    FIRE, ZAP;
 
     private static final String AFFIX = ":";
 

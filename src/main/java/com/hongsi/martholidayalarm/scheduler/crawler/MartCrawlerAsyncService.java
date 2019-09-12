@@ -6,22 +6,21 @@ import com.hongsi.martholidayalarm.scheduler.crawler.model.MartCrawler;
 import com.hongsi.martholidayalarm.utils.ApplicationContextUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MartCrawlerRunner implements Runnable {
+@Component
+public class MartCrawlerAsyncService {
 
-    private final CrawlerMartType crawlerMartType;
     private final MartCrawlerService martCrawlerService;
 
-    @Override
-    public void run() {
-        if (crawlerMartType == CrawlerMartType.LOTTEMART) {
-            throw new IllegalStateException();
-        }
+    @Async("defaultThreadPool")
+    public void crawl(CrawlerMartType crawlerMartType) {
         MartCrawler martCrawler = ApplicationContextUtils.getApplicationContext()
                 .getBean(crawlerMartType.getMartCrawler());
         List<CrawledMart> crawledMarts = martCrawler.crawl().stream()
