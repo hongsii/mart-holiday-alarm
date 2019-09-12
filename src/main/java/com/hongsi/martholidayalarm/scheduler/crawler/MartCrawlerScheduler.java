@@ -18,9 +18,9 @@ import java.util.Arrays;
 @Profile({ProfileType.PROD1, ProfileType.PROD2})
 public class MartCrawlerScheduler {
 
-	private static final int WAIT_TIME_SECONDS = 20 * 1000;
+	private static final int WAIT_FOR_SECONDS = 20 * 1000;
 
-	private final MartCrawlerService martCrawlerService;
+	private final MartCrawlerAsyncService martCrawlerAsyncService;
 	private final ThreadPoolTaskExecutor defaultThreadPool;
 
 	@Scheduled(cron = "${schedule.cron.crawler:0 0 3 ? * *}")
@@ -31,8 +31,7 @@ public class MartCrawlerScheduler {
 
 	private void startCrawlers() {
 		Arrays.stream(CrawlerMartType.values())
-				.map(crawlerMartType -> new MartCrawlerRunner(crawlerMartType, martCrawlerService))
-                .forEach(defaultThreadPool::execute);
+				.forEach(martCrawlerAsyncService::crawl);
 	}
 
 	private void awaitCrawlers() throws Exception {
@@ -41,7 +40,7 @@ public class MartCrawlerScheduler {
 			if (activeCount == 0) break;
 
 			log.info("[CRAWLING] wait for crawlers to finish. active count : {}", activeCount);
-			Thread.sleep(WAIT_TIME_SECONDS);
+			Thread.sleep(WAIT_FOR_SECONDS);
 		}
 	}
 }
