@@ -44,6 +44,6 @@ public class SlackMessageTest {
                 .build();
 
         String expected = "{ \"username\": \"장애 알림\", \"icon_emoji\": \":FIRE:\", \"channel\": \"CN4LW9R16\", \"attachments\": [ { \"color\": \"#FF0000\", \"fields\": [ { \"title\": \"Error\", \"value\": \"NotFoundException\", \"short\": true }, { \"title\": \"StackTrace\", \"value\": \"Stack\", \"short\": false } ] } ] }\n";
-        assertThat(slackMessage).isEqualTo(json.parse(expected));
+        assertThat(json.parse(expected)).isEqualTo(slackMessage);
     }
 }

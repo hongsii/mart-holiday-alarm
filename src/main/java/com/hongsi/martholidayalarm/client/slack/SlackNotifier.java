@@ -14,7 +14,7 @@ public class SlackNotifier {
 
     private final RestTemplate restTemplate;
 
-    @Value("${slack.webhook.url}")
+    @Value("${slack.webhook.url:''}")
     private String url;
 
     public boolean notify(SlackMessage slackMessage) {
