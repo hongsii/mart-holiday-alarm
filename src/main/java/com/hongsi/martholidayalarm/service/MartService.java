@@ -1,6 +1,5 @@
 package com.hongsi.martholidayalarm.service;
 
-import com.hongsi.martholidayalarm.domain.crawler.CrawlerMartData;
 import com.hongsi.martholidayalarm.domain.mart.Holiday;
 import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.Mart;
@@ -84,9 +83,8 @@ public class MartService {
 	}
 
 	@Transactional
-	public List<Mart> saveCrawlerMarts(List<CrawlerMartData> crawlerMartData) {
-		return crawlerMartData.stream()
-				.map(CrawlerMartData::toEntity)
+	public List<Mart> saveAll(List<Mart> marts) {
+		return marts.stream()
 				.map(this::save)
 				.collect(toList());
 	}

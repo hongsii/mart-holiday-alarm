@@ -9,20 +9,16 @@ import org.springframework.web.util.UriComponents;
 public abstract class AbstractLocationConvertClient implements LocationConvertClient {
 
 	private final RestTemplate restTemplate;
-	protected final LocationConverterClientInfo locationConverterClientInfo;
+	protected final LocationConvertClientInfo locationConvertClientInfo;
 
-	protected AbstractLocationConvertClient(RestTemplateBuilder restTemplateBuilder, LocationConverterClientInfo locationConverterClientInfo) {
+	protected AbstractLocationConvertClient(RestTemplateBuilder restTemplateBuilder, LocationConvertClientInfo locationConvertClientInfo) {
 		this.restTemplate = restTemplateBuilder.build();
-		this.locationConverterClientInfo = locationConverterClientInfo;
+		this.locationConvertClientInfo = locationConvertClientInfo;
 	}
 
 	protected <T> T sendRequest(UriComponents uriComponents, HttpEntity<?> httpEntity, Class<T> responseType) {
 		return restTemplate
 				.exchange(uriComponents.toUriString(), HttpMethod.GET, httpEntity, responseType)
 				.getBody();
-	}
-
-	public void setSearchUrl(String url) {
-		locationConverterClientInfo.setSearchUrl(url);
 	}
 }
