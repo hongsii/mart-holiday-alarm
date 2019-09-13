@@ -13,6 +13,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -28,6 +29,8 @@ public class CrawlerLoggingAspect {
 
 	private final SlackNotifier slackNotifier;
 
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
 	private StopWatch stopWatch;
 
 	@Around("execution(* com.hongsi.martholidayalarm.scheduler.crawler.MartCrawlerScheduler.crawlMart())")
@@ -60,6 +63,11 @@ public class CrawlerLoggingAspect {
 						.text(Emoji.ZAP + " 크롤링 실패 " + Emoji.ZAP)
 						.color(Color.RED)
 						.fields(Arrays.asList(
+								SlackMessage.Attachment.Field.builder()
+										.title("Profile")
+										.value(activeProfile)
+										.shortField(true)
+										.build(),
 								SlackMessage.Attachment.Field.builder()
 										.title("Target")
 										.value(getClassName(joinPoint))
