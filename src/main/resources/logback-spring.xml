@@ -1,49 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+  <include resource="log/common.xml"/>
 
-  <property name="DEFAULT_FILE_DIR" value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp/mart-logs}}}"/>
+  <!-- 개발용 -->
+  <springProfile name="default,local,test">
+    <include resource="log/console.xml"/>
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
 
-  <!-- PUSH LOG -->
-  <property name="PUSH_LOG_FILE" value="${DEFAULT_FILE_DIR}/push.log"/>
-  <appender name="PUSH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <encoder>
-      <pattern>${FILE_LOG_PATTERN}</pattern>
-    </encoder>
-    <file>${PUSH_LOG_FILE}</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>${PUSH_LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
-      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
-    </rollingPolicy>
-  </appender>
-
-  <logger name="com.hongsi.martholidayalarm.scheduler.PushScheduler" level="info" additivity="false">
-    <appender-ref ref="PUSH_FILE" />
-  </logger>
-  <logger name="com.hongsi.martholidayalarm.domain.push" level="info" additivity="false">
-    <appender-ref ref="PUSH_FILE" />
-  </logger>
-  <logger name="com.hongsi.martholidayalarm.client.firebase" level="info" additivity="false">
-    <appender-ref ref="PUSH_FILE" />
-  </logger>
-
-  <!-- API LOG -->
-  <property name="API_LOG_INFO" value="${DEFAULT_FILE_DIR}/api.log"/>
-  <appender name="API_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <encoder>
-      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
-    </encoder>
-    <file>${API_LOG_INFO}</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>${API_LOG_INFO}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
-      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
-    </rollingPolicy>
-  </appender>
-
-  <logger name="com.hongsi.martholidayalarm.api.interceptor.ApiLogInterceptor" level="info" additivity="false">
-    <appender-ref ref="CONSOLE" />
-    <appender-ref ref="API_LOG_FILE" />
-  </logger>
+  <!-- 서버용 -->
+  <springProfile name="dev1,dev2,prod1,prod2">
+    <include resource="log/application.xml"/>
+    <include resource="log/api.xml"/>
+    <include resource="log/push.xml"/>
+  </springProfile>
 </configuration>

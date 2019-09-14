@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+  <property name="PUSH_LOG_NAME" value="push.log"/>
+
+  <appender name="PUSH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoder>
+      <pattern>${FILE_LOG_PATTERN}</pattern>
+    </encoder>
+    <file>${DEFAULT_LOG_PATH}/${PUSH_LOG_NAME}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${DEFAULT_LOG_PATH}/${DEFAULT_ARCHIVED_DIR}/push/${PUSH_LOG_NAME}${DEFAULT_ARCHIVED_FILE_SUFFIX}</fileNamePattern>
+      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <logger name="com.hongsi.martholidayalarm.scheduler.PushScheduler" level="info" additivity="false">
+    <appender-ref ref="PUSH_FILE" />
+  </logger>
+  <logger name="com.hongsi.martholidayalarm.domain.push" level="info" additivity="false">
+    <appender-ref ref="PUSH_FILE" />
+  </logger>
+  <logger name="com.hongsi.martholidayalarm.client.firebase" level="info" additivity="false">
+    <appender-ref ref="PUSH_FILE" />
+  </logger>
+</included>
