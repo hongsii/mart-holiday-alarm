@@ -4,7 +4,8 @@
 
   <!-- 개발용 -->
   <springProfile name="default,local,test">
-    <include resource="log/console.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
     <root level="INFO">
       <appender-ref ref="CONSOLE"/>
     </root>
@@ -15,5 +16,9 @@
     <include resource="log/application.xml"/>
     <include resource="log/api.xml"/>
     <include resource="log/push.xml"/>
+
+    <root level="INFO">
+      <appender-ref ref="FILE" />
+    </root>
   </springProfile>
 </configuration>
