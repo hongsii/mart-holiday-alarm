@@ -3,7 +3,7 @@
   <include resource="log/common.xml"/>
 
   <!-- 개발용 -->
-  <springProfile name="default,local,test">
+  <springProfile name="default | local | test">
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
     <root level="INFO">
@@ -12,7 +12,7 @@
   </springProfile>
 
   <!-- 서버용 -->
-  <springProfile name="dev1,dev2,prod1,prod2">
+  <springProfile name="dev1 | dev2 | prod1 | prod2">
     <include resource="log/application.xml"/>
     <include resource="log/api.xml"/>
     <include resource="log/push.xml"/>
