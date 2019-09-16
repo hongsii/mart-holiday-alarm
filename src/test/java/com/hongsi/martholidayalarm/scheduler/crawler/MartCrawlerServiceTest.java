@@ -4,7 +4,7 @@ import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClie
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
 import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
-import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidMart;
+import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidCrawledMart;
 import com.hongsi.martholidayalarm.scheduler.crawler.model.CrawledMart;
 import com.hongsi.martholidayalarm.service.MartService;
 import org.junit.Test;
@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -27,7 +28,7 @@ public class MartCrawlerServiceTest {
     @Mock
     private MartService martService;
     @Mock
-    private InvalidMartRepository invalidMartRepository;
+    private InvalidCrawledMartRepository invalidCrawledMartRepository;
     @Mock
     private LocationConvertClient locationConvertClient;
 
@@ -62,7 +63,7 @@ public class MartCrawlerServiceTest {
                 .url("https://github.io/hongsii")
                 .location(Location.of(30D, 60D))
                 .build();
-        when(invalidMartRepository.findAll()).thenReturn(new ArrayList<>());
+        when(invalidCrawledMartRepository.findAllByEnable(true)).thenReturn(new ArrayList<>());
         when(locationConvertClient.convert(target)).thenReturn(new LocationConvertResult());
 
         martCrawlerService.saveCrawledMarts(Arrays.asList(target, nonTarget));
@@ -72,8 +73,8 @@ public class MartCrawlerServiceTest {
     }
 
     @Test
-    public void saveCrawledMarts_ifContainsInInvalidMartsCanNotSave() {
-        CrawledMart invalidMart = CrawledMart.builder()
+    public void saveCrawledMarts_ifContainsInInvalidCrawledMartsCanNotSave() {
+        CrawledMart invalidCrawledMart = CrawledMart.builder()
                 .martType(MartType.EMART)
                 .realId("1")
                 .branchName("위치가 없는 마트")
@@ -86,14 +87,14 @@ public class MartCrawlerServiceTest {
                 .url("https://github.io/hongsii")
                 .location(Location.of(30D, 60D))
                 .build();
-        when(invalidMartRepository.findAll()).thenReturn(Arrays.asList(
-                InvalidMart.builder()
+        when(invalidCrawledMartRepository.findAllByEnable(true)).thenReturn(Collections.singletonList(
+                InvalidCrawledMart.builder()
                         .martType(MartType.EMART)
                         .realId("1")
                         .build()
         ));
 
-        martCrawlerService.saveCrawledMarts(Arrays.asList(invalidMart));
+        martCrawlerService.saveCrawledMarts(Collections.singletonList(invalidCrawledMart));
 
         verify(martService, times(1)).saveAll(new ArrayList<>());
     }

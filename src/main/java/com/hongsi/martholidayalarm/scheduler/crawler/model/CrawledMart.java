@@ -4,7 +4,7 @@ import com.hongsi.martholidayalarm.domain.mart.Holiday;
 import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.Mart;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
-import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidMart;
+import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidCrawledMart;
 import com.hongsi.martholidayalarm.scheduler.crawler.model.mart.Crawlable;
 import lombok.*;
 
@@ -65,9 +65,9 @@ public class CrawledMart {
 		return location != null;
 	}
 
-	public boolean canCrawl(List<InvalidMart> invalidMarts) {
-		boolean isInvalid = invalidMarts.stream()
-				.anyMatch(invalidMart -> invalidMart.isInvalid(martType, realId));
+	public boolean canCrawl(List<InvalidCrawledMart> invalidCrawledMarts) {
+		boolean isInvalid = invalidCrawledMarts.stream()
+				.anyMatch(invalidCrawledMart -> invalidCrawledMart.isInvalid(martType, realId));
 		return !isInvalid;
 	}
 

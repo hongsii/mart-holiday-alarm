@@ -1,10 +1,11 @@
 package com.hongsi.martholidayalarm.scheduler.crawler.model;
 
 import com.hongsi.martholidayalarm.domain.mart.MartType;
-import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidMart;
+import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidCrawledMart;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,8 +18,8 @@ public class CrawledMartTest {
                 .realId("1")
                 .build();
 
-        boolean actual = crawledMart.canCrawl(Arrays.asList(
-                InvalidMart.builder().martType(MartType.EMART).realId("2").build()
+        boolean actual = crawledMart.canCrawl(Collections.singletonList(
+                InvalidCrawledMart.builder().martType(MartType.EMART).realId("2").build()
         ));
 
         assertThat(actual).isTrue();
@@ -32,8 +33,8 @@ public class CrawledMartTest {
                 .build();
 
         boolean actual = crawledMart.canCrawl(Arrays.asList(
-                InvalidMart.builder().martType(MartType.EMART).realId("2").build(),
-                InvalidMart.builder().martType(MartType.EMART).realId("1").build()
+                InvalidCrawledMart.builder().martType(MartType.EMART).realId("2").build(),
+                InvalidCrawledMart.builder().martType(MartType.EMART).realId("1").build()
         ));
 
         assertThat(actual).isFalse();
