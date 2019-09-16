@@ -3,6 +3,7 @@ package com.hongsi.martholidayalarm.scheduler.crawler;
 import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClient;
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
 import com.hongsi.martholidayalarm.domain.mart.Mart;
+import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidCrawledMart;
 import com.hongsi.martholidayalarm.scheduler.crawler.model.CrawledMart;
 import com.hongsi.martholidayalarm.service.MartService;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,14 @@ import java.util.stream.Collectors;
 public class MartCrawlerService {
 
     private final MartService martService;
+    private final InvalidCrawledMartRepository invalidCrawledMartRepository;
     private final LocationConvertClient locationConvertClient;
 
    public List<Mart> saveCrawledMarts(List<CrawledMart> crawledMarts) {
+       List<InvalidCrawledMart> invalidCrawledMarts = invalidCrawledMartRepository.findAllByEnable(true);
        return martService.saveAll(
                crawledMarts.stream()
+                       .filter(crawledMart -> crawledMart.canCrawl(invalidCrawledMarts))
                        .peek(this::convertLocationIfEmpty)
                        .map(CrawledMart::toEntity)
                        .collect(Collectors.toList())

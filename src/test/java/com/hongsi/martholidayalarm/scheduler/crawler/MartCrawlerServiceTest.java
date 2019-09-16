@@ -4,6 +4,7 @@ import com.hongsi.martholidayalarm.client.location.converter.LocationConvertClie
 import com.hongsi.martholidayalarm.client.location.converter.dto.LocationConvertResult;
 import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
+import com.hongsi.martholidayalarm.scheduler.crawler.domain.InvalidCrawledMart;
 import com.hongsi.martholidayalarm.scheduler.crawler.model.CrawledMart;
 import com.hongsi.martholidayalarm.service.MartService;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -26,13 +28,15 @@ public class MartCrawlerServiceTest {
     @Mock
     private MartService martService;
     @Mock
+    private InvalidCrawledMartRepository invalidCrawledMartRepository;
+    @Mock
     private LocationConvertClient locationConvertClient;
 
     @InjectMocks
     private MartCrawlerService martCrawlerService;
 
     @Test
-    public void testConvertLocation_ifLocationIsEmptyConvert() {
+    public void saveCrawledMarts_ifLocationIsEmptyConvert() {
         CrawledMart target = CrawledMart.builder()
                 .martType(MartType.EMART)
                 .realId("1")
@@ -59,11 +63,39 @@ public class MartCrawlerServiceTest {
                 .url("https://github.io/hongsii")
                 .location(Location.of(30D, 60D))
                 .build();
+        when(invalidCrawledMartRepository.findAllByEnable(true)).thenReturn(new ArrayList<>());
         when(locationConvertClient.convert(target)).thenReturn(new LocationConvertResult());
 
         martCrawlerService.saveCrawledMarts(Arrays.asList(target, nonTarget));
 
         verify(locationConvertClient, times(1)).convert(target);
         verify(martService, times(1)).saveAll(anyList());
+    }
+
+    @Test
+    public void saveCrawledMarts_ifContainsInInvalidCrawledMartsCanNotSave() {
+        CrawledMart invalidCrawledMart = CrawledMart.builder()
+                .martType(MartType.EMART)
+                .realId("1")
+                .branchName("위치가 없는 마트")
+                .region("서울")
+                .address("주소")
+                .holidays(new ArrayList<>())
+                .holidayText("매주 월요일 휴무")
+                .openingHours("10:00 ~ 11:00")
+                .phoneNumber("010-1234-5678")
+                .url("https://github.io/hongsii")
+                .location(Location.of(30D, 60D))
+                .build();
+        when(invalidCrawledMartRepository.findAllByEnable(true)).thenReturn(Collections.singletonList(
+                InvalidCrawledMart.builder()
+                        .martType(MartType.EMART)
+                        .realId("1")
+                        .build()
+        ));
+
+        martCrawlerService.saveCrawledMarts(Collections.singletonList(invalidCrawledMart));
+
+        verify(martService, times(1)).saveAll(new ArrayList<>());
     }
 }
