@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+  <property name="API_LOG_NAME" value="api.log"/>
+
+  <appender name="API_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoder>
+      <pattern>${FILE_LOG_PATTERN}</pattern>
+    </encoder>
+    <file>${DEFAULT_LOG_PATH}/${API_LOG_NAME}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${DEFAULT_LOG_PATH}/${DEFAULT_ARCHIVED_DIR}/api/${API_LOG_NAME}${DEFAULT_ARCHIVED_FILE_SUFFIX}</fileNamePattern>
+      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <logger name="com.hongsi.martholidayalarm.api.interceptor.ApiLogInterceptor" level="info" additivity="false">
+    <appender-ref ref="API_FILE"/>
+  </logger>
+</included>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+  <property name="APPLICATION_LOG_NAME" value="application.log"/>
+  <property name="LOG_FILE" value="${DEFAULT_LOG_PATH}/${APPLICATION_LOG_NAME}"/>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoder>
+      <pattern>${FILE_LOG_PATTERN}</pattern>
+    </encoder>
+    <file>${LOG_FILE}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${DEFAULT_LOG_PATH}/${DEFAULT_ARCHIVED_DIR}/application/${APPLICATION_LOG_NAME}${DEFAULT_ARCHIVED_FILE_SUFFIX}</fileNamePattern>
+      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+    </rollingPolicy>
+  </appender>
+</included>

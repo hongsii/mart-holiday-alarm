@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+  <property name="DEFAULT_LOG_PATH" value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp/mart-logs}}}"/>
+  <property name="DEFAULT_ARCHIVED_DIR" value="archived"/>
+  <property name="DEFAULT_ARCHIVED_FILE_SUFFIX" value=".%d{yyyy-MM-dd}.%i.gz"/>
+</included>
