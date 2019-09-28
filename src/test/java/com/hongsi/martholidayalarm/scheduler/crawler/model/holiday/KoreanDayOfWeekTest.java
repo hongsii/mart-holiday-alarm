@@ -5,16 +5,16 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DayOfWeekWrapperTest {
+public class KoreanDayOfWeekTest {
 
 	@Test
 	public void 문자로_파싱() {
-		Assertions.assertThat(DayOfWeekWrapper.of("월")).isEqualTo(DayOfWeekWrapper.MONDAY);
-		assertThat(DayOfWeekWrapper.of("일요일")).isEqualTo(DayOfWeekWrapper.SUNDAY);
+		Assertions.assertThat(KoreanDayOfWeek.of("월")).isEqualTo(KoreanDayOfWeek.MONDAY);
+		assertThat(KoreanDayOfWeek.of("일요일")).isEqualTo(KoreanDayOfWeek.SUNDAY);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void 잘못된_문자_파싱() {
-		DayOfWeekWrapper.of("월월");
+		KoreanDayOfWeek.of("월월");
 	}
 }

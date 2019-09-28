@@ -8,13 +8,13 @@ public class RegularHoliday {
 	private int week;
 	private DayOfWeek dayOfWeek;
 
-	public RegularHoliday(WeekWrapper weekWrapper, DayOfWeekWrapper dayOfWeekWrapper) {
-		week = weekWrapper.getWeek();
-		dayOfWeek = dayOfWeekWrapper.getDayOfWeek();
+	public RegularHoliday(KoreanWeek koreanWeek, KoreanDayOfWeek koreanDayOfWeek) {
+		week = koreanWeek.getWeek();
+		dayOfWeek = koreanDayOfWeek.getDayOfWeek();
 	}
 
-	public static RegularHoliday of(WeekWrapper weekWrapper, DayOfWeekWrapper dayOfWeekWrapper) {
-		return new RegularHoliday(weekWrapper, dayOfWeekWrapper);
+	public static RegularHoliday of(KoreanWeek koreanWeek, KoreanDayOfWeek koreanDayOfWeek) {
+		return new RegularHoliday(koreanWeek, koreanDayOfWeek);
 	}
 
 	public int getWeek() {

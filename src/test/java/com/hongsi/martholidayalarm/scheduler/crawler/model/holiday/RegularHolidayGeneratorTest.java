@@ -21,12 +21,12 @@ public class RegularHolidayGeneratorTest {
 	public void 텍스트로_객체_생성_확인() {
 		RegularHolidayGenerator regularHolidayGenerator1 = RegularHolidayGenerator.parse("둘째주 일요일");
 		assertThat(regularHolidayGenerator1.getRegularHolidays()).hasSize(1)
-				.containsOnly(RegularHoliday.of(WeekWrapper.SECOND, DayOfWeekWrapper.SUNDAY));
+				.containsOnly(RegularHoliday.of(KoreanWeek.SECOND, KoreanDayOfWeek.SUNDAY));
 
 		RegularHolidayGenerator regularHolidayGenerator2 = RegularHolidayGenerator
 				.parse("넷 째주 수요일");
 		assertThat(regularHolidayGenerator2.getRegularHolidays()).hasSize(1)
-				.containsOnly(RegularHoliday.of(WeekWrapper.FOURTH, DayOfWeekWrapper.WEDNESDAY));
+				.containsOnly(RegularHoliday.of(KoreanWeek.FOURTH, KoreanDayOfWeek.WEDNESDAY));
 	}
 
 	@Test
@@ -36,10 +36,10 @@ public class RegularHolidayGeneratorTest {
 
 		assertThat(regularHolidayGenerator.getRegularHolidays()).hasSize(4)
 				.containsExactly(
-						RegularHoliday.of(WeekWrapper.SECOND, DayOfWeekWrapper.MONDAY),
-						RegularHoliday.of(WeekWrapper.SECOND, DayOfWeekWrapper.SUNDAY),
-						RegularHoliday.of(WeekWrapper.FOURTH, DayOfWeekWrapper.MONDAY),
-						RegularHoliday.of(WeekWrapper.FOURTH, DayOfWeekWrapper.SUNDAY)
+						RegularHoliday.of(KoreanWeek.SECOND, KoreanDayOfWeek.MONDAY),
+						RegularHoliday.of(KoreanWeek.SECOND, KoreanDayOfWeek.SUNDAY),
+						RegularHoliday.of(KoreanWeek.FOURTH, KoreanDayOfWeek.MONDAY),
+						RegularHoliday.of(KoreanWeek.FOURTH, KoreanDayOfWeek.SUNDAY)
 				);
 	}
 
@@ -50,8 +50,8 @@ public class RegularHolidayGeneratorTest {
 
 		assertThat(regularHolidayGenerator.getRegularHolidays()).hasSize(2)
 				.containsExactly(
-						RegularHoliday.of(WeekWrapper.SECOND, DayOfWeekWrapper.SUNDAY),
-						RegularHoliday.of(WeekWrapper.FOURTH, DayOfWeekWrapper.SUNDAY)
+						RegularHoliday.of(KoreanWeek.SECOND, KoreanDayOfWeek.SUNDAY),
+						RegularHoliday.of(KoreanWeek.FOURTH, KoreanDayOfWeek.SUNDAY)
 				);
 	}
 

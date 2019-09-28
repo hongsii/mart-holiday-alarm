@@ -15,7 +15,7 @@ public class RegularHolidayGenerator {
 
 	private List<RegularHoliday> regularHolidays;
 
-	private RegularHolidayGenerator(List<WeekWrapper> weeks, List<DayOfWeekWrapper> dayOfWeeks) {
+	private RegularHolidayGenerator(List<KoreanWeek> weeks, List<KoreanDayOfWeek> dayOfWeeks) {
 		Objects.requireNonNull(weeks);
 		Objects.requireNonNull(dayOfWeeks);
 		if (weeks.isEmpty() || dayOfWeeks.isEmpty()) {
@@ -29,8 +29,8 @@ public class RegularHolidayGenerator {
 	}
 
 	public static RegularHolidayGenerator parse(String holidayText) {
-		List<WeekWrapper> weeks = WeekWrapper.parseToCollection(holidayText);
-		List<DayOfWeekWrapper> dayOfWeeks = DayOfWeekWrapper.parseToCollection(holidayText);
+		List<KoreanWeek> weeks = KoreanWeek.parseToCollection(holidayText);
+		List<KoreanDayOfWeek> dayOfWeeks = KoreanDayOfWeek.parseToCollection(holidayText);
 		return new RegularHolidayGenerator(weeks, dayOfWeeks);
 	}
 

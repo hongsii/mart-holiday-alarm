@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public enum DayOfWeekWrapper {
+public enum KoreanDayOfWeek {
 
 	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
 
@@ -19,18 +19,18 @@ public enum DayOfWeekWrapper {
 
 	private String displayName;
 
-	DayOfWeekWrapper() {
+	KoreanDayOfWeek() {
 		displayName = DayOfWeek.valueOf(name()).getDisplayName(TextStyle.FULL, Locale.KOREA);
 	}
 
-	public static List<DayOfWeekWrapper> parseToCollection(String text) {
+	public static List<KoreanDayOfWeek> parseToCollection(String text) {
 		Matcher matcher = DAY_OF_WEEK_PATTERN.matcher(text);
 		return MatchSpliterator.from(matcher).stream()
-				.map(DayOfWeekWrapper::of)
+				.map(KoreanDayOfWeek::of)
 				.collect(Collectors.toList());
 	}
 
-	public static DayOfWeekWrapper of(String text) {
+	public static KoreanDayOfWeek of(String text) {
 		return Arrays.stream(values())
 				.filter(dayOfWeek -> dayOfWeek.startsWith(text))
 				.findFirst()

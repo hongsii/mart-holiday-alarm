@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
-public enum WeekWrapper {
+public enum KoreanWeek {
 
 	FIRST("첫"), SECOND("둘", "두"), THIRD("셋", "세"), FOURTH("넷", "네"), FIFTH("다섯");
 
@@ -24,12 +24,12 @@ public enum WeekWrapper {
 
 	private List<String> matchCharacters = new ArrayList<>();
 
-	WeekWrapper(String... matchCharacter) {
+	KoreanWeek(String... matchCharacter) {
 		matchCharacters.addAll(asList(matchCharacter));
 		matchCharacters.add(Integer.toString(getWeek()));
 	}
 
-	public static WeekWrapper of(String text) {
+	public static KoreanWeek of(String text) {
 		return Arrays.stream(values())
 				.filter(weekWrapper -> weekWrapper.hasCharacter(text))
 				.findFirst()
@@ -37,10 +37,10 @@ public enum WeekWrapper {
 						"Not found week of this text : " + text));
 	}
 
-	public static List<WeekWrapper> parseToCollection(String text) {
+	public static List<KoreanWeek> parseToCollection(String text) {
 		Matcher matcher = MATCH_CHARACTER_PATTERN.matcher(text);
 		return MatchSpliterator.from(matcher).stream()
-				.map(WeekWrapper::of)
+				.map(KoreanWeek::of)
 				.collect(Collectors.toList());
 	}
 
