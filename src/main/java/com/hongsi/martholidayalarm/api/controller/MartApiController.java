@@ -1,18 +1,15 @@
 package com.hongsi.martholidayalarm.api.controller;
 
 import com.hongsi.martholidayalarm.api.converter.MartTypeParameterConverter;
+import com.hongsi.martholidayalarm.api.model.mart.MartOrder;
+import com.hongsi.martholidayalarm.api.model.mart.MartSortParser;
 import com.hongsi.martholidayalarm.api.response.ApiResponse;
-import com.hongsi.martholidayalarm.domain.mart.MartOrder.Property;
-import com.hongsi.martholidayalarm.domain.mart.MartSortBuilder;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.exception.MissingParameterException;
 import com.hongsi.martholidayalarm.service.MartService;
 import com.hongsi.martholidayalarm.service.dto.mart.LocationDto;
-import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
-import com.hongsi.martholidayalarm.service.dto.mart.MartOrderDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,19 +26,18 @@ public class MartApiController {
 
 	@GetMapping
 	public ApiResponse<?> getMarts(
-			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters
+			@RequestParam(name = "sort", required = false) List<String> orders
 	) {
-		Order[] defaultOrders = new Order[]{ Property.martType.asc(), Property.branchName.asc() };
-		Sort sort = MartSortBuilder.parseSort(orderParameters, defaultOrders);
+		Sort sort = MartSortParser.parse(orders, MartOrder.martType.asc(), MartOrder.branchName.asc());
 		return ApiResponse.ok(martService.findAll(sort));
 	}
 
 	@GetMapping(params = "ids")
 	public ApiResponse<?> getMartsByIds(
 			@RequestParam(name = "ids") Set<Long> ids,
-			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters
+			@RequestParam(name = "sort", required = false) List<String> orders
 	) {
-		Sort sort = MartSortBuilder.parseSort(orderParameters, Property.id.asc());
+		Sort sort = MartSortParser.parse(orders, MartOrder.id.asc());
 		return ApiResponse.ok(martService.findAllById(ids, sort));
 	}
 
@@ -58,11 +54,10 @@ public class MartApiController {
 	@GetMapping(value = "/types/{martType}")
 	public ApiResponse<?> getMartsByMartType(
 			@PathVariable @Valid MartType martType,
-			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters
+			@RequestParam(name = "sort", required = false) List<String> orders
 	) {
-		Sort sort = MartSortBuilder.parseSort(orderParameters, Property.branchName.asc());
-		List<MartDto.Response> marts = martService.findAllByMartType(martType, sort);
-		return ApiResponse.ok(marts);
+		Sort sort = MartSortParser.parse(orders, MartOrder.branchName.asc());
+		return ApiResponse.ok(martService.findAllByMartType(martType, sort));
 	}
 
 	@GetMapping(params = {"latitude", "longitude"})
