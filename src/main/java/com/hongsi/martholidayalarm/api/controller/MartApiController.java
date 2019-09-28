@@ -29,7 +29,8 @@ public class MartApiController {
 
 	@GetMapping
 	public ApiResponse<?> getMarts(
-			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters) {
+			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters
+	) {
 		Order[] defaultOrders = new Order[]{ Property.martType.asc(), Property.branchName.asc() };
 		Sort sort = MartSortBuilder.parseSort(orderParameters, defaultOrders);
 		return ApiResponse.ok(martService.findAll(sort));
@@ -38,24 +39,10 @@ public class MartApiController {
 	@GetMapping(params = "ids")
 	public ApiResponse<?> getMartsByIds(
 			@RequestParam(name = "ids") Set<Long> ids,
-			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters) {
+			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters
+	) {
 		Sort sort = MartSortBuilder.parseSort(orderParameters, Property.id.asc());
 		return ApiResponse.ok(martService.findAllById(ids, sort));
-	}
-
-	@GetMapping(params = {"latitude", "longitude"})
-	public ApiResponse<?> getMartsByLocation(@Valid @ModelAttribute LocationDto.Request request) {
-		return ApiResponse.ok(martService.findAllByLocation(request));
-	}
-
-	@GetMapping(params = "latitude")
-	public void getMartsByLocationMissingLongitude() {
-		throw new MissingParameterException("경도(longitude)가 필요합니다.");
-	}
-
-	@GetMapping(params = "longitude")
-	public void getMartsByLocationMissingLatitude() {
-		throw new MissingParameterException("위도(latitude)가 필요합니다.");
 	}
 
 	@GetMapping(value = "/{id}")
@@ -71,10 +58,26 @@ public class MartApiController {
 	@GetMapping(value = "/types/{martType}")
 	public ApiResponse<?> getMartsByMartType(
 			@PathVariable @Valid MartType martType,
-			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters) {
+			@RequestParam(name = "sort", required = false) List<MartOrderDto.Parameter> orderParameters
+	) {
 		Sort sort = MartSortBuilder.parseSort(orderParameters, Property.branchName.asc());
 		List<MartDto.Response> marts = martService.findAllByMartType(martType, sort);
 		return ApiResponse.ok(marts);
+	}
+
+	@GetMapping(params = {"latitude", "longitude"})
+	public ApiResponse<?> getMartsByLocation(@ModelAttribute @Valid LocationDto.Request request) {
+		return ApiResponse.ok(martService.findAllByLocation(request));
+	}
+
+	@GetMapping(params = "latitude")
+	public void getMartsByLocationMissingLongitude() {
+		throw new MissingParameterException("경도(longitude)가 필요합니다.");
+	}
+
+	@GetMapping(params = "longitude")
+	public void getMartsByLocationMissingLatitude() {
+		throw new MissingParameterException("위도(latitude)가 필요합니다.");
 	}
 
 	@InitBinder
