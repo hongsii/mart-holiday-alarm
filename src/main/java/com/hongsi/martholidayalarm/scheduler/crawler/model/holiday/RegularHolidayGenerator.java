@@ -24,7 +24,7 @@ public class RegularHolidayGenerator {
 
 		regularHolidays = weeks.stream()
 				.flatMap(weekWrapper -> dayOfWeeks.stream()
-						.map(dayOfWrapper -> new RegularHoliday(weekWrapper, dayOfWrapper)))
+						.map(dayOfWrapper -> RegularHoliday.of(weekWrapper, dayOfWrapper)))
 				.collect(Collectors.toList());
 	}
 

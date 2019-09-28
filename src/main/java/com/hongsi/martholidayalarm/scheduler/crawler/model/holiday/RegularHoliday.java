@@ -8,7 +8,7 @@ public class RegularHoliday {
 	private int week;
 	private DayOfWeek dayOfWeek;
 
-	public RegularHoliday(KoreanWeek koreanWeek, KoreanDayOfWeek koreanDayOfWeek) {
+	private RegularHoliday(KoreanWeek koreanWeek, KoreanDayOfWeek koreanDayOfWeek) {
 		week = koreanWeek.getWeek();
 		dayOfWeek = koreanDayOfWeek.getDayOfWeek();
 	}
