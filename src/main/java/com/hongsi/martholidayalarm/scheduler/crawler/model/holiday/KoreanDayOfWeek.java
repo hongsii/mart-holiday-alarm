@@ -17,10 +17,10 @@ public enum KoreanDayOfWeek {
 
 	private static final Pattern DAY_OF_WEEK_PATTERN = Pattern.compile(".요일");
 
-	private String displayName;
+	private String character;
 
 	KoreanDayOfWeek() {
-		displayName = DayOfWeek.valueOf(name()).getDisplayName(TextStyle.FULL, Locale.KOREA);
+		character = DayOfWeek.valueOf(name()).getDisplayName(TextStyle.FULL, Locale.KOREA);
 	}
 
 	public static List<KoreanDayOfWeek> parseToCollection(String text) {
@@ -34,12 +34,11 @@ public enum KoreanDayOfWeek {
 		return Arrays.stream(values())
 				.filter(dayOfWeek -> dayOfWeek.startsWith(text))
 				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException(
-						"Not found DayOfWeek of this text : " + text));
+				.orElseThrow(() -> new IllegalArgumentException("Not found DayOfWeek of this text : " + text));
 	}
 
-	public boolean startsWith(String text) {
-		return displayName.startsWith(text);
+	private boolean startsWith(String text) {
+		return character.startsWith(text);
 	}
 
 	public DayOfWeek getDayOfWeek() {
