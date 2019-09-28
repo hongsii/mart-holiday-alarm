@@ -152,7 +152,7 @@ public class LotteMartData implements Crawlable {
 		while (matcher.find()) {
 			// 포매터가 파싱할 수 있게 문자열 변경
 			String holidayText = changeToDateFormat(matcher.group());
-			MonthDayHoliday monthDayHoliday = MonthDayHoliday.of(holidayText, HOLIDAY_FORMATTER);
+			MonthDayHoliday monthDayHoliday = MonthDayHoliday.parse(holidayText, HOLIDAY_FORMATTER);
 			Stream<Holiday> parsedHolidayStream = Stream.of(monthDayHoliday.toHoliday());
 			holidayStream = Stream.concat(holidayStream, parsedHolidayStream);
 		}
@@ -172,7 +172,7 @@ public class LotteMartData implements Crawlable {
 		}
 
 		try {
-			Holiday openHoliday = MonthDayHoliday.of(openHolidayText, HOLIDAY_FORMATTER).toHoliday();
+			Holiday openHoliday = MonthDayHoliday.parse(openHolidayText, HOLIDAY_FORMATTER).toHoliday();
 			return holidays.stream()
 					.filter(holiday -> !holiday.equals(openHoliday))
 					.collect(Collectors.toList());
