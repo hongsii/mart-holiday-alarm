@@ -1,7 +1,7 @@
 package com.hongsi.martholidayalarm.api.controller;
 
 import com.hongsi.martholidayalarm.api.converter.MartTypeParameterConverter;
-import com.hongsi.martholidayalarm.domain.mart.MartOrder.Property;
+import com.hongsi.martholidayalarm.api.model.mart.MartOrder;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.service.MartService;
 import com.hongsi.martholidayalarm.service.dto.mart.MartDto;
@@ -64,7 +64,7 @@ public class MartController {
 	}
 
 	private Sort defaultSort() {
-		return Sort.by(Property.martType.asc(), Property.branchName.asc());
+		return Sort.by(MartOrder.martType.asc(), MartOrder.branchName.asc());
 	}
 
 	@InitBinder
