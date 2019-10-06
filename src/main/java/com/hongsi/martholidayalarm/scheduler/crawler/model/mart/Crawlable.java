@@ -5,6 +5,7 @@ import com.hongsi.martholidayalarm.domain.mart.Location;
 import com.hongsi.martholidayalarm.domain.mart.MartType;
 import com.hongsi.martholidayalarm.scheduler.crawler.model.holiday.RegularHolidayGenerator;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface Crawlable {
 	default List<Holiday> generateRegularHoliday(String holidayText) {
 		try {
 			RegularHolidayGenerator generator = RegularHolidayGenerator.parse(holidayText);
-			return generator.generate();
+			return generator.generate(LocalDate.now());
 		} catch (Exception e) {
 			return Collections.emptyList();
 		}
