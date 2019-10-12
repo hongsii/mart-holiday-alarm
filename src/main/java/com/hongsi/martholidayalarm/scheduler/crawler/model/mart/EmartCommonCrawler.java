@@ -60,7 +60,8 @@ public abstract class EmartCommonCrawler implements MartCrawler {
     protected enum SearchType {
 
         EMART("EM"),
-        TRADERS("TR");
+        TRADERS("TR"),
+        NOBRAND("NO");
 
         private final String value;
     }

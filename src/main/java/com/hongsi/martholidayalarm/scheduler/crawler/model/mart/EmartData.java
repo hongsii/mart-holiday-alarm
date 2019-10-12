@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
@@ -51,8 +51,7 @@ public class EmartData implements Crawlable {
 	@JsonProperty("STORE_SHOPPING_TIME")
 	private String openingHours;
 
-	@JsonProperty("STORE_TP")
-	private String storeType;
+	private StoreType storeType;
 
 	@JsonProperty("MAP_X")
 	private String rawLatitude;
@@ -66,9 +65,14 @@ public class EmartData implements Crawlable {
 	@JsonIgnore
 	private List<Holiday> holidays;
 
+	@JsonProperty("STORE_TP")
+	private void setStoreType(String storeType) {
+		this.storeType = StoreType.of(storeType);
+	}
+
 	@Override
 	public MartType getMartType() {
-		return StoreType.of(storeType).getMartType();
+		return storeType.getMartType();
 	}
 
 	@Override
@@ -78,10 +82,7 @@ public class EmartData implements Crawlable {
 
 	@Override
 	public String getBranchName() {
-		if (getMartType() == MartType.EMART_TRADERS) {
-		    return branchName.replaceAll("트레이더스 ", "");
-		}
-		return branchName;
+	    return storeType.removePrefix(branchName);
 	}
 
 	@Override
@@ -140,17 +141,27 @@ public class EmartData implements Crawlable {
 				.collect(toList());
 	}
 
+	@AllArgsConstructor
 	public enum StoreType {
-		EMART(MartType.EMART, "E", "A"),
-		TRADERS(MartType.EMART_TRADERS, "T"),
+		EMART(MartType.EMART, Arrays.asList("E", "A")),
+		TRADERS(MartType.EMART_TRADERS, "T", "트레이더스"),
+		NOBRAND(MartType.NOBRAND, "S", "노브랜드"),
 		UNKNOWN(null, "");
 
 		private MartType martType;
 		private List<String> typeCharacters;
+		private String prefix;
 
-		StoreType(MartType martType, String... typeCharacter) {
-			this.martType = martType;
-			this.typeCharacters = asList(typeCharacter);
+		StoreType(MartType martType, String typeCharacter) {
+		    this(martType, Collections.singletonList(typeCharacter));
+		}
+
+		StoreType(MartType martType, String typeCharacter, String prefix) {
+			this(martType, Collections.singletonList(typeCharacter), prefix);
+		}
+
+		StoreType(MartType martType, List<String> typeCharacters) {
+			this(martType, typeCharacters, "");
 		}
 
 		public static StoreType of(String typeCharacter) {
@@ -166,6 +177,12 @@ public class EmartData implements Crawlable {
 
 		public MartType getMartType() {
 			return martType;
+		}
+
+		public String removePrefix(String branchName) {
+			if (prefix.isEmpty()) return branchName;
+
+			return branchName.replaceAll(prefix + "\\s+", "");
 		}
 	}
 
