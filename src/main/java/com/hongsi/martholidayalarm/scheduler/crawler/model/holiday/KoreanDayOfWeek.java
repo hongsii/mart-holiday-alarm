@@ -11,35 +11,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public enum DayOfWeekWrapper {
+public enum KoreanDayOfWeek {
 
 	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
 
 	private static final Pattern DAY_OF_WEEK_PATTERN = Pattern.compile(".요일");
 
-	private String displayName;
+	private String character;
 
-	DayOfWeekWrapper() {
-		displayName = DayOfWeek.valueOf(name()).getDisplayName(TextStyle.FULL, Locale.KOREA);
+	KoreanDayOfWeek() {
+		character = DayOfWeek.valueOf(name()).getDisplayName(TextStyle.FULL, Locale.KOREA);
 	}
 
-	public static List<DayOfWeekWrapper> parseToCollection(String text) {
+	public static List<KoreanDayOfWeek> parseToCollection(String text) {
 		Matcher matcher = DAY_OF_WEEK_PATTERN.matcher(text);
 		return MatchSpliterator.from(matcher).stream()
-				.map(DayOfWeekWrapper::of)
+				.map(KoreanDayOfWeek::of)
 				.collect(Collectors.toList());
 	}
 
-	public static DayOfWeekWrapper of(String text) {
+	public static KoreanDayOfWeek of(String text) {
 		return Arrays.stream(values())
 				.filter(dayOfWeek -> dayOfWeek.startsWith(text))
 				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException(
-						"Not found DayOfWeek of this text : " + text));
+				.orElseThrow(() -> new IllegalArgumentException("Not found DayOfWeek of this text : " + text));
 	}
 
-	public boolean startsWith(String text) {
-		return displayName.startsWith(text);
+	private boolean startsWith(String text) {
+		return character.startsWith(text);
 	}
 
 	public DayOfWeek getDayOfWeek() {

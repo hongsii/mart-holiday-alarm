@@ -165,7 +165,7 @@ public class CostcoData implements Crawlable {
 		MatchSpliterator matcher = MatchSpliterator.from(PATTERN_EXCLUDE_HOLIDAY_TEXT, getUnwrappedStoreContent(), 1);
 		List<Holiday> excludingHolidays = matcher.stream()
 				.map(holidayText -> holidayText.replaceAll("월|일", "").trim())
-				.map(replacedText -> MonthDayHoliday.of(replacedText, HOLIDAY_FORMATTER).toHoliday())
+				.map(replacedText -> MonthDayHoliday.parse(replacedText, HOLIDAY_FORMATTER).toHoliday())
 				.collect(Collectors.toList());
 
 		return holidays.stream()
