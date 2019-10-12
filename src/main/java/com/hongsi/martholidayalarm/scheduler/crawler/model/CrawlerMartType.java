@@ -1,13 +1,11 @@
 package com.hongsi.martholidayalarm.scheduler.crawler.model;
 
-import com.hongsi.martholidayalarm.scheduler.crawler.model.mart.CostcoCrawler;
-import com.hongsi.martholidayalarm.scheduler.crawler.model.mart.EmartCrawler;
-import com.hongsi.martholidayalarm.scheduler.crawler.model.mart.HomePlusCrawler;
-import com.hongsi.martholidayalarm.scheduler.crawler.model.mart.LotteMartCrawler;
+import com.hongsi.martholidayalarm.scheduler.crawler.model.mart.*;
 
 public enum CrawlerMartType {
 
 	EMART(EmartCrawler.class, "http://store.emart.com"),
+	EMART_TRADERS(EmartTradersCrawler.class, "http://store.traders.co.kr"),
 	LOTTEMART(LotteMartCrawler.class, "http://company.lottemart.com"),
 	HOMEPLUS(HomePlusCrawler.class, "http://corporate.homeplus.co.kr"),
 	COSTCO(CostcoCrawler.class, "https://www.costco.co.kr");

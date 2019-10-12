@@ -123,29 +123,27 @@ public class EmartData implements Crawlable {
 
 	@Override
 	public String getHolidayText() {
-		// 이마트는 휴무일 텍스트가 없음
-		return "";
+		return ""; // 이마트는 휴무일 텍스트가 없음
 	}
 
 	@Override
 	public List<Holiday> getHolidays() {
-		return holidays;
+	    return holidays;
 	}
 
-	public boolean isValidTarget() {
-		return StoreType.UNKNOWN != StoreType.of(storeType);
-	}
-
-	public void addHolidays(List<EmartHolidayData> holidayData) {
+	void addHolidays(List<EmartHolidayData> holidayData) {
 		holidays = holidayData.stream()
 				.filter(data -> data.isSameId(realId))
 				.flatMap(data -> data.getHolidays().stream())
 				.filter(Holiday::isUpcoming)
+				.sorted()
 				.collect(toList());
 	}
 
 	public enum StoreType {
-		EMART(MartType.EMART, "E", "A"), TRADERS(MartType.EMART_TRADERS, "T"), UNKNOWN(null, "");
+		EMART(MartType.EMART, "E", "A"),
+		TRADERS(MartType.EMART_TRADERS, "T"),
+		UNKNOWN(null, "");
 
 		private MartType martType;
 		private List<String> typeCharacters;
@@ -169,5 +167,23 @@ public class EmartData implements Crawlable {
 		public MartType getMartType() {
 			return martType;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "EmartData{" +
+				"realId='" + realId + '\'' +
+				", branchName='" + branchName + '\'' +
+				", regionCode='" + regionCode + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", roadNameAddress='" + roadNameAddress + '\'' +
+				", oldAddress='" + oldAddress + '\'' +
+				", openingHours='" + openingHours + '\'' +
+				", storeType='" + storeType + '\'' +
+				", rawLatitude='" + rawLatitude + '\'' +
+				", rawLongitude='" + rawLongitude + '\'' +
+				", location=" + location +
+				", holidays=" + holidays +
+				'}';
 	}
 }
