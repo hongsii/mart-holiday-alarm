@@ -2,10 +2,12 @@ package com.hongsi.martholidayalarm.scheduler.crawler.model.mart;
 
 import com.hongsi.martholidayalarm.utils.HtmlParser;
 import org.jsoup.nodes.Document;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class NobrandCrawler extends EmartCommonCrawler {
 
     private static final String DETAIL_VIEW_URL_FORMAT = "https://store.emart.com/branch/view.do?id=%s";
