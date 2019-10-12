@@ -24,16 +24,12 @@ public class Holiday implements Comparable<Holiday> {
 	@Column
 	private LocalDate date;
 
-	public Holiday(LocalDate date) {
+	private Holiday(LocalDate date) {
 		this.date = date;
 	}
 
 	public static Holiday of(int year, int month, int dayOfMonth) {
 		return of(LocalDate.of(year, month, dayOfMonth));
-	}
-
-	public static Holiday of(String holidayText) {
-		return of(LocalDate.parse(holidayText));
 	}
 
 	public static Holiday of(LocalDate date) {
