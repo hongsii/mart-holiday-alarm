@@ -2,12 +2,14 @@ package com.hongsi.martholidayalarm.domain.mart;
 
 import com.hongsi.martholidayalarm.exception.CannotParseMartTypeException;
 import com.hongsi.martholidayalarm.utils.StringUtils;
+
 import java.util.Arrays;
 
 public enum MartType {
 
 	EMART("이마트"),
 	EMART_TRADERS("이마트 트레이더스"),
+	NOBRAND("노브랜드"),
 	LOTTEMART("롯데마트"),
 	HOMEPLUS("홈플러스"),
 	HOMEPLUS_EXPRESS("홈플러스 익스프레스"),
