@@ -1,14 +1,15 @@
 package com.hongsi.martholidayalarm.domain.mart;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Embeddable
 @NoArgsConstructor
@@ -18,7 +19,7 @@ import lombok.ToString;
 public class Holiday implements Comparable<Holiday> {
 
 	private static final DateTimeFormatter VIEW_DATE_FORMATTER = DateTimeFormatter
-			.ofPattern("yyyy-M-d (EE)").withLocale(Locale.KOREAN);
+			.ofPattern("yyyy-MM-dd (EE)").withLocale(Locale.KOREAN);
 
 	@Column
 	private LocalDate date;
