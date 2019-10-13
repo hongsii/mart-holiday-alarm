@@ -1,28 +1,33 @@
 package com.hongsi.martholidayalarm.scheduler.crawler.model.holiday;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Objects;
 
 public class RegularHoliday {
 
+	private static final int FIRST_DAY_IN_MONTH = 1;
+
 	private int week;
 	private DayOfWeek dayOfWeek;
 
-	public RegularHoliday(WeekWrapper weekWrapper, DayOfWeekWrapper dayOfWeekWrapper) {
-		week = weekWrapper.getWeek();
-		dayOfWeek = dayOfWeekWrapper.getDayOfWeek();
+	private RegularHoliday(KoreanWeek koreanWeek, KoreanDayOfWeek koreanDayOfWeek) {
+		week = koreanWeek.getWeek();
+		dayOfWeek = koreanDayOfWeek.getDayOfWeek();
 	}
 
-	public static RegularHoliday of(WeekWrapper weekWrapper, DayOfWeekWrapper dayOfWeekWrapper) {
-		return new RegularHoliday(weekWrapper, dayOfWeekWrapper);
+	public static RegularHoliday of(KoreanWeek koreanWeek, KoreanDayOfWeek koreanDayOfWeek) {
+		if (koreanWeek == null || koreanDayOfWeek == null) {
+			throw new IllegalArgumentException("Can't create RegularHoliday");
+		}
+		return new RegularHoliday(koreanWeek, koreanDayOfWeek);
 	}
 
-	public int getWeek() {
-		return week;
-	}
-
-	public DayOfWeek getDayOfWeek() {
-		return dayOfWeek;
+	public LocalDate parse(YearMonth yearMonth) {
+		return yearMonth.atDay(FIRST_DAY_IN_MONTH)
+				.with(TemporalAdjusters.dayOfWeekInMonth(week, dayOfWeek));
 	}
 
 	@Override

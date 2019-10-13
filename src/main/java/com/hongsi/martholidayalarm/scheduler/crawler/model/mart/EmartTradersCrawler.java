@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class EmartCrawler extends EmartCommonCrawler {
+public class EmartTradersCrawler extends EmartCommonCrawler {
 
     @Override
     public List<Crawlable> crawl() {
-        return new ArrayList<>(crawl(SearchType.EMART));
+        List<EmartData> marts = crawl(SearchType.TRADERS);
+        return new ArrayList<>(marts);
     }
 }
