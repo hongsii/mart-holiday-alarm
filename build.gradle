@@ -36,33 +36,32 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-starter-aop')
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-aop")
 
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.10.2'
-    compile group: 'com.ibm.icu', name: 'icu4j', version: '63.1'
+    compile("org.mariadb.jdbc:mariadb-java-client:2.2.3")
+    compile("com.querydsl:querydsl-jpa:${querydslVersion}")
+    compile("com.querydsl:querydsl-apt:${querydslVersion}")
 
-    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
-    compile group: 'com.querydsl', name: 'querydsl-jpa', version: "${querydslVersion}"
-    compile group: 'com.querydsl', name: 'querydsl-apt', version: "${querydslVersion}"
+    compile("org.jsoup:jsoup:1.10.2")
+    compile("com.ibm.icu:icu4j:63.1")
+    compile("com.google.firebase:firebase-admin:6.4.0")
 
+    runtime("com.h2database:h2")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.spockframework:spock-core:${spockVersion}")
+    testImplementation("org.spockframework:spock-spring:${spockVersion}")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:${restDocsVersion}")
+    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor:${restDocsVersion}")
+
+    // deprecated
     compile group: 'io.springfox', name: 'springfox-swagger2', version: "${swaggerVersion}"
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: "${swaggerVersion}"
     compile group: 'io.springfox', name: 'springfox-core', version: "${swaggerVersion}"
-
-    compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.4.0'
-
-    runtime('com.h2database:h2')
-    compileOnly('org.projectlombok:lombok')
-    annotationProcessor('org.projectlombok:lombok')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile("org.springframework.restdocs:spring-restdocs-mockmvc:${restDocsVersion}")
-    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor:${restDocsVersion}")
-
-    testImplementation("org.spockframework:spock-core:${spockVersion}")
-    testImplementation("org.spockframework:spock-spring:${spockVersion}")
 }
 
 // QueryDSL Configuration
