@@ -28,9 +28,9 @@ import static java.util.Arrays.asList;
 public class LotteMartData implements Crawlable {
 
 	private static final DateTimeFormatter HOLIDAY_FORMATTER = DateTimeFormatter.ofPattern("M/d");
-	private static final List<Pattern> HOLIDAY_PATTERNS = asList(Pattern.compile("\\d+\\/\\d+"), Pattern.compile("\\d+월\\s?\\d+일"));
-	private static final Pattern PATTERN_HOLIDAY_BY_ONE = Pattern.compile("(.+\\s{0,}[째|쨰]\\s{0,}.요일)(, {0,}.+\\s{0,}[째|쨰]\\s{0,}.요일)+");
-	private static final Pattern PATTERN_EXCLUDE_HOLIDAY = Pattern.compile("(\\d+\\s{0,}월?\\s{0,}\\/?\\s{0,}\\d+\\s{0,}일?)\\s{0,}(\\(?(.요일|月|火|水|木|金|土|日|월|화|수|목|금|토|일)\\)?)?\\s{0,}정상\\s{0,}영업");
+	private static final List<Pattern> HOLIDAY_PATTERNS = asList(Pattern.compile("\\d+/\\d+"), Pattern.compile("\\d+월\\s?\\d+일"));
+	private static final Pattern PATTERN_HOLIDAY_BY_ONE = Pattern.compile("(.+\\s*[째|쨰]\\s*.요일)(, *.+\\s*[째|쨰]\\s*.요일)+");
+	private static final Pattern PATTERN_EXCLUDE_HOLIDAY = Pattern.compile("(\\d+\\s*월?\\s*/?\\s*\\d+\\s*일?)\\s*(\\(?(.요일|月|火|水|木|金|土|日|월|화|수|목|금|토|일)\\)?)?\\s*정상\\s*영업");
 
 	@JsonProperty("brnchCd")
 	private String realId;
@@ -126,7 +126,7 @@ public class LotteMartData implements Crawlable {
 	public List<Holiday> getHolidays() {
 		List<Holiday> holidays = HOLIDAY_PATTERNS.stream()
 				.map(pattern -> pattern.matcher(holidayText))
-				.map(matcher -> parseHoliday(matcher))
+				.map(this::parseHoliday)
 				.reduce(Stream::concat)
 				.orElseGet(Stream::empty)
 				.filter(Holiday::isUpcoming)
@@ -183,7 +183,7 @@ public class LotteMartData implements Crawlable {
 
 	private String changeToDateFormat(String openHolidyText) {
 		return openHolidyText
-				.replaceAll("\\s{0,}월\\s{0,}", "\\/")
-				.replaceAll("\\s{0,}일\\s{0,}", "");
+				.replaceAll("\\s*월\\s*", "\\/")
+				.replaceAll("\\s*일\\s*", "");
 	}
 }
