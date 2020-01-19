@@ -1,0 +1,9 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = "mart-holiday-alarm"
+
+include("mart-holiday-alarm-core")
