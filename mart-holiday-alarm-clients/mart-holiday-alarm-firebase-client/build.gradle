@@ -1,0 +1,3 @@
+dependencies {
+    compile("com.google.firebase:firebase-admin:6.4.0")
+}

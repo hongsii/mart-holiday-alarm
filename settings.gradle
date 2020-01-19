@@ -7,3 +7,6 @@ pluginManagement {
 rootProject.name = "mart-holiday-alarm"
 
 include("mart-holiday-alarm-core")
+include("mart-holiday-alarm-firebase-client")
+
+project(":mart-holiday-alarm-firebase-client").projectDir = file("mart-holiday-alarm-clients/mart-holiday-alarm-firebase-client")
