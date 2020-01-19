@@ -1,0 +1,42 @@
+plugins {
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+bootJar.enabled = false
+jar.enabled = true
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "com.querydsl:querydsl-jpa"
+    compile "com.querydsl:querydsl-apt"
+
+    runtime "com.h2database:h2"
+    compile "org.mariadb.jdbc:mariadb-java-client"
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+def queryDslSrcDir = "src/main/generated"
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = queryDslSrcDir
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java", queryDslSrcDir]
+        }
+    }
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
