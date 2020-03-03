@@ -21,6 +21,7 @@ env:
     - AWS_REGION=${AWS_REGION_VARIABLE:-$AWS_REGION_DEFAULT}
     - DEPLOY_DIR=${DEPLOY_DIR_VARIABLE:-$DEPLOY_DIR_DEFAULT}
     - APP_NAME=mart-holiday-alarm
+    - AWS_BUCKET=${AWS_BUCKET_VARIABLE:-$APP_NAME}
     - DEPLOYMENT_GROUP=$APP_NAME-group
 
 before_deploy:
@@ -38,7 +39,7 @@ deploy:
     access_key_id: "$AWS_ACCESS_KEY_DEV"
     secret_access_key: "$AWS_SECRET_KEY_DEV"
     region: $AWS_REGION
-    bucket: ${APP_NAME}-dev
+    bucket: ${AWS_BUCKET}-dev
     local_dir: $DEPLOY_DIR
     upload_dir: $DEPLOY_DIR
     skip_cleanup: true
@@ -51,7 +52,7 @@ deploy:
     access_key_id: "$AWS_ACCESS_KEY_DEV"
     secret_access_key: "$AWS_SECRET_KEY_DEV"
     region: $AWS_REGION
-    bucket: ${APP_NAME}-dev
+    bucket: ${AWS_BUCKET}-dev
     key: $DEPLOY_DIR/$APP_NAME.zip
     bundle_type: zip
     application: $APP_NAME
@@ -63,10 +64,10 @@ deploy:
 
   # master branch
   - provider: s3
-    access_key_id: $AWS_ACCESS_KEY2
-    secret_access_key: $AWS_SECRET_KEY2
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
     region: $AWS_REGION
-    bucket: $APP_NAME
+    bucket: $AWS_BUCKET
     local_dir: $DEPLOY_DIR
     upload_dir: $DEPLOY_DIR
     skip_cleanup: true
@@ -76,10 +77,10 @@ deploy:
       repo: $TRAVIS_REPO_SLUG
       branch: master
   - provider: codedeploy
-    access_key_id: $AWS_ACCESS_KEY2
-    secret_access_key: $AWS_SECRET_KEY2
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
     region: $AWS_REGION
-    bucket: $APP_NAME
+    bucket: $AWS_BUCKET
     key: $DEPLOY_DIR/$APP_NAME.zip
     bundle_type: zip
     application: $APP_NAME
