@@ -6,6 +6,7 @@ pluginManagement {
 
 rootProject.name = "mart-holiday-alarm"
 
+include("mart-holiday-alarm-api")
 include("mart-holiday-alarm-core")
 include("mart-holiday-alarm-firebase-client")
 

@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    hikari:
+      driver-class-name: org.mariadb.jdbc.Driver
+      minimumIdle: 5
+      maximumPoolSize: 15
+      idleTimeout: 600000
+      maxLifetime: 1800000
+      data-source-properties:
+        connect-timeout: 30000
+        socket-timeout: 60000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+---
+
+spring:
+  profiles: local
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+---
+
+spring:
+  profiles: prod1,dev1
+
+server:
+  port: 8081
+
+---
+
+spring:
+  profiles: prod2,dev2
+
+server:
+  port: 8082
