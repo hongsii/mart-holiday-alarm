@@ -4,10 +4,12 @@ import com.hongsi.martholidayalarm.core.BaseEntity;
 import com.hongsi.martholidayalarm.core.holiday.Holiday;
 import com.hongsi.martholidayalarm.core.location.Location;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 })
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode(of = {"realId", "martType"}, callSuper = false)
 public class Mart extends BaseEntity {
 
     @Id
@@ -71,6 +74,24 @@ public class Mart extends BaseEntity {
         this.location = location;
         this.holidayText = holidayText;
         this.holidays = holidays;
+    }
+
+    public Mart update(Mart updateMart) {
+        if (!equals(updateMart)) {
+            throw new IllegalArgumentException("can't update. real id and type of mart are different.");
+        }
+
+        if (StringUtils.hasText(updateMart.branchName)) branchName = updateMart.branchName;
+        if (StringUtils.hasText(updateMart.region)) region = updateMart.region;
+        if (StringUtils.hasText(updateMart.phoneNumber)) phoneNumber = updateMart.phoneNumber;
+        if (StringUtils.hasText(updateMart.address)) address = updateMart.address;
+        if (StringUtils.hasText(updateMart.openingHours)) openingHours = updateMart.openingHours;
+        if (StringUtils.hasText(updateMart.url)) url = updateMart.url;
+        if (updateMart.location != null) location = updateMart.location;
+        if (StringUtils.hasText(updateMart.holidayText)) holidayText = updateMart.holidayText;
+        this.holidays = updateMart.holidays;
+
+        return this;
     }
 
     public List<Holiday> getUpcomingHolidays() {

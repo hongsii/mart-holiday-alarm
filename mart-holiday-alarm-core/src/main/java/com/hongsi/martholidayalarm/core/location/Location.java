@@ -4,6 +4,7 @@ import com.hongsi.martholidayalarm.core.exception.LocationOutOfRangeException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor
 @Getter
+@ToString
 public class Location {
 
     @Column(columnDefinition = "DECIMAL(10, 8)")

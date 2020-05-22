@@ -7,7 +7,10 @@ pluginManagement {
 rootProject.name = "mart-holiday-alarm"
 
 include("mart-holiday-alarm-api")
-include("mart-holiday-alarm-core")
-include("mart-holiday-alarm-firebase-client")
+include("mart-holiday-alarm-core", "mart-holiday-alarm-crawler")
+include("mart-holiday-alarm-client-location-converter", "mart-holiday-alarm-client-slack")
 
-project(":mart-holiday-alarm-firebase-client").projectDir = file("mart-holiday-alarm-clients/mart-holiday-alarm-firebase-client")
+rootProject.children
+        .stream()
+        .filter { it.name.startsWith("mart-holiday-alarm-client") }
+        .forEach { it.projectDir = file("mart-holiday-alarm-clients/$it.name") }
