@@ -2,6 +2,7 @@ package com.hongsi.martholidayalarm.api.repository;
 
 import com.hongsi.martholidayalarm.api.dto.mart.MartDto;
 import com.hongsi.martholidayalarm.api.dto.mart.MartTypeDto;
+import com.hongsi.martholidayalarm.core.BaseQuerydslRepositorySupport;
 import com.hongsi.martholidayalarm.core.holiday.Holiday;
 import com.hongsi.martholidayalarm.core.mart.Mart;
 import com.hongsi.martholidayalarm.core.mart.MartType;

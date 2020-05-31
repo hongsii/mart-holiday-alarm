@@ -1,4 +1,4 @@
-package com.hongsi.martholidayalarm.api.repository;
+package com.hongsi.martholidayalarm.core;
 
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;

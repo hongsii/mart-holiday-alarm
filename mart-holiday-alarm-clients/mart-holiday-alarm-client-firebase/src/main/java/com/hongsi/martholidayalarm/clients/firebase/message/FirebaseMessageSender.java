@@ -1,23 +1,25 @@
-package com.hongsi.martholidayalarm.clients.firebase;
+package com.hongsi.martholidayalarm.clients.firebase.message;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.hongsi.martholidayalarm.clients.firebase.exception.PushException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
-public class FirebaseMessageClient {
+@Slf4j
+public class FirebaseMessageSender {
 
-    public String send(Message message) {
+    public String send(Message message) throws PushException {
         String messageId = null;
         try {
             messageId = FirebaseMessaging.getInstance().send(message);
         } catch (FirebaseMessagingException e) {
-            log.error("[PUSH] can't send message -> errorCode : {}, message : {}", e.getErrorCode(), e.getMessage());
+            log.error("failed to send message. errorCode : {}, message : {}", e.getErrorCode(), e.getMessage());
+            throw new PushException(e.getErrorCode(), e.getMessage());
         } catch (Exception e) {
-            log.error("[PUSH] Sender error -> message : {}, cause : {}", e.getMessage(), e.getCause());
+            log.error("failed to send message.", e);
         }
         return messageId;
     }

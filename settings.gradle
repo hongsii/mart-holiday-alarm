@@ -7,8 +7,8 @@ pluginManagement {
 rootProject.name = "mart-holiday-alarm"
 
 include("mart-holiday-alarm-api")
-include("mart-holiday-alarm-core", "mart-holiday-alarm-crawler")
-include("mart-holiday-alarm-client-location-converter", "mart-holiday-alarm-client-slack")
+include("mart-holiday-alarm-core", "mart-holiday-alarm-crawler", "mart-holiday-alarm-push")
+include("mart-holiday-alarm-client-firebase", "mart-holiday-alarm-client-location-converter", "mart-holiday-alarm-client-slack")
 
 rootProject.children
         .stream()

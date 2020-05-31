@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compile project(":mart-holiday-alarm-core")
     compile project(":mart-holiday-alarm-crawler")
+    compile project(":mart-holiday-alarm-push")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-actuator"

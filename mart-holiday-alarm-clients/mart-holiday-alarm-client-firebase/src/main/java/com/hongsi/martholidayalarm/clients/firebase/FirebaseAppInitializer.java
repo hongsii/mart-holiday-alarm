@@ -22,9 +22,9 @@ public class FirebaseAppInitializer {
     private static final List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/firebase.messaging");
 
     @Value("${firebase.project-id}")
-    private final String projectId;
-    @Value("${firebase.service-key-file")
-    private final String serviceKeyFile;
+    private String projectId;
+    @Value("${firebase.service-key-file}")
+    private String serviceKeyFile;
 
     @PostConstruct
     public void initialize() throws Exception {

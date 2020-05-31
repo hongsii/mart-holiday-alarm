@@ -100,4 +100,11 @@ public class Mart extends BaseEntity {
                 .sorted()
                 .collect(Collectors.toList());
     }
+
+    public Holiday getUpcomingHoliday() {
+        if (holidays.isEmpty()) {
+            return null;
+        }
+        return getUpcomingHolidays().get(0);
+    }
 }

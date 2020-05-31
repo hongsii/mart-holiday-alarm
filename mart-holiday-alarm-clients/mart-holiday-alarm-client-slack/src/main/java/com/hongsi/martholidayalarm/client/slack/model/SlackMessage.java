@@ -29,6 +29,7 @@ public class SlackMessage {
     public static SlackMessage success(String title, Attachment... attachments) {
         return SlackMessage.builder()
                 .username(title)
+                .text(title)
                 .iconEmoji(Emoji.SUNNY)
                 .channel(SlackChannel.CRAWLING_ALARM)
                 .attachments(Arrays.asList(attachments))

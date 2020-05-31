@@ -1,6 +1,7 @@
 package com.hongsi.martholidayalarm.api.repository;
 
 import com.hongsi.martholidayalarm.api.dto.mart.MartDto;
+import com.hongsi.martholidayalarm.core.BaseQuerydslRepositorySupport;
 import com.hongsi.martholidayalarm.core.mart.Mart;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
