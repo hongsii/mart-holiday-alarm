@@ -1,3 +1,6 @@
 dependencies {
     compile("com.google.firebase:firebase-admin:6.4.0")
 }
+
+bootJar.enabled = false
+jar.enabled = true

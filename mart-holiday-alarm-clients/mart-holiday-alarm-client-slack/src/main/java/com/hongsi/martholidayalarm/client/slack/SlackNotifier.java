@@ -12,7 +12,11 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class SlackNotifier {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public SlackNotifier() {
+        this.restTemplate = new RestTemplate();
+    }
 
     @Value("${slack.webhook.url:''}")
     private String url;

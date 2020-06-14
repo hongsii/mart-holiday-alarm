@@ -8,3 +8,6 @@ dependencies {
     implementation "org.jsoup:jsoup:1.10.2"
     implementation "com.ibm.icu:icu4j:63.1"
 }
+
+bootJar.enabled = false
+jar.enabled = true
