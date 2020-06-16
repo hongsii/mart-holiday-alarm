@@ -1,4 +1,4 @@
-# 마트휴일알리미 [![Build Status](https://travis-ci.org/hongsii/mart-holiday-alarm.svg?branch=master)](https://travis-ci.org/hongsii/mart-holiday-alarm)
+# 마트휴일알리미 ![build](https://github.com/hongsii/mart-holiday-alarm/workflows/build/badge.svg?branch=master)
 
 * 마트쉬는날 - 휴무일 알리미 ([App Store](https://itunes.apple.com/kr/app/%EB%A7%88%ED%8A%B8%EC%89%AC%EB%8A%94%EB%82%A0-%ED%9C%B4%EB%AC%B4%EC%9D%BC-%EC%95%8C%EB%A6%AC%EB%AF%B8/id1438702208?mt=8))
 * 마트휴일알리미 - 카카오톡봇 ([플러스친구](https://pf.kakao.com/_BBAiC))
