@@ -1,4 +1,4 @@
-name: CI/CD
+name: build
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
     env:
       UPLOAD_DIR: deploy
@@ -40,3 +39,13 @@ jobs:
       run: aws s3 cp "$APP_NAME.zip" s3://${{ secrets.PROD_AWS_BUCKET }}${UPLOAD_DIR:+/$UPLOAD_DIR/}
     - name: Deploy
       run: aws deploy create-deployment --application-name $APP_NAME --deployment-group-name "$APP_NAME-group" --s3-location bucket=${{ secrets.PROD_AWS_BUCKET }},bundleType=zip,key="${UPLOAD_DIR:+$UPLOAD_DIR/}${APP_NAME}.zip"
+
+    - uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: ${{ job.status }}
+        author_name: '배포 결과'
+        fields: repo,commit,message,action,ref,job,took
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
