@@ -39,5 +39,4 @@ jobs:
     - name: Upload build file to s3
       run: aws s3 cp "$APP_NAME.zip" s3://${{ secrets.PROD_AWS_BUCKET }}${UPLOAD_DIR:+/$UPLOAD_DIR/}
     - name: Deploy
-      run: aws deploy create-deployment --aplication-name $APP_NAME --deployment-group-name "$APP_NAME-group" --s3-location bucket=${{ secrets.PROD_AWS_BUCKET }},bundleType=zip,key="${UPLOAD_DIR:+$UPLOAD_DIR/}${APP_NAME}.zip"
-
+      run: aws deploy create-deployment --application-name $APP_NAME --deployment-group-name "$APP_NAME-group" --s3-location bucket=${{ secrets.PROD_AWS_BUCKET }},bundleType=zip,key="${UPLOAD_DIR:+$UPLOAD_DIR/}${APP_NAME}.zip"
