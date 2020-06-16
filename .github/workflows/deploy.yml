@@ -5,12 +5,22 @@ on:
     branches: [ master ]
 
 jobs:
-  build_and_deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
+    env:
+      UPLOAD_DIR: deploy
+      APP_NAME: mart-holiday-alarm
 
     steps:
     - uses: actions/checkout@v2
-      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
@@ -18,18 +28,16 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -x test -x asciidoctor
+
     - name: Zip build files
-      shell: bash
       run: |
-        zip -r mart-holiday-alarm *
-        
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
-    - name: Upload build file
-      run: |
-        aws s3 cp mart-holiday-alarm.zip s3://${{ secrets.PROD_AWS_BUCKET }}
+        apt-get update
+        apt-get install zip unzip -qy
+        zip -r $APP_NAME *
+        ls
+    - name: Upload build file to s3
+      run: aws s3 cp "$APP_NAME.zip" s3://${{ secrets.PROD_AWS_BUCKET }}${UPLOAD_DIR:+/$UPLOAD_DIR/}
+    - name: Deploy
+      run: aws deploy create-deployment --aplication-name $APP_NAME --deployment-group-name "$APP_NAME-group" --s3-location bucket=${{ secrets.PROD_AWS_BUCKET }},bundleType=zip,key="${UPLOAD_DIR:+$UPLOAD_DIR/}${APP_NAME}.zip"
+
