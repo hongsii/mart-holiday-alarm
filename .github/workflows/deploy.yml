@@ -32,8 +32,8 @@ jobs:
 
     - name: Zip build files
       run: |
-        apt-get update
-        apt-get install zip unzip -qy
+        sudo apt-get update
+        sudo apt-get install zip unzip -qy
         zip -r $APP_NAME *
         ls
     - name: Upload build file to s3
