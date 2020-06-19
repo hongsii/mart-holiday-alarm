@@ -1,7 +1,6 @@
 # 마트휴일알리미 ![build](https://github.com/hongsii/mart-holiday-alarm/workflows/build/badge.svg?branch=master)
 
 * 마트쉬는날 - 휴무일 알리미 ([App Store](https://itunes.apple.com/kr/app/%EB%A7%88%ED%8A%B8%EC%89%AC%EB%8A%94%EB%82%A0-%ED%9C%B4%EB%AC%B4%EC%9D%BC-%EC%95%8C%EB%A6%AC%EB%AF%B8/id1438702208?mt=8))
-* 마트휴일알리미 - 카카오톡봇 ([플러스친구](https://pf.kakao.com/_BBAiC))
 
 -------------------------
 
@@ -10,7 +9,7 @@
 * 언어 : Java 8 (openjdk 8)
 * 프레임워크 : Spring Boot 2.1.1.RELEASE, JPA, Querydsl 4.2.1
 * 데이터베이스 : AWS RDS (MariaDB), Firebase Realtime DB
-* 빌드 환경 : JUnit(AssertJ), Lombok, Gradle, Travis CI, AWS CodeDeploy 
+* 빌드 환경 : JUnit(AssertJ), Lombok, Gradle, Github Actions, AWS CodeDeploy 
 * 라이브러리 : Spring Rest Docs, Jsoup 1.10.2, Firebase Messaging
 
 -------------------------
@@ -42,14 +41,3 @@
 * 마트를 즐겨찾기해 간편하게 휴일 조회
 * 즐겨찾기된 마트를 위젯으로 조회 가능
 * 즐겨찾기한 마트의 휴일 전날 오전에 푸시 알림
-
--------------------------
-
-### 카카오톡봇 (카카오톡 플러스친구)
-
-* 카카오톡 친구탭 > 상단의 검색창에 '마트휴일알리미' 검색 > 친구 추가
-* [플러스친구 링크](https://pf.kakao.com/_BBAiC)를 통해 친구 추가 후, 채팅방을 통해 사용
-
-#### 기능
-
-* 마트 정보 및 휴일 조회 기능
