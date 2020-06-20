@@ -9,7 +9,6 @@ import com.hongsi.martholidayalarm.core.mart.MartType;
 import com.hongsi.martholidayalarm.crawler.MartCrawlerType;
 import com.hongsi.martholidayalarm.crawler.model.MartParser;
 import com.hongsi.martholidayalarm.crawler.model.holiday.MonthDayHoliday;
-import com.hongsi.martholidayalarm.crawler.model.holiday.SolarLunarConverter;
 import com.hongsi.martholidayalarm.crawler.utils.MatchSpliterator;
 import com.hongsi.martholidayalarm.crawler.utils.RegionParser;
 import lombok.Setter;
@@ -20,9 +19,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -156,8 +153,8 @@ public class CostcoParser implements MartParser {
         LocalDate chuSeokOfLunar = LocalDate.of(year, 8, 15);
         return asList(
                 newYearOfLunar,
-                SolarLunarConverter.convertLunarToSolar(newYearOfLunar),
-                SolarLunarConverter.convertLunarToSolar(chuSeokOfLunar)
+                CostcoLunarCalendar.convertToSolar(newYearOfLunar),
+                CostcoLunarCalendar.convertToSolar(chuSeokOfLunar)
         );
     }
 
@@ -176,5 +173,29 @@ public class CostcoParser implements MartParser {
 
     private String getUnwrappedStoreContent() {
         return Jsoup.parse(storeContent).text();
+    }
+
+    static class CostcoLunarCalendar {
+
+        private static final Map<LocalDate, LocalDate> solarCalendar = new HashMap<>();
+
+        static {
+            putSolarCalendar(1, 1, Arrays.asList(
+                    LocalDate.of(2020, 1, 25), LocalDate.of(2021, 2, 12), LocalDate.of(2022, 2, 1),
+                    LocalDate.of(2023, 1, 22), LocalDate.of(2024, 2, 10), LocalDate.of(2025, 1, 29)
+            ));
+            putSolarCalendar(8, 15, Arrays.asList(
+                    LocalDate.of(2020, 10, 1), LocalDate.of(2021, 9, 21), LocalDate.of(2022, 9, 10),
+                    LocalDate.of(2023, 9, 29), LocalDate.of(2024, 9, 17), LocalDate.of(2025, 10, 6)
+            ));
+        }
+
+        private static void putSolarCalendar(int lunarMonth, int lunarDayOfMonth, List<LocalDate> solarDates) {
+            solarDates.forEach(solar -> solarCalendar.put(solar.withMonth(lunarMonth).withDayOfMonth(lunarDayOfMonth), solar));
+        }
+
+        static LocalDate convertToSolar(LocalDate lunar) {
+            return solarCalendar.get(lunar);
+        }
     }
 }
