@@ -11,6 +11,9 @@ import spock.lang.Specification
 
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
+import java.time.LocalDate
+
+import static java.time.LocalDate.now
 
 @DataJpaTest
 @Import(MartLocationRepository.class)
@@ -29,7 +32,7 @@ class MartLocationRepositoryTest extends Specification {
                 .realId("1")
                 .region("서울")
                 .branchName("신도림점")
-                .holidays([Holiday.of(2020, 3, 1)].toSet())
+                .holidays(createHolidays(now().minusDays(1), now(), now().plusDays(1)))
                 .location(Location.of(37.507631, 126.890203))
                 .build()
         def nonTarget = Mart.builder()
@@ -37,7 +40,7 @@ class MartLocationRepositoryTest extends Specification {
                 .realId("2")
                 .region("서울")
                 .branchName("성수점")
-                .holidays([Holiday.of(2020, 3, 2)].toSet())
+                .holidays(createHolidays(now()))
                 .location(Location.of(37.539993, 127.053111))
                 .build()
         em.persist(nonTarget)
@@ -49,5 +52,9 @@ class MartLocationRepositoryTest extends Specification {
         then:
         marts.size() == 1
         marts[0].branchName == target.branchName
+    }
+
+    private static Set<Holiday> createHolidays(LocalDate... dates) {
+        dates.collect { Holiday.of(it) }.toSet()
     }
 }

@@ -45,10 +45,7 @@ public class MartService {
     }
 
     public List<MartDto> findAllByLocation(LocationParameter parameter) {
-        log.info(parameter.getDistance().toString());
-        return martLocationRepository.findAllByLocation(
-                parameter.getLatitude(), parameter.getLongitude(), parameter.getDistance()
-        );
+        return martLocationRepository.findAllByLocation(parameter.getLatitude(), parameter.getLongitude(), parameter.getDistance());
     }
 
     public List<MartTypeDto> findAllMartTypes() {

@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.NumberPath;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hongsi.martholidayalarm.core.holiday.QHoliday.holiday;
 import static com.hongsi.martholidayalarm.core.mart.QMart.mart;
@@ -32,7 +33,10 @@ public class MartLocationRepository extends BaseQuerydslRepositorySupport {
                 .leftJoin(mart.holidays, holiday).fetchJoin()
                 .where(distanceFormula.loe(distance))
                 .orderBy(distancePath.asc())
-                .fetch();
+                .fetch()
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private NumberExpression<Double> distanceFormula(Double latitude, Double longitude) {

@@ -59,6 +59,7 @@ public class MartHolidayRepositoryImpl extends BaseQuerydslRepositorySupport imp
         return applySorting(sort, query -> query
                 .select(Projections.constructor(MartDto.class, mart))
                 .from(mart)
+                .distinct()
                 .leftJoin(mart.holidays, holiday).fetchJoin()
                 .where(mart.martType.eq(martType)))
                 .fetch();
