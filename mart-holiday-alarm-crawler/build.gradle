@@ -1,0 +1,12 @@
+dependencies {
+    compile project(":mart-holiday-alarm-core")
+    compile project(":mart-holiday-alarm-client-location-converter")
+    compile project(":mart-holiday-alarm-client-slack")
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    implementation "org.jsoup:jsoup:1.10.2"
+}
+
+bootJar.enabled = false
+jar.enabled = true

@@ -2,8 +2,9 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
-/out
+out/
 /src/main/generated/
+generated/
 /logs
 
 ### STS ###

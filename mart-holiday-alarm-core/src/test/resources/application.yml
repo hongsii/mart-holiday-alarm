@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem://localhost/~/martholidayalarm;MODE=MYSQL
+      username: sa
+      password:
+  jpa:
+    database-platform: H2
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+  output:
+    ansi:
+      enabled: always
+
+#logging.level.org.hibernate.type.descriptor.sql: trace
