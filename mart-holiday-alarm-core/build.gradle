@@ -1,42 +1,25 @@
-plugins {
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
-}
-
 bootJar.enabled = false
 jar.enabled = true
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "com.querydsl:querydsl-core"
     compile "com.querydsl:querydsl-jpa"
-    compile "com.querydsl:querydsl-apt"
+    annotationProcessor(
+            "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa",
+            "jakarta.persistence:jakarta.persistence-api",
+            "jakarta.annotation:jakarta.annotation-api"
+    )
 
     runtime "com.h2database:h2"
     compile "org.mariadb.jdbc:mariadb-java-client"
 }
 
-configurations {
-    querydsl.extendsFrom compileClasspath
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
+/** clean 태스크 실행시 QClass 삭제 */
+clean {
+    delete file('src/main/generated')
 }
-
-def queryDslSrcDir = "src/main/generated"
-querydsl {
-    library = "com.querydsl:querydsl-apt"
-    jpa = true
-    querydslSourcesDir = queryDslSrcDir
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ["src/main/java", queryDslSrcDir]
-        }
-    }
-}
-
-compileQuerydsl{
-    options.annotationProcessorPath = configurations.querydsl
+/** 인텔리제이 Annotation processor 에 생성되는 'src/main/generated' 디렉터리 삭제 */
+task cleanGeneatedDir(type: Delete) {
+    delete file('src/main/generated')
 }
