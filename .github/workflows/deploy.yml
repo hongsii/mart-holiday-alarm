@@ -1,10 +1,10 @@
-name: build
+name: deploy
 
 on:
   deployment:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     env:
       UPLOAD_DIR: deploy
