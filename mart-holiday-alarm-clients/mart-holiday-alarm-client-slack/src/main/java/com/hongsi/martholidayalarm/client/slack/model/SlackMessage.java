@@ -69,6 +69,14 @@ public class SlackMessage {
             private String value;
             @JsonProperty("short")
             private boolean shortField;
+
+            public static Field shortField(String title, String value) {
+                return Field.builder()
+                        .title(title)
+                        .value(value)
+                        .shortField(true)
+                        .build();
+            }
         }
     }
 }
