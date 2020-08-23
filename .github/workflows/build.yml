@@ -9,8 +9,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
     steps:
       - uses: actions/checkout@v2
+      - uses: 8398a7/action-slack@v3
+        name: Job start notification
+        if: ${{ success() }}
+        with:
+          status: custom
+          author_name: '빌드 알림'
+          fields: repo,commit,message,action,ref,job,took,workflow,eventName
+          custom_payload: |
+            { text: `⏱ Started ${process.env.AS_EVENT_NAME} action : ${process.env.AS_JOB} of ${process.env.AS_REPO}` }
+
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
@@ -20,13 +34,32 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build test
 
-      - name: Notify result to slack
+      - name: Job result notification
         uses: 8398a7/action-slack@v3
         if: always()
         with:
-          status: ${{ job.status }}
-          author_name: '빌드 결과'
-          fields: repo,commit,message,action,ref,job,took
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: custom
+          author_name: '빌드 알림'
+          fields: repo,commit,message,action,ref,job,took,workflow,eventName
+          custom_payload: |
+            {
+              text: ('${{ job.status }}' === 'success' ? "🎉 Successd" : '${{ job.status }}' === 'failure' ? "☄️ Failed" : "✖️ Cancelled") + ` ${process.env.AS_EVENT_NAME} action : ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
+              attachments: [
+                {
+                  color: '${{ job.status }}' === 'success' ? "#00FF00" : '${{ job.status }}' === 'failure' ? "#FF0000" : "#505050",
+                  blocks: [
+                    {
+                      type: "section",
+                      fields: [
+                        { type: "mrkdwn", text: `*repo:*\n${process.env.AS_REPO}` },
+                        { type: "mrkdwn", text: `*branch:*\n${process.env.AS_REF}` },
+                        { type: "mrkdwn", text: `*commit:*\n${process.env.AS_MESSAGE} (${process.env.AS_COMMIT})` },
+                        { type: "mrkdwn", text: `*job:*\n${process.env.AS_WORKFLOW} -> ${process.env.AS_JOB}` },
+                        { type: "mrkdwn", text: `*job event:*\n${process.env.AS_EVENT_NAME}` },
+                        { type: "mrkdwn", text: `*elasped time:*\n${process.env.AS_TOOK}` },
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
