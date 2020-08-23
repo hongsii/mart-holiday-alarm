@@ -42,6 +42,7 @@ public class CrawlerLoggingAspect {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     @Around("execution(* com.hongsi.martholidayalarm.crawler.MartCrawler+.crawl())")
     public List<? extends MartParser> recordEachElapsedTime(ProceedingJoinPoint joinPoint) {
         String crawler = getClassName(joinPoint);
@@ -67,26 +68,10 @@ public class CrawlerLoggingAspect {
                 SlackMessage.Attachment.builder()
                         .color(Color.LIME)
                         .fields(Arrays.asList(
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("환경")
-                                        .value(activeProfile)
-                                        .shortField(true)
-                                        .build(),
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("대상")
-                                        .value(getClassName(joinPoint))
-                                        .shortField(true)
-                                        .build(),
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("소요시간")
-                                        .value(stopWatch.prettyPrint())
-                                        .shortField(false)
-                                        .build(),
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("크롤링 수")
-                                        .value(joinResults())
-                                        .shortField(false)
-                                        .build()
+                                SlackMessage.Attachment.Field.shortField("환경", activeProfile),
+                                SlackMessage.Attachment.Field.shortField("대상", getClassName(joinPoint)),
+                                SlackMessage.Attachment.Field.longField("소요시간", stopWatch.prettyPrint()),
+                                SlackMessage.Attachment.Field.longField("크롤링 수", joinResults())
                         ))
                         .build()
         );
@@ -105,26 +90,10 @@ public class CrawlerLoggingAspect {
                         .text(Emoji.ZAP + " 크롤링 실패 " + Emoji.ZAP)
                         .color(Color.RED)
                         .fields(Arrays.asList(
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("Profile")
-                                        .value(activeProfile)
-                                        .shortField(true)
-                                        .build(),
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("Target")
-                                        .value(getClassName(joinPoint))
-                                        .shortField(true)
-                                        .build(),
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("Error")
-                                        .value(e.toString())
-                                        .shortField(true)
-                                        .build(),
-                                SlackMessage.Attachment.Field.builder()
-                                        .title("StackTrace")
-                                        .value(SlackTextGenerator.codeBlock(getHalfStackTrace(e)))
-                                        .shortField(false)
-                                        .build()
+                                SlackMessage.Attachment.Field.shortField("환경", activeProfile),
+                                SlackMessage.Attachment.Field.shortField("대상", getClassName(joinPoint)),
+                                SlackMessage.Attachment.Field.shortField("에러", e.toString()),
+                                SlackMessage.Attachment.Field.longField("StackTrace", SlackTextGenerator.codeBlock(getHalfStackTrace(e)))
                         ))
                         .build()
         );

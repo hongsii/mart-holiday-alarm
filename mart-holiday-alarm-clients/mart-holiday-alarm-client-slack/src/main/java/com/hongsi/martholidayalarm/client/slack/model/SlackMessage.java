@@ -70,6 +70,14 @@ public class SlackMessage {
             @JsonProperty("short")
             private boolean shortField;
 
+            public static Field longField(String title, String value) {
+                return Field.builder()
+                        .title(title)
+                        .value(value)
+                        .shortField(false)
+                        .build();
+            }
+
             public static Field shortField(String title, String value) {
                 return Field.builder()
                         .title(title)
