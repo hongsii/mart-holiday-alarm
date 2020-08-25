@@ -14,6 +14,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    # deploy start
     - uses: 8398a7/action-slack@v3
       name: Job start notification
       if: ${{ success() }}
@@ -23,7 +24,14 @@ jobs:
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
           { text: `⏱ Started ${process.env.AS_EVENT_NAME} action : ${process.env.AS_JOB} of ${process.env.AS_REPO}` }
+    - id: set_state_in_progress
+      name: Set deployment status to [in_progress]
+      uses: rsotnychenko/deployment-status-update@0.2.0
+      with:
+        run_id: ${{ github.run_id }}
+        status: in_progress
 
+    # build and deploy
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -51,6 +59,14 @@ jobs:
     - name: Deploy
       run: aws deploy create-deployment --application-name $APP_NAME --deployment-group-name "$APP_NAME-group" --s3-location bucket=${{ secrets.PROD_AWS_BUCKET }},bundleType=zip,key="${UPLOAD_DIR:+$UPLOAD_DIR/}${APP_NAME}.zip"
 
+    # deploy end
+    - id: set_state_final
+      if: always()
+      name: Set deployment status
+      uses: rsotnychenko/deployment-status-update@0.2.0
+      with:
+        status: ${{ job.status }}
+        run_id: ${{ github.run_id }}
     - name: Job result notification
       uses: 8398a7/action-slack@v3
       if: always()
