@@ -15,7 +15,7 @@ public enum MartCrawlerType {
 	EMART_TRADERS(EmartTradersCrawler.class, "https://store.traders.co.kr"),
 	NOBRAND(NobrandCrawler.class, EMART.url),
 	LOTTEMART(LotteMartCrawler.class, "http://company.lottemart.com"),
-	HOMEPLUS(HomePlusCrawler.class, "http://corporate.homeplus.co.kr"),
+	HOMEPLUS(HomePlusCrawler.class, "https://corporate.homeplus.co.kr"),
 	HOMEPLUS_EXPRESS(HomePlusExpressCrawler.class, HOMEPLUS.url),
 	COSTCO(CostcoCrawler.class, "https://www.costco.co.kr");
 
